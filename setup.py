@@ -24,7 +24,7 @@ tests_require = [
 
 setup(
     name='gramophone',
-    version='1.0',
+    version='1.0.0',
     description='gramophone',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[

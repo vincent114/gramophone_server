@@ -1,6 +1,6 @@
 
 from nexus import smap
-smap.register('gramophone_server')
+smap.register('gramophone')
 
 from pyramid.config import Configurator
 
@@ -15,6 +15,9 @@ def main(global_config, **settings):
     )
 
     config.include('pyramid_jinja2')
+
+    # NxApp config
+    config.include('nexus.pyramid')
 
     # Routes
     # ------------------------------------------------------
