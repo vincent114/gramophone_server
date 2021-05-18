@@ -36,7 +36,7 @@ setup(
     author='Vincent Boni',
     author_email='vincent.boni@icloud.com',
     url='',
-    keywords='gramophone music',
+    keywords='gramophone webserver',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
