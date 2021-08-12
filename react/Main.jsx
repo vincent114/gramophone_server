@@ -8,6 +8,13 @@ import { NxAppStore, NxApp, makeInitSnapshot } from 'nexus/NxApp';
 import { ContextualHeader } from 'gramophone/ui/ContextualHeader';
 import { ContextualMenu } from 'gramophone/ui/ContextualMenu';
 import { HomePage } from 'gramophone/contexts/home/Home';
+import { SearchStore, SearchPage } from 'gramophone/contexts/search/Search';
+import { ArtistsStore, ArtistsPage } from 'gramophone/contexts/artists/Artists';
+import { AlbumsStore, AlbumsPage } from 'gramophone/contexts/albums/Albums';
+import { TracksStore, TracksPage } from 'gramophone/contexts/tracks/Tracks';
+import { YearsStore, YearsPage } from 'gramophone/contexts/years/Years';
+import { GenresStore, GenresPage } from 'gramophone/contexts/genres/Genres';
+import { PlaylistsStore, PlaylistsPage } from 'gramophone/contexts/playlists/Playlists';
 import { AdminPage } from 'gramophone/contexts/admin/Admin';
 
 import './Main.css';
@@ -23,6 +30,42 @@ const TAG_RootStore = () => {}
 const RootStore = types
 	.model({
 		'app': types.optional(NxAppStore, {}),
+
+		// Search
+		// -
+
+		'search': types.optional(SearchStore, {}),
+
+		// Artistes
+		// -
+
+		'artists': types.optional(ArtistsStore, {}),
+
+		// Albums
+		// -
+
+		'albums': types.optional(AlbumsStore, {}),
+
+		// Titres
+		// -
+
+		'tracks': types.optional(TracksStore, {}),
+
+		// Années
+		// -
+
+		'years': types.optional(YearsStore, {}),
+
+		// Genres
+		// -
+
+		'genres': types.optional(GenresStore, {}),
+
+		// Playlists
+		// -
+
+		'playlists': types.optional(PlaylistsStore, {}),
+
 	})
 	.views(self => ({
 
@@ -53,10 +96,44 @@ const RootStore = types
 
 			// -
 
-			// A propos
-			// if (navContext == 'about') {
-			// 	app.navigate(app.aboutUrl, 'about');
-			// }
+			// Search
+			if (navContext == 'search') {
+				app.navigate('/search', 'search');
+			}
+
+			// -
+
+			// Artistes
+			if (navContext == 'artists') {
+				app.navigate('/artists', 'artists');
+			}
+
+			// Albums
+			if (navContext == 'albums') {
+				app.navigate('/albums', 'albums');
+			}
+
+			// Tracks
+			if (navContext == 'tracks') {
+				app.navigate('/tracks', 'tracks');
+			}
+
+			// -
+
+			// Années
+			if (navContext == 'years') {
+				app.navigate('/years', 'years');
+			}
+
+			// Genres
+			if (navContext == 'genres') {
+				app.navigate('/genres', 'genres');
+			}
+
+			// Playlists
+			if (navContext == 'playlists') {
+				app.navigate('/playlists', 'playlists');
+			}
 
 		},
 
@@ -71,6 +148,13 @@ const RootStore = types
 
 let contexts = {
 	'home': HomePage,
+	'search': SearchPage,
+	'artists': ArtistsPage,
+	'albums': AlbumsPage,
+	'tracks': TracksPage,
+	'years': YearsPage,
+	'genres': GenresPage,
+	'playlists': PlaylistsPage,
 	'admin': AdminPage,
 }
 
@@ -84,6 +168,13 @@ let popups = {}
 
 let routes = {
 	'home': '/',
+	'search': '/search',
+	'artists': '/artists',
+	'albums': '/albums',
+	'tracks': '/tracks',
+	'years': '/years',
+	'genres': '/genres',
+	'playlists': '/playlists',
 	'admin': '/admin',
 }
 

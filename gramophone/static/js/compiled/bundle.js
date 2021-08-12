@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 505:
+/***/ 188:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -222,7 +222,26 @@ var ICON_KEYS_TO_FILES = {
     'push_pin': 'push_pin_black_24dp.svg',
     'bug_report': 'bug_report_black_24dp.svg',
     'badge': 'badge_black_24dp.svg',
-    'lock_open': 'lock_open_black_24dp.svg'
+    'lock_open': 'lock_open_black_24dp.svg',
+    'person': 'person_black_24dp.svg',
+    'history': 'history_black_24dp.svg',
+    'text_snippet': 'text_snippet_black_24dp.svg',
+    'forum': 'forum_black_24dp.svg',
+    'work_outline': 'work_outline_black_24dp.svg',
+    'school': 'school_black_24dp.svg',
+    'science': 'science_black_24dp.svg',
+    'book': 'book_black_24dp.svg',
+    'history_edu': 'history_edu_black_24dp.svg',
+    'card_giftcard': 'card_giftcard_black_24dp.svg',
+    'inventory_2': 'inventory_2_black_24dp.svg',
+    'sports_esports': 'sports_esports_black_24dp.svg',
+    'face': 'face_black_24dp.svg',
+    'art_track': 'art_track_black_24dp.svg',
+    'album': 'album_black_24dp.svg',
+    'audiotrack': 'audiotrack_black_24dp.svg',
+    'date_range': 'date_range_black_24dp.svg',
+    'local_bar': 'local_bar_black_24dp.svg',
+    'playlist_play': 'playlist_play_black_24dp.svg'
   }
 }; // const ICON_SIZES = {
 // 	'small': {
@@ -720,7 +739,33 @@ var HeaderStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(f
   };
 }); // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
-// ***** HeaderUserMenu *****
+// ***** HeaderTitle *****
+// ***********************
+
+var TAG_HeaderTitle = function TAG_HeaderTitle() {};
+
+var HeaderTitle = function HeaderTitle(props) {
+  // From ... props
+  var title = props.title ? props.title : '';
+  var titleStyle = props.titleStyle ? props.titleStyle : {};
+  var subtitle = props.subtitle ? props.subtitle : '';
+  var subtitleStyle = props.subtitleStyle ? props.subtitleStyle : {};
+  var centered = props.centered == true ? props.centered : false; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-header-titles-wrapper", {
+      "centered": centered
+    })
+  }, title && /*#__PURE__*/react.createElement("div", {
+    className: "nx-header-title",
+    style: titleStyle
+  }, title), subtitle && /*#__PURE__*/react.createElement("div", {
+    className: "nx-header-subtitle",
+    style: subtitleStyle
+  }, subtitle));
+}; // ***** HeaderUserMenu *****
 // **************************
 
 var TAG_HeaderUserMenu = function TAG_HeaderUserMenu() {};
@@ -847,7 +892,9 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
   var menu = app.menu;
   var portal = app.portal; // From ... props
 
+  var left = props.left;
   var children = props.children;
+  var right = props.right;
   var callbackMenu = props.callbackMenu;
   var callbackBack = props.callbackBack;
   var callbackHome = props.callbackHome;
@@ -924,7 +971,7 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
   }, /*#__PURE__*/react.createElement(Icon_Icon, {
     name: "home",
     color: "white"
-  }))); // Header -> Middle
+  })), left && left); // Header -> Middle
   // -------------------------------------------------
 
   var headerMiddle = /*#__PURE__*/react.createElement("div", {
@@ -934,7 +981,7 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
 
   var headerRight = /*#__PURE__*/react.createElement("div", {
     className: "nx-header-right"
-  }, !breakPoint650 && /*#__PURE__*/react.createElement(IconButton, {
+  }, right && right, !breakPoint650 && /*#__PURE__*/react.createElement(IconButton, {
     onClick: function onClick() {
       return handleBugReportClick();
     },
@@ -1792,9 +1839,27 @@ var About = __webpack_require__(189);
 
 
 
+
  // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
-// ***** AboutMenuItem *****
+// ***** AboutHeaderLeft *****
+// ***************************
+
+var TAG_AboutHeaderLeft = function TAG_AboutHeaderLeft() {};
+
+var AboutHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "A propos",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** AboutMenuItem *****
 // *************************
 
 var TAG_AboutMenuItem = function TAG_AboutMenuItem() {};
@@ -1805,7 +1870,7 @@ var AboutMenuItem = (0,es/* observer */.Pi)(function (props) {
   // ==================================================================================================
 
   var handleMenuItemClick = function handleMenuItemClick() {
-    app.navigate(app.aboutUrl, 'about');
+    app.navigate(app.aboutUrl, app.aboutContext);
   }; // Render
   // ==================================================================================================
 
@@ -1815,7 +1880,7 @@ var AboutMenuItem = (0,es/* observer */.Pi)(function (props) {
       name: "code"
     }),
     label: "A propos",
-    activeContexts: ['about'],
+    activeContexts: [app.aboutContext],
     callbackClick: handleMenuItemClick
   });
 }); // ***** AboutPage *****
@@ -1976,6 +2041,7 @@ function Account_arrayLikeToArray(arr, len) { if (len == null || len > arr.lengt
 
 
 
+
  // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** AccountStore *****
@@ -2075,7 +2141,24 @@ var AccountStore = mobx_state_tree_module/* types.model */.V5.model({
   };
 }); // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
-// ***** AccountMenuItem *****
+// ***** AccountHeaderLeft *****
+// *****************************
+
+var TAG_AccountHeaderLeft = function TAG_AccountHeaderLeft() {};
+
+var AccountHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Mon compte",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** AccountMenuItem *****
 // ***************************
 
 var TAG_AccountMenuItem = function TAG_AccountMenuItem() {};
@@ -2279,6 +2362,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   loginContext: 'login',
   homeUrl: '/',
   homeContext: 'home',
+  searchUrl: '/search',
+  searchContext: 'search',
   aboutUrl: '/about',
   aboutContext: 'about',
   adminUrl: '/admin',
@@ -3093,7 +3178,826 @@ var NxApp_NxApp = (0,es/* observer */.Pi)(function (props) {
     id: "nx-main"
   }, content), !isFullScreen && /*#__PURE__*/react.createElement(Portal_Portal, null), popupsRendered)));
 });
+// EXTERNAL MODULE: ../../nexus/react/contexts/home/Home.css
+var Home = __webpack_require__(37);
+;// CONCATENATED MODULE: ../../nexus/react/contexts/home/Home.jsx
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** HomeHeaderMiddle *****
+// ****************************
+
+var TAG_HomeHeaderMiddle = function TAG_HomeHeaderMiddle() {};
+
+var HomeHeaderMiddle = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var services = app.services; // From ... store
+
+  var appName = services.me.name; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: appName,
+    titleStyle: {
+      fontWeight: 'bold'
+    },
+    centered: true
+  });
+}); // ***** HomeMenuItem *****
+// ************************
+
+var TAG_HomeMenuItem = function TAG_HomeMenuItem() {};
+
+var HomeMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // From ... store
+
+  var breakPoint650 = app.breakPoint650; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    app.navigate(app.homeUrl, app.homeContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  var homeMenuItemContent = null;
+
+  if (breakPoint650) {
+    homeMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
+      icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+        name: "home",
+        width: "120px"
+      }),
+      label: "Accueil",
+      activeContexts: [app.homeContext],
+      callbackClick: handleMenuItemClick
+    });
+  }
+
+  return homeMenuItemContent;
+});
+// EXTERNAL MODULE: ../../nexus/react/contexts/admin/Admin.css
+var Admin = __webpack_require__(644);
+;// CONCATENATED MODULE: ../../nexus/react/contexts/admin/Admin.jsx
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** AdminHeaderLeft *****
+// ***************************
+
+var TAG_AdminHeaderLeft = function TAG_AdminHeaderLeft() {};
+
+var AdminHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Administration",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** AdminMenuItem *****
+// *************************
+
+var TAG_AdminMenuItem = function TAG_AdminMenuItem() {};
+
+var AdminMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var account = app.account; // From ... store
+
+  var isAdmin = account.is_admin; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    app.navigate(app.adminUrl, app.adminContext);
+  }; // Render
+  // ==================================================================================================
+
+
+  var adminMenuItemContent = null;
+
+  if (isAdmin) {
+    adminMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
+      icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+        name: "setting"
+      }),
+      label: "Administration",
+      activeContexts: [app.adminContext],
+      callbackClick: handleMenuItemClick
+    });
+  }
+
+  return adminMenuItemContent;
+});
+// EXTERNAL MODULE: ./contexts/search/Search.css
+var Search = __webpack_require__(906);
+;// CONCATENATED MODULE: ./contexts/search/Search.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** SearchStore *****
+// ***********************
+
+var TAG_SearchStore = function TAG_SearchStore() {};
+
+var SearchStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** SearchHeaderMiddle *****
+// ******************************
+
+var TAG_SearchHeaderMiddle = function TAG_SearchHeaderMiddle() {};
+
+var SearchHeaderMiddle = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Rechercher"
+  });
+}); // ***** SearchMenuItem *****
+// **************************
+
+var TAG_SearchMenuItem = function TAG_SearchMenuItem() {};
+
+var SearchMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var searchContext = 'search'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(searchContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "search",
+      width: "120px"
+    }),
+    label: "Rechercher",
+    activeContexts: [searchContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** SearchPage *****
+// **********************
+
+var TAG_SearchPage = function TAG_SearchPage() {};
+
+var SearchPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "search",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/artists/Artists.css
+var Artists = __webpack_require__(664);
+;// CONCATENATED MODULE: ./contexts/artists/Artists.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** ArtistsStore *****
+// ***********************
+
+var TAG_ArtistsStore = function TAG_ArtistsStore() {};
+
+var ArtistsStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** ArtistsHeaderLeft *****
+// *****************************
+
+var TAG_ArtistsHeaderLeft = function TAG_ArtistsHeaderLeft() {};
+
+var ArtistsHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Artistes",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** ArtistsMenuItem *****
+// ***************************
+
+var TAG_ArtistsMenuItem = function TAG_ArtistsMenuItem() {};
+
+var ArtistsMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var artistsContext = 'artists'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(artistsContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "face",
+      width: "120px"
+    }),
+    label: "Artistes",
+    activeContexts: [artistsContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** ArtistsPage *****
+// ***********************
+
+var TAG_ArtistsPage = function TAG_ArtistsPage() {};
+
+var ArtistsPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "face",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/albums/Albums.css
+var Albums = __webpack_require__(789);
+;// CONCATENATED MODULE: ./contexts/albums/Albums.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** AlbumsStore *****
+// ***********************
+
+var TAG_AlbumsStore = function TAG_AlbumsStore() {};
+
+var AlbumsStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** AlbumsHeaderLeft *****
+// *****************************
+
+var TAG_AlbumsHeaderLeft = function TAG_AlbumsHeaderLeft() {};
+
+var AlbumsHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Albums",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** AlbumsMenuItem *****
+// **************************
+
+var TAG_AlbumsMenuItem = function TAG_AlbumsMenuItem() {};
+
+var AlbumsMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var albumsContext = 'albums'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(albumsContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "album",
+      width: "120px"
+    }),
+    label: "Albums",
+    activeContexts: [albumsContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** AlbumsPage *****
+// **********************
+
+var TAG_AlbumsPage = function TAG_AlbumsPage() {};
+
+var AlbumsPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "album",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/tracks/Tracks.css
+var Tracks = __webpack_require__(220);
+;// CONCATENATED MODULE: ./contexts/tracks/Tracks.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** TracksStore *****
+// ***********************
+
+var TAG_TracksStore = function TAG_TracksStore() {};
+
+var TracksStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** TracksHeaderLeft *****
+// ****************************
+
+var TAG_TracksHeaderLeft = function TAG_TracksHeaderLeft() {};
+
+var TracksHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Titres",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** TracksMenuItem *****
+// **************************
+
+var TAG_TracksMenuItem = function TAG_TracksMenuItem() {};
+
+var TracksMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var tracksContext = 'tracks'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(tracksContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "audiotrack",
+      width: "120px"
+    }),
+    label: "Titres",
+    activeContexts: [tracksContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** TracksPage *****
+// **********************
+
+var TAG_TracksPage = function TAG_TracksPage() {};
+
+var TracksPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "audiotrack",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/years/Years.css
+var Years = __webpack_require__(114);
+;// CONCATENATED MODULE: ./contexts/years/Years.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** YearsStore *****
+// **********************
+
+var TAG_YearsStore = function TAG_YearsStore() {};
+
+var YearsStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** YearsHeaderLeft *****
+// ***************************
+
+var TAG_YearsHeaderLeft = function TAG_YearsHeaderLeft() {};
+
+var YearsHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Ann\xE9es",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** YearsMenuItem *****
+// *************************
+
+var TAG_YearsMenuItem = function TAG_YearsMenuItem() {};
+
+var YearsMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var yearsContext = 'years'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(yearsContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "date_range",
+      width: "120px"
+    }),
+    label: "Ann\xE9es",
+    activeContexts: [yearsContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** YearsPage *****
+// *********************
+
+var TAG_YearsPage = function TAG_YearsPage() {};
+
+var YearsPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "date_range",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/genres/Genres.css
+var Genres = __webpack_require__(597);
+;// CONCATENATED MODULE: ./contexts/genres/Genres.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** GenresStore *****
+// ***********************
+
+var TAG_GenresStore = function TAG_GenresStore() {};
+
+var GenresStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** GenresHeaderLeft *****
+// ****************************
+
+var TAG_GenresHeaderLeft = function TAG_GenresHeaderLeft() {};
+
+var GenresHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Genres",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** GenresMenuItem *****
+// **************************
+
+var TAG_GenresMenuItem = function TAG_GenresMenuItem() {};
+
+var GenresMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var genresContext = 'genres'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(genresContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "local_bar",
+      width: "120px"
+    }),
+    label: "Genres",
+    activeContexts: [genresContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** GenresPage *****
+// **********************
+
+var TAG_GenresPage = function TAG_GenresPage() {};
+
+var GenresPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "local_bar",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
+// EXTERNAL MODULE: ./contexts/playlists/Playlists.css
+var Playlists = __webpack_require__(555);
+;// CONCATENATED MODULE: ./contexts/playlists/Playlists.jsx
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** PlaylistsStore *****
+// **************************
+
+var TAG_PlaylistsStore = function TAG_PlaylistsStore() {};
+
+var PlaylistsStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {}
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** PlaylistsHeaderLeft *****
+// *******************************
+
+var TAG_PlaylistsHeaderLeft = function TAG_PlaylistsHeaderLeft() {};
+
+var PlaylistsHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Playlists",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** PlaylistsMenuItem *****
+// *****************************
+
+var TAG_PlaylistsMenuItem = function TAG_PlaylistsMenuItem() {};
+
+var PlaylistsMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // ...
+
+  var playlistsContext = 'playlists'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(playlistsContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "playlist_play",
+      width: "120px"
+    }),
+    label: "Playlists",
+    activeContexts: [playlistsContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** PlaylistsPage *****
+// *************************
+
+var TAG_PlaylistsPage = function TAG_PlaylistsPage() {};
+
+var PlaylistsPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // Renderers
+  // ==================================================================================================
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "playlist_play",
+      show: true
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderHelper());
+});
 ;// CONCATENATED MODULE: ./ui/ContextualHeader.jsx
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3112,99 +4016,127 @@ var ContextualHeader = (0,es/* observer */.Pi)(function (props) {
   var context = app.context; // Render
   // ==================================================================================================
 
-  return /*#__PURE__*/react.createElement(Header_Header, null, "Gramophone");
-});
-// EXTERNAL MODULE: ../../nexus/react/contexts/home/Home.css
-var Home = __webpack_require__(37);
-;// CONCATENATED MODULE: ../../nexus/react/contexts/home/Home.jsx
+  var headerLeft = null;
+  var headerMiddle = null;
+  var headerRight = null; // -------------------------------------------------
+
+  var renderHeaderHome = function renderHeaderHome() {
+    if ([app.homeContext, 'login'].indexOf(context) == -1) {
+      return;
+    }
+
+    headerMiddle = /*#__PURE__*/react.createElement(HomeHeaderMiddle, null);
+  };
+
+  var renderHeaderSearch = function renderHeaderSearch() {
+    if (context != 'search') {
+      return;
+    }
+
+    headerMiddle = /*#__PURE__*/react.createElement(SearchHeaderMiddle, null);
+  }; // -------------------------------------------------
 
 
+  var renderHeaderArtists = function renderHeaderArtists() {
+    if (context != 'artists') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(ArtistsHeaderLeft, null);
+  };
+
+  var renderHeaderAlbums = function renderHeaderAlbums() {
+    if (context != 'albums') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(AlbumsHeaderLeft, null);
+  };
+
+  var renderHeaderTracks = function renderHeaderTracks() {
+    if (context != 'tracks') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(TracksHeaderLeft, null);
+  }; // -------------------------------------------------
 
 
+  var renderHeaderYears = function renderHeaderYears() {
+    if (context != 'years') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(YearsHeaderLeft, null);
+  };
+
+  var renderHeaderGenres = function renderHeaderGenres() {
+    if (context != 'genres') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(GenresHeaderLeft, null);
+  };
+
+  var renderHeaderPlaylists = function renderHeaderPlaylists() {
+    if (context != 'playlists') {
+      return;
+    }
+
+    headerLeft = /*#__PURE__*/react.createElement(PlaylistsHeaderLeft, null);
+  }; // -------------------------------------------------
 
 
- // Functions Components ReactJS
-// -------------------------------------------------------------------------------------------------------------
-// ***** HomeMenuItem *****
-// ************************
+  var renderHeaderAbout = function renderHeaderAbout() {
+    if (context != app.aboutContext) {
+      return;
+    }
 
-var TAG_HomeMenuItem = function TAG_HomeMenuItem() {};
+    headerLeft = /*#__PURE__*/react.createElement(AboutHeaderLeft, null);
+  };
 
-var HomeMenuItem = (0,es/* observer */.Pi)(function (props) {
-  var store = react.useContext(window.storeContext);
-  var app = store.app; // From ... store
+  var renderHeaderAdmin = function renderHeaderAdmin() {
+    if (context != app.adminContext) {
+      return;
+    }
 
-  var breakPoint650 = app.breakPoint650; // Evènements
-  // ==================================================================================================
-
-  var handleMenuItemClick = function handleMenuItemClick() {
-    app.navigate(app.homeUrl, 'home');
-  }; // Render
-  // ==================================================================================================
+    headerLeft = /*#__PURE__*/react.createElement(AdminHeaderLeft, null);
+  }; // -------------------------------------------------
 
 
-  var homeMenuItemContent = null;
+  var renderHeaderAccount = function renderHeaderAccount() {
+    if (context != app.accountContext) {
+      return;
+    }
 
-  if (breakPoint650) {
-    homeMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
-      icon: /*#__PURE__*/react.createElement(Icon_Icon, {
-        name: "home",
-        width: "120px"
-      }),
-      label: "Accueil",
-      activeContexts: ['home'],
-      callbackClick: handleMenuItemClick
-    });
-  }
-
-  return homeMenuItemContent;
-});
-// EXTERNAL MODULE: ../../nexus/react/contexts/admin/Admin.css
-var Admin = __webpack_require__(644);
-;// CONCATENATED MODULE: ../../nexus/react/contexts/admin/Admin.jsx
+    headerLeft = /*#__PURE__*/react.createElement(AccountHeaderLeft, null);
+  }; // -------------------------------------------------
 
 
-
-
-
-
- // Functions Components ReactJS
-// -------------------------------------------------------------------------------------------------------------
-// ***** AdminMenuItem *****
-// *************************
-
-var TAG_AdminMenuItem = function TAG_AdminMenuItem() {};
-
-var AdminMenuItem = (0,es/* observer */.Pi)(function (props) {
-  var store = react.useContext(window.storeContext);
-  var app = store.app;
-  var account = app.account; // From ... store
-
-  var isAdmin = account.is_admin; // Evènements
-  // ==================================================================================================
-
-  var handleMenuItemClick = function handleMenuItemClick() {
-    app.navigate(app.adminUrl, 'admin');
-  }; // Render
-  // ==================================================================================================
-
-
-  var adminMenuItemContent = null;
-
-  if (isAdmin) {
-    adminMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
-      icon: /*#__PURE__*/react.createElement(Icon_Icon, {
-        name: "setting"
-      }),
-      label: "Administration",
-      activeContexts: ['admin'],
-      callbackClick: handleMenuItemClick
-    });
-  }
-
-  return adminMenuItemContent;
+  renderHeaderHome();
+  renderHeaderSearch();
+  renderHeaderArtists();
+  renderHeaderAlbums();
+  renderHeaderTracks();
+  renderHeaderYears();
+  renderHeaderGenres();
+  renderHeaderPlaylists();
+  renderHeaderAbout();
+  renderHeaderAdmin();
+  renderHeaderAccount();
+  return /*#__PURE__*/react.createElement(Header_Header, {
+    left: headerLeft,
+    right: headerRight
+  }, headerMiddle);
 });
 ;// CONCATENATED MODULE: ./ui/ContextualMenu.jsx
+
+
+
+
+
+
+
 
 
 
@@ -3229,10 +4161,8 @@ var ContextualMenu = (0,es/* observer */.Pi)(function (props) {
   var context = app.context;
   var breakPoint650 = app.breakPoint650; // Render
   // ==================================================================================================
-  // -------------------------------------------------
-  // -------------------------------------------------
 
-  return /*#__PURE__*/react.createElement(Menu_Menu, null, /*#__PURE__*/react.createElement(HomeMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(AboutMenuItem, null), /*#__PURE__*/react.createElement(AdminMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(LoginMenuItem, null), /*#__PURE__*/react.createElement(AccountMenuItem, null), /*#__PURE__*/react.createElement(LogoutMenuItem, null));
+  return /*#__PURE__*/react.createElement(Menu_Menu, null, /*#__PURE__*/react.createElement(HomeMenuItem, null), /*#__PURE__*/react.createElement(SearchMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(ArtistsMenuItem, null), /*#__PURE__*/react.createElement(AlbumsMenuItem, null), /*#__PURE__*/react.createElement(TracksMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(YearsMenuItem, null), /*#__PURE__*/react.createElement(GenresMenuItem, null), /*#__PURE__*/react.createElement(PlaylistsMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(AboutMenuItem, null), /*#__PURE__*/react.createElement(AdminMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(LoginMenuItem, null), /*#__PURE__*/react.createElement(AccountMenuItem, null), /*#__PURE__*/react.createElement(LogoutMenuItem, null));
 });
 // EXTERNAL MODULE: ./contexts/home/Home.css
 var home_Home = __webpack_require__(319);
@@ -3318,6 +4248,13 @@ var Main = __webpack_require__(729);
 
 
 
+
+
+
+
+
+
+
  // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** RootStore *****
@@ -3326,7 +4263,28 @@ var Main = __webpack_require__(729);
 var TAG_RootStore = function TAG_RootStore() {};
 
 var RootStore = mobx_state_tree_module/* types.model */.V5.model({
-  'app': mobx_state_tree_module/* types.optional */.V5.optional(NxAppStore, {})
+  'app': mobx_state_tree_module/* types.optional */.V5.optional(NxAppStore, {}),
+  // Search
+  // -
+  'search': mobx_state_tree_module/* types.optional */.V5.optional(SearchStore, {}),
+  // Artistes
+  // -
+  'artists': mobx_state_tree_module/* types.optional */.V5.optional(ArtistsStore, {}),
+  // Albums
+  // -
+  'albums': mobx_state_tree_module/* types.optional */.V5.optional(AlbumsStore, {}),
+  // Titres
+  // -
+  'tracks': mobx_state_tree_module/* types.optional */.V5.optional(TracksStore, {}),
+  // Années
+  // -
+  'years': mobx_state_tree_module/* types.optional */.V5.optional(YearsStore, {}),
+  // Genres
+  // -
+  'genres': mobx_state_tree_module/* types.optional */.V5.optional(GenresStore, {}),
+  // Playlists
+  // -
+  'playlists': mobx_state_tree_module/* types.optional */.V5.optional(PlaylistsStore, {})
 }).views(function (self) {
   return {
     get ajaxGramophone() {
@@ -3348,10 +4306,43 @@ var RootStore = mobx_state_tree_module/* types.model */.V5.model({
       // ---
       var app = self.app;
       var context = app.context; // -
-      // A propos
-      // if (navContext == 'about') {
-      // 	app.navigate(app.aboutUrl, 'about');
-      // }
+      // Search
+
+      if (navContext == 'search') {
+        app.navigate('/search', 'search');
+      } // -
+      // Artistes
+
+
+      if (navContext == 'artists') {
+        app.navigate('/artists', 'artists');
+      } // Albums
+
+
+      if (navContext == 'albums') {
+        app.navigate('/albums', 'albums');
+      } // Tracks
+
+
+      if (navContext == 'tracks') {
+        app.navigate('/tracks', 'tracks');
+      } // -
+      // Années
+
+
+      if (navContext == 'years') {
+        app.navigate('/years', 'years');
+      } // Genres
+
+
+      if (navContext == 'genres') {
+        app.navigate('/genres', 'genres');
+      } // Playlists
+
+
+      if (navContext == 'playlists') {
+        app.navigate('/playlists', 'playlists');
+      }
     }
   };
 }); // Init
@@ -3361,6 +4352,13 @@ var RootStore = mobx_state_tree_module/* types.model */.V5.model({
 
 var contexts = {
   'home': HomePage,
+  'search': SearchPage,
+  'artists': ArtistsPage,
+  'albums': AlbumsPage,
+  'tracks': TracksPage,
+  'years': YearsPage,
+  'genres': GenresPage,
+  'playlists': PlaylistsPage,
   'admin': AdminPage
 }; // Popups
 // -
@@ -3370,6 +4368,13 @@ var popups = {}; // Routes
 
 var routes = {
   'home': '/',
+  'search': '/search',
+  'artists': '/artists',
+  'albums': '/albums',
+  'tracks': '/tracks',
+  'years': '/years',
+  'genres': '/genres',
+  'playlists': '/playlists',
   'admin': '/admin'
 }; // Store
 // -
@@ -3438,7 +4443,56 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ 789:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 664:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 597:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
 /***/ 319:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 555:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 906:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 220:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 114:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -3739,7 +4793,7 @@ window.addEventListener('DOMContentLoaded', function () {
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, [216], () => (__webpack_require__(979)))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(505)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(188)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

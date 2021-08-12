@@ -18,6 +18,14 @@ import {
 import { AccountMenuItem } from 'nexus/contexts/account/Account';
 import { Icon } from 'nexus/ui/icon/Icon';
 
+import { SearchMenuItem } from 'gramophone/contexts/search/Search';
+import { ArtistsMenuItem } from 'gramophone/contexts/artists/Artists';
+import { AlbumsMenuItem } from 'gramophone/contexts/albums/Albums';
+import { TracksMenuItem } from 'gramophone/contexts/tracks/Tracks';
+import { YearsMenuItem } from 'gramophone/contexts/years/Years';
+import { GenresMenuItem } from 'gramophone/contexts/genres/Genres';
+import { PlaylistsMenuItem } from 'gramophone/contexts/playlists/Playlists';
+
 
 // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
@@ -39,15 +47,24 @@ export const ContextualMenu = observer((props) => {
 	// Render
 	// ==================================================================================================
 
-	// -------------------------------------------------
-
-	// -------------------------------------------------
-
 	return (
 		<Menu>
 			<HomeMenuItem />
+			<SearchMenuItem />
 
-			{breakPoint650 && <MenuDivider />}
+			<MenuDivider />
+
+			<ArtistsMenuItem />
+			<AlbumsMenuItem />
+			<TracksMenuItem />
+
+			<MenuDivider />
+
+			<YearsMenuItem />
+			<GenresMenuItem />
+			<PlaylistsMenuItem />
+
+			<MenuDivider />
 
 			<AboutMenuItem />
 			<AdminMenuItem />
