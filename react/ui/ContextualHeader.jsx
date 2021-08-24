@@ -33,6 +33,8 @@ export const ContextualHeader = observer((props) => {
 	// From ... store
 
 	const context = app.context;
+	const homeContext = app.homeContext;
+	const authContext = app.authContext;
 
 	// Render
 	// ==================================================================================================
@@ -45,7 +47,7 @@ export const ContextualHeader = observer((props) => {
 
 	const renderHeaderHome = () => {
 
-		if ([app.homeContext, 'login'].indexOf(context) == -1 ) { return; }
+		if ([homeContext, authContext].indexOf(context) == -1 ) { return; }
 
 		headerMiddle = <HomeHeaderMiddle />
 	}

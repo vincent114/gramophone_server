@@ -71,8 +71,8 @@ const RootStore = types
 
 		get ajaxGramophone() {
 			const app = self.app;
-			// return app.getAjaxBase('gramophone');
-			return '/';
+			const services = app.services;
+			return services.getAjaxBase('gramophone');
 		},
 
 	}))
@@ -186,6 +186,10 @@ let initSnapshot = makeInitSnapshot(routes, {
 		'theme': {
 			'variant': 'light',
 			'palette': {
+				'default': {
+					'main': '#000000',
+					'contrastText': '#fff',
+				},
 				'primary': {
 					'main': '#424242',
 					'contrastText': '#fff',
