@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 188:
+/***/ 3940:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -9,17 +9,17 @@
 // UNUSED EXPORTS: RootStoreContext, rootStore
 
 // EXTERNAL MODULE: ../../nexus/react/node_modules/react/index.js
-var react = __webpack_require__(354);
+var react = __webpack_require__(3354);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/react-dom/index.js
 var react_dom = __webpack_require__(20);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/mobx-state-tree/dist/mobx-state-tree.module.js
-var mobx_state_tree_module = __webpack_require__(947);
+var mobx_state_tree_module = __webpack_require__(7947);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/mobx-react-lite/es/index.js + 17 modules
-var es = __webpack_require__(27);
+var es = __webpack_require__(8027);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/route-node/dist/route-node.esm.js + 3 modules
-var route_node_esm = __webpack_require__(285);
+var route_node_esm = __webpack_require__(6285);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/clsx/dist/clsx.m.js
-var clsx_m = __webpack_require__(97);
+var clsx_m = __webpack_require__(4097);
 ;// CONCATENATED MODULE: ../../nexus/react/models/Services.jsx
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -53,7 +53,19 @@ var ServiceInfoStore = mobx_state_tree_module/* types.model */.V5.model({
   port: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.integer */.V5.integer),
   database: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
   internal: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
-  external: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
+  external: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  view_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  edit_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  admin_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
+}).views(function (self) {
+  return {
+    // Getters
+    // -
+    get roles() {
+      return [self.view_role, self.edit_role, self.admin_role];
+    }
+
+  };
 }).actions(function (self) {
   return {
     setField: function setField(field, value) {
@@ -71,6 +83,9 @@ var ServiceInfoStore = mobx_state_tree_module/* types.model */.V5.model({
       self.database = raw.database;
       self.internal = raw.internal;
       self.external = raw.external;
+      self.view_role = raw.view_role;
+      self.edit_role = raw.edit_role;
+      self.admin_role = raw.admin_role;
     }
   };
 }); // ***** ServicesStore *****
@@ -90,8 +105,26 @@ var ServicesStore = mobx_state_tree_module/* types.model */.V5.model({
       }
 
       return me;
-    }
+    },
 
+    // Getters
+    // -
+    getServiceInfo: function getServiceInfo(appId) {
+      return self.smap.get(appId);
+    },
+    getAjaxBase: function getAjaxBase(appId) {
+      var me = self.getServiceInfo('me'); // AJAX vers un autre serveur ?
+
+      if (me && me.app_id != appId) {
+        var serviceInfo = self.getServiceInfo(appId);
+
+        if (serviceInfo) {
+          return serviceInfo.external;
+        }
+      }
+
+      return '';
+    }
   };
 }).actions(function (self) {
   return {
@@ -115,7 +148,7 @@ var ServicesStore = mobx_state_tree_module/* types.model */.V5.model({
   };
 });
 // EXTERNAL MODULE: ../../nexus/react/ui/theme/Theme.css
-var Theme = __webpack_require__(824);
+var Theme = __webpack_require__(6824);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/theme/Theme.jsx
 
 
@@ -144,6 +177,7 @@ var ColorStore = mobx_state_tree_module/* types.model */.V5.model({
 var TAG_PaletteStore = function TAG_PaletteStore() {};
 
 var PaletteStore = mobx_state_tree_module/* types.model */.V5.model({
+  "default": mobx_state_tree_module/* types.optional */.V5.optional(ColorStore, {}),
   primary: mobx_state_tree_module/* types.optional */.V5.optional(ColorStore, {}),
   secondary: mobx_state_tree_module/* types.optional */.V5.optional(ColorStore, {})
 }).actions(function (self) {
@@ -192,7 +226,7 @@ var hexToRgbA = function hexToRgbA(hex, opacity) {
   throw new Error('Bad Hex');
 };
 // EXTERNAL MODULE: ../../nexus/react/ui/icon/Icon.css
-var Icon = __webpack_require__(244);
+var Icon = __webpack_require__(3244);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/icon/Icon.jsx
 
 
@@ -222,6 +256,7 @@ var ICON_KEYS_TO_FILES = {
     'push_pin': 'push_pin_black_24dp.svg',
     'bug_report': 'bug_report_black_24dp.svg',
     'badge': 'badge_black_24dp.svg',
+    'lock': 'lock_black_24dp.svg',
     'lock_open': 'lock_open_black_24dp.svg',
     'person': 'person_black_24dp.svg',
     'history': 'history_black_24dp.svg',
@@ -241,7 +276,22 @@ var ICON_KEYS_TO_FILES = {
     'audiotrack': 'audiotrack_black_24dp.svg',
     'date_range': 'date_range_black_24dp.svg',
     'local_bar': 'local_bar_black_24dp.svg',
-    'playlist_play': 'playlist_play_black_24dp.svg'
+    'playlist_play': 'playlist_play_black_24dp.svg',
+    'text_fields': 'text_fields_black_24dp.svg',
+    'hourglass_empty': 'hourglass_empty_black_24dp.svg',
+    'feedback_black': 'feedback_black_24dp.svg',
+    'info': 'info_black_24dp.svg',
+    'warning_amber': 'warning_amber_black_24dp.svg',
+    'check_circle': 'check_circle_black_24dp.svg',
+    'report': 'report_black_24dp.svg',
+    'new_releases': 'new_releases_black_24dp.svg',
+    'whatshot': 'whatshot_black_24dp.svg',
+    'close': 'close_black_24dp.svg',
+    'no_accounts': 'no_accounts_black_24dp.svg',
+    'palette': 'palette_black_24dp.svg',
+    'arrow_drop_down': 'arrow_drop_down_black_24dp.svg',
+    'arrow_forward': 'arrow_forward_black_24dp.svg',
+    'smart_button': 'smart_button_black_24dp.svg'
   }
 }; // const ICON_SIZES = {
 // 	'small': {
@@ -280,6 +330,7 @@ var Icon_Icon = function Icon(props) {
   var color = props.color ? props.color : 'black';
   var size = props.size ? props.size : 'normal'; // small, normal, large
 
+  var className = props.className ? props.className : '';
   var style = props.style ? props.style : {}; // ...
 
   var iconUrl = '';
@@ -301,53 +352,24 @@ var Icon_Icon = function Icon(props) {
 
 
   return /*#__PURE__*/react.createElement("div", {
-    className: "nx-icon",
+    className: (0,clsx_m/* default */.Z)("nx-icon", name, className),
     style: style
   }, iconUrl && /*#__PURE__*/react.createElement("img", {
     src: iconUrl
   }));
 };
-// EXTERNAL MODULE: ../../nexus/react/ui/button/Button.css
-var Button = __webpack_require__(181);
-;// CONCATENATED MODULE: ../../nexus/react/ui/button/Button.jsx
-
-
- // Functions Components ReactJS
-// -------------------------------------------------------------------------------------------------------------
-// ***** IconButton *****
-// **********************
-
-var TAG_IconButton = function TAG_IconButton() {};
-
-var IconButton = function IconButton(props) {
-  // From ... props
-  var children = props.children;
-  var color = props.color ? props.color : 'black'; // white, black
-
-  var disabled = props.disabled == true ? true : false;
-  var onClick = props.onClick; // Evènement
-  // ==================================================================================================
-
-  var handleClick = function handleClick(e) {
-    if (onClick) {
-      onClick(e);
-    }
-  }; // Render
-  // ==================================================================================================
-
-
-  return /*#__PURE__*/react.createElement("div", {
-    className: (0,clsx_m/* default */.Z)("nx-icon-button", color, {
-      "disabled": disabled
-    }),
-    onClick: function onClick(e) {
-      return handleClick(e);
-    }
-  }, children);
-};
 ;// CONCATENATED MODULE: ../../nexus/react/utils/Datas.jsx
-// Functions
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Datas_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function Datas_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Datas_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Datas_arrayLikeToArray(o, minLen); }
+
+function Datas_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+// Datas
 // -------------------------------------------------------------------------------------------------------------
+var ileDeFrance = (/* unused pure expression or super */ null && (['75', '77', '78', '91', '92', '93', '94', '95'])); // Functions
+// -------------------------------------------------------------------------------------------------------------
+
 function uuid() {
   // Collision free V4 UUIDS
   // ---
@@ -384,8 +406,272 @@ function copyObj(srcObj) {
   var copy = JSON.parse(JSON.stringify(srcObj));
   return copy;
 }
+function encodeBase64(str) {
+  var buff = new Buffer(str);
+  var base64data = buff.toString('base64');
+  return base64data;
+}
+function decodeBase64(str) {
+  var buff = new Buffer(str, 'base64');
+  var decodedData = buff.toString('ascii');
+  return decodedData;
+}
+function extendArray(array_dest, array_src, get_a_new_one) {
+  // Ajoute les éléments d'une liste dans une autre liste
+  // ---
+  if (get_a_new_one == true) {
+    var new_array = copyObj(array_dest);
+  } else {
+    var new_array = array_dest;
+  }
+
+  for (var idx_item in array_src) {
+    new_array.push(array_src[idx_item]);
+  }
+
+  return new_array;
+}
+function sortObjects(objects, sortField, sortDirection) {
+  sortDirection = sortDirection ? sortDirection : 'asc'; // Tri croissant
+
+  if (sortDirection == 'asc') {
+    objects.sort(function (a, b) {
+      if (a[sortField] > b[sortField]) return 1;
+      if (a[sortField] < b[sortField]) return -1;
+      return 0;
+    });
+  } // Tri décroissant
+
+
+  if (sortDirection == 'desc') {
+    objects.sort(function (a, b) {
+      if (a[sortField] < b[sortField]) return 1;
+      if (a[sortField] > b[sortField]) return -1;
+      return 0;
+    });
+  }
+
+  return objects;
+}
+var applyValue = function applyValue(node, path, value) {
+  // Enregistrement d'une valeur à partir d'un objet et d'un chemin
+  // ---
+  var saveTarget = node;
+
+  for (var idx_path in path) {
+    var target = path[idx_path];
+
+    if (idx_path == path.length - 1) {
+      saveTarget[target] = value;
+    } else {
+      if (!saveTarget.hasOwnProperty(target)) {
+        saveTarget[target] = {};
+      }
+
+      saveTarget = saveTarget[target];
+    }
+  }
+};
+var convertToJSONPath = function convertToJSONPath(path) {
+  // Convertion d'un chemin sous forme de liste en JSON Path pour mobx-state-tree
+  // ---
+  // https://mobx-state-tree.js.org/API/#applypatch
+  // http://jsonpatch.com
+  var jsonPath = '';
+
+  var _iterator = _createForOfIteratorHelper(path),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var pathItem = _step.value;
+      jsonPath = "".concat(jsonPath, "/").concat(pathItem);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return jsonPath;
+};
+// EXTERNAL MODULE: ../../nexus/react/ui/button/Button.css
+var Button = __webpack_require__(2181);
+;// CONCATENATED MODULE: ../../nexus/react/ui/button/Button.jsx
+function Button_slicedToArray(arr, i) { return Button_arrayWithHoles(arr) || Button_iterableToArrayLimit(arr, i) || Button_unsupportedIterableToArray(arr, i) || Button_nonIterableRest(); }
+
+function Button_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function Button_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Button_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Button_arrayLikeToArray(o, minLen); }
+
+function Button_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function Button_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function Button_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** IconButton *****
+// **********************
+
+var TAG_IconButton = function TAG_IconButton() {};
+
+var IconButton = function IconButton(props) {
+  // From ... props
+  var title = props.title ? props.title : '';
+  var children = props.children;
+  var color = props.color ? props.color : 'black'; // white, black
+
+  var disabled = props.disabled == true ? true : false;
+  var onClick = props.onClick; // Evènement
+  // ==================================================================================================
+
+  var handleClick = function handleClick(e) {
+    if (onClick) {
+      onClick(e);
+    }
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-icon-button", color, {
+      "disabled": disabled
+    }),
+    onClick: function onClick(e) {
+      return handleClick(e);
+    },
+    title: title
+  }, children);
+}; // ***** Button *****
+// ******************
+
+var TAG_Button = function TAG_Button() {};
+
+var Button_Button = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... state
+
+  var _React$useState = react.useState(false),
+      _React$useState2 = Button_slicedToArray(_React$useState, 2),
+      hover = _React$useState2[0],
+      setHover = _React$useState2[1]; // From ... props
+
+
+  var id = props.id ? props.id : '';
+  var children = props.children;
+  var variant = props.variant ? props.variant : 'flat'; // default, contained, outlined
+
+  var color = props.color ? props.color : 'default'; // default, primary, secondary
+
+  var disabled = props.disabled == true ? true : false;
+  var onClick = props.onClick;
+  var className = props.className ? props.className : '';
+  var style = props.style ? copyObj(props.style) : {}; // ...
+
+  style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : 'black';
+  style['backgroundColor'] = hover ? hexToRgbA(theme.palette["default"].main, 0.1) : 'transparent';
+  style['border'] = '1px solid transparent';
+
+  if (variant == 'outlined') {
+    style['borderColor'] = hexToRgbA(theme.palette["default"].main, 0.8);
+
+    if (disabled) {
+      style['borderColor'] = "rgba(0, 0, 0, 0.12)";
+    }
+  }
+
+  if (color == 'primary') {
+    style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : theme.palette.primary.main;
+    style['backgroundColor'] = hover ? hexToRgbA(theme.palette.primary.main, 0.1) : 'transparent';
+
+    if (variant == 'outlined') {
+      style['borderColor'] = theme.palette.primary.main;
+
+      if (disabled) {
+        style['borderColor'] = "rgba(0, 0, 0, 0.12)";
+      }
+    }
+
+    if (variant == 'contained') {
+      style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : 'white';
+      style['backgroundColor'] = hover ? theme.palette.primary.main : hexToRgbA(theme.palette.primary.main, 0.8);
+
+      if (disabled) {
+        style['backgroundColor'] = "rgba(0, 0, 0, 0.12)";
+      }
+    }
+  }
+
+  if (color == 'secondary') {
+    style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : theme.palette.secondary.main;
+    style['backgroundColor'] = hover ? hexToRgbA(theme.palette.secondary.main, 0.1) : 'transparent';
+
+    if (variant == 'outlined') {
+      style['borderColor'] = theme.palette.secondary.main;
+
+      if (disabled) {
+        style['borderColor'] = "rgba(0, 0, 0, 0.12)";
+      }
+    }
+
+    if (variant == 'contained') {
+      style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : 'white';
+      style['backgroundColor'] = hover ? theme.palette.secondary.main : hexToRgbA(theme.palette.secondary.main, 0.8);
+
+      if (disabled) {
+        style['backgroundColor'] = "rgba(0, 0, 0, 0.12)";
+      }
+    }
+  } // Evènement
+  // ==================================================================================================
+
+
+  var handleMouseEnter = function handleMouseEnter(evt) {
+    setHover(true);
+  };
+
+  var handleMouseLeave = function handleMouseLeave(evt) {
+    setHover(false);
+  };
+
+  var handleClick = function handleClick(evt) {
+    if (onClick) {
+      onClick(evt);
+    }
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    id: id,
+    className: (0,clsx_m/* default */.Z)("nx-button", variant, className, {
+      "hover": hover
+    }, {
+      "disabled": disabled
+    }),
+    style: style,
+    onMouseEnter: function onMouseEnter(e) {
+      return handleMouseEnter(e);
+    },
+    onMouseLeave: function onMouseLeave(e) {
+      return handleMouseLeave(e);
+    },
+    onClick: function onClick(e) {
+      return handleClick(e);
+    }
+  }, children);
+});
 // EXTERNAL MODULE: ../../nexus/react/ui/popover/Popover.css
-var Popover = __webpack_require__(443);
+var Popover = __webpack_require__(9443);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/popover/Popover.jsx
 function Popover_slicedToArray(arr, i) { return Popover_arrayWithHoles(arr) || Popover_iterableToArrayLimit(arr, i) || Popover_unsupportedIterableToArray(arr, i) || Popover_nonIterableRest(); }
 
@@ -559,7 +845,7 @@ var Popover_Popover = function Popover(props) {
   return popoverContent;
 };
 // EXTERNAL MODULE: ../../nexus/react/ui/avatar/Avatar.css
-var Avatar = __webpack_require__(130);
+var Avatar = __webpack_require__(3130);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/avatar/Avatar.jsx
 
 
@@ -602,7 +888,7 @@ var Avatar_Avatar = function Avatar(props) {
   }, children);
 };
 // EXTERNAL MODULE: ../../nexus/react/ui/list/List.css
-var List = __webpack_require__(817);
+var List = __webpack_require__(7883);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/list/List.jsx
 
 
@@ -676,7 +962,7 @@ var List_List = function List(props) {
   }, props.children);
 };
 // EXTERNAL MODULE: ../../nexus/react/ui/divider/Divider.css
-var Divider = __webpack_require__(236);
+var Divider = __webpack_require__(6236);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/divider/Divider.jsx
 
 
@@ -698,7 +984,7 @@ var Divider_Divider = function Divider(props) {
   });
 };
 // EXTERNAL MODULE: ../../nexus/react/layout/header/Header.css
-var Header = __webpack_require__(450);
+var Header = __webpack_require__(4450);
 ;// CONCATENATED MODULE: ../../nexus/react/layout/header/Header.jsx
 function Header_slicedToArray(arr, i) { return Header_arrayWithHoles(arr) || Header_iterableToArrayLimit(arr, i) || Header_unsupportedIterableToArray(arr, i) || Header_nonIterableRest(); }
 
@@ -711,6 +997,7 @@ function Header_arrayLikeToArray(arr, len) { if (len == null || len > arr.length
 function Header_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function Header_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -739,7 +1026,19 @@ var HeaderStore = mobx_state_tree_module/* types.model */.V5.model({}).actions(f
   };
 }); // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
-// ***** HeaderTitle *****
+// ***** HeaderDivider *****
+// *************************
+
+var TAG_HeaderDivider = function TAG_HeaderDivider() {};
+
+var HeaderDivider = function HeaderDivider(props) {
+  // ...
+  // Render
+  // ==================================================================================================
+  return /*#__PURE__*/React.createElement("div", {
+    className: "nx-header-divider"
+  });
+}; // ***** HeaderTitle *****
 // ***********************
 
 var TAG_HeaderTitle = function TAG_HeaderTitle() {};
@@ -781,11 +1080,11 @@ var HeaderUserMenu = (0,es/* observer */.Pi)(function (props) {
       setAnchorAccount = _React$useState2[1]; // From ... store
 
 
-  var isLoading = app.isLoading();
+  var isLoading = app.isLoading;
   var isLogged = account.isLogged;
   var breakPoint650 = app.breakPoint650;
-  var loginUrl = app.loginUrl;
-  var loginContext = app.loginContext;
+  var authUrl = app.authUrl;
+  var authContext = app.authContext;
   var accountUrl = app.accountUrl;
   var accountContext = app.accountContext; // ...
 
@@ -802,8 +1101,11 @@ var HeaderUserMenu = (0,es/* observer */.Pi)(function (props) {
 
 
   var handleLoginClick = function handleLoginClick() {
-    console.log('handleLoginClick');
-    app.navigate(loginUrl, loginContext);
+    app.navigate(authUrl, authContext, [{
+      "op": "replace",
+      "path": "/app/auth/step",
+      "value": 'login'
+    }]);
     handleCloseAccount();
   };
 
@@ -830,7 +1132,7 @@ var HeaderUserMenu = (0,es/* observer */.Pi)(function (props) {
       },
       disabled: isLoading
     }, /*#__PURE__*/react.createElement(Icon_Icon, {
-      name: "account_circle",
+      name: isLogged ? "account_circle" : "no_accounts",
       color: "white"
     })), /*#__PURE__*/react.createElement(Popover_Popover, {
       id: "pop-account",
@@ -900,7 +1202,7 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
   var callbackHome = props.callbackHome;
   var callbackPortal = props.callbackPortal; // From ... store
 
-  var isLoading = app.isLoading();
+  var isLoading = app.isLoading;
   var canGoBack = app.canGoBack();
   var canGoHome = app.canGoHome();
   var breakPoint650 = app.breakPoint650; // Evènements
@@ -955,13 +1257,19 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
   }, /*#__PURE__*/react.createElement(Icon_Icon, {
     name: "menu",
     color: "white"
-  })), /*#__PURE__*/react.createElement(IconButton, {
+  })), !isLoading && /*#__PURE__*/react.createElement(IconButton, {
     onClick: function onClick() {
       return handleBackClick();
     },
     disabled: isLoading || !canGoBack
   }, /*#__PURE__*/react.createElement(Icon_Icon, {
     name: "arrow_back",
+    color: "white"
+  })), isLoading && /*#__PURE__*/react.createElement(Avatar_Avatar, {
+    color: "transparent",
+    size: "small"
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "hourglass_empty",
     color: "white"
   })), !breakPoint650 && /*#__PURE__*/react.createElement(IconButton, {
     onClick: function onClick() {
@@ -1081,7 +1389,7 @@ function initTrimFunction() {
   }
 }
 ;// CONCATENATED MODULE: ../../nexus/react/utils/Storage.jsx
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Storage_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function Storage_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Storage_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function Storage_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Storage_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Storage_arrayLikeToArray(o, minLen); }
 
@@ -1096,7 +1404,7 @@ function getFromCookies(field) {
   var cookie = document.cookie;
   var cookies = cookie.split(' ');
 
-  var _iterator = _createForOfIteratorHelper(cookies),
+  var _iterator = Storage_createForOfIteratorHelper(cookies),
       _step;
 
   try {
@@ -1175,7 +1483,7 @@ function removeFromStorage(field, storage) {
   } catch (err) {}
 }
 // EXTERNAL MODULE: ../../nexus/react/ui/drawer/Drawer.css
-var Drawer = __webpack_require__(575);
+var Drawer = __webpack_require__(7575);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/drawer/Drawer.jsx
 
 
@@ -1216,7 +1524,7 @@ var Drawer_Drawer = function Drawer(props) {
   }, children));
 };
 // EXTERNAL MODULE: ../../nexus/react/layout/menu/Menu.css
-var Menu = __webpack_require__(397);
+var Menu = __webpack_require__(4397);
 ;// CONCATENATED MODULE: ../../nexus/react/layout/menu/Menu.jsx
 
 
@@ -1318,16 +1626,18 @@ var TAG_MenuItem = function TAG_MenuItem() {};
 var MenuItem = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app;
-  var theme = app.theme; // From ... props
+  var theme = app.theme; // From ... store
+
+  var context = app.context;
+  var isLoading = app.isLoading; // From ... props
 
   var icon = props.icon;
   var label = props.label;
   var activeContexts = props.activeContexts ? props.activeContexts : [];
+  var disabled = props.disabled == true ? props.disabled : isLoading;
   var style = props.style ? props.style : {};
   var styleLabel = {};
-  var callbackClick = props.callbackClick; // From ... store
-
-  var context = app.context; // ...
+  var callbackClick = props.callbackClick; // ...
 
   var active = activeContexts.indexOf(context) > -1 ? true : false;
 
@@ -1353,6 +1663,8 @@ var MenuItem = (0,es/* observer */.Pi)(function (props) {
   return /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)("nx-menu-item", {
       'active': active
+    }, {
+      'disabled': disabled
     }),
     style: style,
     onClick: function onClick() {
@@ -1416,7 +1728,7 @@ var Menu_Menu = (0,es/* observer */.Pi)(function (props) {
   }, menuContent));
 });
 // EXTERNAL MODULE: ../../nexus/react/layout/portal/Portal.css
-var Portal = __webpack_require__(230);
+var Portal = __webpack_require__(3230);
 ;// CONCATENATED MODULE: ../../nexus/react/layout/portal/Portal.jsx
 
 
@@ -1600,8 +1912,195 @@ var Portal_Portal = (0,es/* observer */.Pi)(function (props) {
     })
   }, portalContent));
 });
+// EXTERNAL MODULE: ../../nexus/react/node_modules/react-dom/server.browser.js
+var server_browser = __webpack_require__(3228);
+;// CONCATENATED MODULE: ../../nexus/react/ui/Styles.jsx
+function Styles_slicedToArray(arr, i) { return Styles_arrayWithHoles(arr) || Styles_iterableToArrayLimit(arr, i) || Styles_unsupportedIterableToArray(arr, i) || Styles_nonIterableRest(); }
+
+function Styles_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function Styles_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Styles_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Styles_arrayLikeToArray(o, minLen); }
+
+function Styles_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function Styles_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function Styles_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+// Datas
+// -------------------------------------------------------------------------------------------------------------
+var SEVERITIES = {
+  'default': {
+    color: '#bdbdbd',
+    contrasted: '#424242',
+    // background: 'rgba(189, 189, 189, 0.20)',
+    icon_name: 'info'
+  },
+  'success': {
+    color: '#81c784',
+    contrasted: '#43a047',
+    // background: 'rgba(129, 199, 132, 0.1)',
+    icon_name: 'check_circle'
+  },
+  'warning': {
+    color: '#ffb74d',
+    contrasted: '#ffa000',
+    // background: 'rgba(255, 183, 77, 0.1)',
+    icon_name: 'warning_amber'
+  },
+  'error': {
+    color: '#e57373',
+    contrasted: '#d32f2f',
+    // background: 'rgba(229, 115, 115, 0.1)',
+    icon_name: 'report'
+  },
+  'info': {
+    color: '#64b5f6',
+    contrasted: '#1976d2',
+    // background: 'rgba(100, 181, 246, 0.20)',
+    icon_name: 'info'
+  },
+  'hot': {
+    color: '#e91e63',
+    contrasted: '#e91e63',
+    // background: 'rgba(233, 30, 99, 0.1)',
+    icon_name: 'whatshot'
+  },
+  // -
+  getDef: function getDef(severity) {
+    return SEVERITIES[severity];
+  }
+};
+var SEVERITY_COLORS = {};
+var SEVERITY_COLORS_CONTRASTED = {};
+var SEVERITY_BACKGROUNDS = {};
+var SEVERITY_ICONS_NAMES = {};
+
+for (var _i = 0, _Object$entries = Object.entries(SEVERITIES); _i < _Object$entries.length; _i++) {
+  var _Object$entries$_i = Styles_slicedToArray(_Object$entries[_i], 2),
+      severityKey = _Object$entries$_i[0],
+      severityDef = _Object$entries$_i[1];
+
+  SEVERITY_COLORS[severityKey] = severityDef.color;
+  SEVERITY_COLORS_CONTRASTED[severityKey] = severityDef.contrasted;
+  SEVERITY_BACKGROUNDS[severityKey] = severityDef.background;
+  SEVERITY_ICONS_NAMES[severityKey] = severityDef.icon_name;
+}
+// EXTERNAL MODULE: ../../nexus/react/ui/snackbar/Snackbar.css
+var Snackbar = __webpack_require__(7677);
+;// CONCATENATED MODULE: ../../nexus/react/ui/snackbar/Snackbar.jsx
+
+
+
+
+
+
+
+
+
+ // Models
+// ----------------------------------------------------------------------------------------------------------------------------
+
+var TAG_SnackbarStore = function TAG_SnackbarStore() {};
+
+var SnackbarStore = mobx_state_tree_module/* types.model */.V5.model({
+  open: false,
+  msg: '',
+  severity: 'default',
+  action: mobx_state_tree_module/* types.frozen */.V5.frozen(null),
+  callbackExit: mobx_state_tree_module/* types.frozen */.V5.frozen(null)
+}).actions(function (self) {
+  return {
+    update: function update(open, msg, severity, action, callbackExit) {
+      // Mise à jour de la snackbar en fonction des paramètres
+      // ---
+      if (msg) {
+        if (typeof msg != 'string') {
+          try {
+            msg = server_browser.renderToStaticMarkup(msg);
+          } catch (ex) {}
+        }
+      } else {
+        msg = '';
+      }
+
+      self.open = open;
+      self.msg = msg ? msg : self.msg;
+      self.severity = severity ? severity : self.severity;
+      self.action = action ? action : self.action;
+      self.callbackExit = callbackExit ? callbackExit : self.callbackExit;
+    },
+    close: function close() {
+      self.update(false);
+    }
+  };
+}); // Functions Components ReactJS
+// ----------------------------------------------------------------------------------------------------------------------------
+// ***** Snackbar *****
+// ********************
+
+var TAG_Snackbar = function TAG_Snackbar() {};
+
+var Snackbar_Snackbar = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var snackbar = app.snackbar; // From ... store
+
+  var open = snackbar.open;
+  var msg = snackbar.msg;
+  var severity = snackbar.severity;
+  var action = snackbar.action;
+  var callbackExit = snackbar.callbackExit; // ...
+
+  react.useEffect(function () {
+    if (open) {
+      document.body.addEventListener('click', handleCloseClick, true);
+    }
+  }, [open]); // ...
+
+  var style = {}; // Evènements
+  // ==================================================================================================
+
+  var handleCloseClick = function handleCloseClick() {
+    snackbar.close();
+    document.body.removeEventListener('click', handleCloseClick, true);
+  }; // Render
+  // ==================================================================================================
+
+
+  var snackbarContent = null;
+
+  if (open) {
+    var severityDef = SEVERITIES.getDef(severity);
+    style['backgroundColor'] = severityDef.contrasted;
+    snackbarContent = /*#__PURE__*/react.createElement("div", {
+      className: "nx-snackbar",
+      style: style
+    }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
+      color: "transparent",
+      size: "small"
+    }, /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: severityDef.icon_name,
+      color: "white"
+    })), /*#__PURE__*/react.createElement("div", {
+      className: "nx-snackbar-msg",
+      dangerouslySetInnerHTML: {
+        __html: msg
+      }
+    }), /*#__PURE__*/react.createElement(IconButton, {
+      onClick: function onClick() {
+        return handleCloseClick();
+      }
+    }, /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "close",
+      color: "white"
+    })));
+  }
+
+  return snackbarContent;
+});
 ;// CONCATENATED MODULE: ../../nexus/react/utils/Responsive.jsx
-var MobileDetect = __webpack_require__(288); // Functions
+var MobileDetect = __webpack_require__(5288); // Functions
 // ========================================================================================================================
 
 
@@ -1725,35 +2224,8 @@ function matchUrl(routes, url) {
 
   return matched;
 }
-;// CONCATENATED MODULE: ../../nexus/react/ui/Styles.jsx
-// Datas
-// -------------------------------------------------------------------------------------------------------------
-var SEVERITY_COLORS = {
-  "default": '#bdbdbd',
-  success: '#81c784',
-  warning: '#ffb74d',
-  error: '#e57373',
-  info: '#64b5f6',
-  hot: '#e91e63'
-};
-var SEVERITY_COLORS_CONTRASTED = {
-  "default": '#424242',
-  success: '#43a047',
-  warning: '#ffa000',
-  error: '#d32f2f',
-  info: '#1976d2',
-  hot: '#e91e63'
-};
-var SEVERITY_BACKGROUNDS = {
-  "default": 'rgba(189, 189, 189, 0.20)',
-  success: 'rgba(129, 199, 132, 0.1)',
-  warning: 'rgba(255, 183, 77, 0.1)',
-  error: 'rgba(229, 115, 115, 0.1)',
-  info: 'rgba(100, 181, 246, 0.20)',
-  hot: 'rgba(233, 30, 99, 0.1)'
-};
 // EXTERNAL MODULE: ../../nexus/react/ui/helper/Helper.css
-var Helper = __webpack_require__(742);
+var Helper = __webpack_require__(2742);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/helper/Helper.jsx
 
 
@@ -1762,7 +2234,55 @@ var Helper = __webpack_require__(742);
 
  // Functions Components ReactJS
 // ----------------------------------------------------------------------------------------------------------------------------
-// ***** Helper *****
+// ***** HelperParaphTitle *****
+// *****************************
+
+var TAG_HelperParaphTitle = function TAG_HelperParaphTitle() {};
+
+var HelperParaphTitle = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... props
+
+  var color = props.color ? props.color : 'default'; // default, primary, secondary
+
+  var children = props.children;
+  var style = props.style ? props.style : {}; // ...
+
+  if (color) {
+    style['color'] = color;
+  }
+
+  if (color == 'primary') {
+    style['color'] = theme.palette.primary.main;
+  }
+
+  if (color == 'secondary') {
+    style['color'] = theme.palette.secondary.main;
+  } // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-helper-paraph-title",
+    style: style
+  }, children);
+}); // ***** HelperParaph *****
+// ************************
+
+var TAG_HelperParaph = function TAG_HelperParaph() {};
+
+var HelperParaph = function HelperParaph(props) {
+  // From ... props
+  var children = props.children;
+  var style = props.style ? props.style : {}; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-helper-paraph",
+    style: style
+  }, children);
+}; // ***** Helper *****
 // ******************
 
 var TAG_Helper = function TAG_Helper() {};
@@ -1830,7 +2350,7 @@ var Helper_Helper = (0,es/* observer */.Pi)(function (props) {
   return helper;
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/about/About.css
-var About = __webpack_require__(189);
+var About = __webpack_require__(2189);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/about/About.jsx
 
 
@@ -1906,9 +2426,354 @@ var AboutPage = (0,es/* observer */.Pi)(function (props) {
     className: "nx-page"
   }, renderHelper());
 });
-// EXTERNAL MODULE: ../../nexus/react/contexts/login/Login.css
-var Login = __webpack_require__(364);
-;// CONCATENATED MODULE: ../../nexus/react/contexts/login/Login.jsx
+// EXTERNAL MODULE: ../../nexus/react/layout/section/Section.css
+var Section = __webpack_require__(8461);
+;// CONCATENATED MODULE: ../../nexus/react/layout/section/Section.jsx
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** Section *****
+// *******************
+
+var TAG_Section = function TAG_Section() {};
+
+var Section_Section = function Section(props) {
+  // From ... props
+  var icon = props.icon ? props.icon : null;
+  var title = props.title ? props.title : '';
+  var right = props.right;
+  var children = props.children;
+  var buttons = props.buttons;
+  var buttonsPosition = props.buttonsPosition ? props.buttonsPosition : 'right'; // left, right, center, stretch
+
+  var buttonsResponsive = props.buttonsResponsive == true ? true : false; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-section"
+  }, (icon || title || right) && /*#__PURE__*/react.createElement("div", {
+    className: "nx-section-header"
+  }, icon && /*#__PURE__*/react.createElement("div", {
+    className: "nx-section-icon"
+  }, icon), title && /*#__PURE__*/react.createElement("div", {
+    className: "nx-section-header-title"
+  }, title)), children && /*#__PURE__*/react.createElement("div", {
+    className: "nx-section-content"
+  }, children), buttons && /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-section-buttonset", "h-col-small", {
+      "responsive-vertical": buttonsResponsive
+    }, {
+      "responsive-align-stretch": buttonsResponsive
+    })
+  }, buttons));
+};
+// EXTERNAL MODULE: ../../nexus/react/layout/row/Row.css
+var Row = __webpack_require__(3447);
+;// CONCATENATED MODULE: ../../nexus/react/layout/row/Row.jsx
+
+
+ // Functions Components ReactJS
+// ----------------------------------------------------------------------------------------------------------------------------
+// ***** Row *****
+// ***************
+
+var TAG_Row = function TAG_Row() {};
+
+var Row_Row = function Row(props) {
+  // From ... props
+  var responsive = props.responsive == false ? false : true;
+  var children = props.children;
+  var spacing = props.spacing ? props.spacing : 'small';
+  var className = props.className ? props.className : '';
+  var style = props.style ? props.style : {};
+  var marginBottom = props.marginBottom == false ? false : true; // ==================================================================================================
+
+  return /*#__PURE__*/React.createElement("div", {
+    className: clsx("nx-row", "h-col-".concat(spacing), "flex-align-start", {
+      "responsive-vertical": responsive
+    }, {
+      "responsive-align-stretch": responsive
+    }, {
+      "margin-bottom": marginBottom
+    }, className),
+    style: style
+  }, children);
+};
+// EXTERNAL MODULE: ../../nexus/react/node_modules/date-fns/esm/format/index.js + 28 modules
+var format = __webpack_require__(5599);
+// EXTERNAL MODULE: ../../nexus/react/node_modules/date-fns/esm/addDays/index.js
+var addDays = __webpack_require__(8484);
+// EXTERNAL MODULE: ../../nexus/react/node_modules/date-fns/esm/subDays/index.js
+var subDays = __webpack_require__(5081);
+;// CONCATENATED MODULE: ../../nexus/react/utils/DateTools.jsx
+
+ // Objects
+// --------------------------------------------------------------------------------------------------------------------------------------------
+// ***** dateTools *****
+// *********************
+
+var dateTools = {
+  // Conversions
+  // -
+  fromDateToHumanized: function fromDateToHumanized(date) {
+    // Date() ou AAAA-MM-JJ -> JJ/MM/AAAA
+    // ---
+    if (typeof date == 'string') {
+      if (date.search('/') > -1) {
+        return date;
+      }
+
+      date = new Date(date);
+    }
+
+    if (date == undefined) {
+      date = new Date();
+    }
+
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+    d = d.toString();
+    m = m.toString();
+    y = y.toString();
+    d = d.length == 1 ? '0' + d : d;
+    m = m.length == 1 ? '0' + m : m;
+    return d + '/' + m + '/' + y;
+  },
+  fromTimeToHumanized: function fromTimeToHumanized(date) {
+    // Date() -> HH:MM
+    // ---
+    if (date == undefined) {
+      date = new Date();
+    }
+
+    var hh = date.getHours();
+    var mm = date.getMinutes();
+    hh = hh.toString();
+    mm = mm.toString();
+    hh = hh.length == 1 ? '0' + hh : hh;
+    mm = mm.length == 1 ? '0' + mm : mm;
+    return hh + ':' + mm;
+  },
+  fromHumanizedToISO: function fromHumanizedToISO(humanizedDate) {
+    // JJ/MM/AAAA -> AAAA-MM-JJ
+    // ---
+    var isoDate = humanizedDate;
+    var parts = humanizedDate.split('/');
+
+    if (parts.length > 1) {
+      isoDate = "".concat(parts[2], "-").concat(parts[1], "-").concat(parts[0]);
+    }
+
+    return isoDate;
+  },
+  fromISOToDate: function fromISOToDate(strISO) {
+    // AAAA-MM-JJ ou HH:MM -> Date()
+    // ---
+    var newDate = null;
+
+    if (strISO) {
+      var rez = new Date(strISO);
+
+      if (rez != 'Invalid Date') {
+        newDate = rez;
+      }
+
+      if (strISO.length == 5 && newDate == null) {
+        var parts = strISO.split(':');
+
+        if (parts.length > 1) {
+          rez = new Date();
+          rez.setHours(parts[0]);
+          rez.setMinutes(parts[1]);
+          newDate = rez;
+        }
+      }
+    }
+
+    return newDate;
+  },
+  fromISOToTime: function fromISOToTime(time_iso) {
+    // HH:MM -> Date()
+    // ---
+    var hours_iso_parts = copyObj(time_iso).split(':');
+
+    if (hours_iso_parts.length > 1) {
+      var date_holder = new Date();
+      date_holder.setHours(parseInt(hours_iso_parts[0]));
+      date_holder.setMinutes(parseInt(hours_iso_parts[1]));
+      date_holder.setSeconds(0);
+      return date_holder;
+    }
+
+    return null;
+  },
+  fromDateToISO: function fromDateToISO(date, missing) {
+    // Date() -> AAAA-MM-JJ
+    // ---
+    missing = missing != undefined ? missing : null;
+
+    if (date) {
+      try {
+        var rez = (0,format/* default */.Z)(date, "yyyy-MM-dd");
+        return rez != null ? rez : missing;
+      } catch (err) {}
+    }
+
+    return missing;
+  },
+  fromTimeToISO: function fromTimeToISO(date, missing) {
+    // Date() -> HH:MM
+    // ---
+    missing = missing != undefined ? missing : null;
+
+    if (date) {
+      try {
+        var rez = (0,format/* default */.Z)(date, "HH:mm");
+        return rez != null ? rez : missing;
+      } catch (err) {}
+    }
+
+    return missing;
+  },
+  // Operations
+  // -
+  // addTime: function(hours_iso, to_add, what_to_add) {
+  // 	var self = this;
+  // 	if (!hours_iso) { return null; }
+  // 	var date_holder = self.fromTimeToISO(hours_iso);
+  // 	if (date_holder && to_add && what_to_add) {
+  // 		var date_holder = moment(date_holder).add(to_add, what_to_add).toDate();
+  // 		return self.formatTime(date_holder);
+  // 	} else {
+  // 		return hours_iso;
+  // 	}
+  // },
+  // substractTime: function(hours_iso, to_substract, what_to_substract) {
+  // 	var self = this;
+  // 	if (!hours_iso) { return null; }
+  // 	var date_holder = self.fromTimeToISO(hours_iso);
+  // 	if (date_holder && to_substract && what_to_substract) {
+  // 		var date_holder = moment(date_holder).subtract(to_substract, what_to_substract).toDate();
+  // 		return self.formatTime(date_holder);
+  // 	} else {
+  // 		return hours_iso;
+  // 	}
+  // },
+  addDuration: function addDuration(hours_iso, hours_to_add) {
+    var self = this;
+
+    if (!hours_iso) {
+      return null;
+    }
+
+    if (hours_to_add) {
+      var hours = parseInt(hours_to_add.split(':')[0]);
+      var minutes = parseInt(hours_to_add.split(':')[1]);
+      hours_iso = self.addTime(hours_iso, hours, 'h');
+      hours_iso = self.addTime(hours_iso, minutes, 'm');
+    }
+
+    return hours_iso;
+  },
+  timeToMinutes: function timeToMinutes(time_iso) {
+    // HH:MM -> x minutes
+    // ---
+    var self = this;
+    var minutes_total = 0;
+
+    if (time_iso) {
+      minutes_total += parseInt(time_iso.split(':')[0]) * 60;
+      minutes_total += parseInt(time_iso.split(':')[1]);
+    }
+
+    return minutes_total;
+  },
+  minutesToTime: function minutesToTime(minutes) {
+    // x minutes -> HH:MM
+    // ---
+    var self = this;
+    var minutes = minutes ? minutes : 0;
+    var hh = minutes / 60 | 0;
+    var mm = minutes % 60 | 0;
+    hh = hh.toString();
+    mm = mm.toString();
+    hh = hh.length == 1 ? '0' + hh : hh;
+    mm = mm.length == 1 ? '0' + mm : mm;
+    return hh + ':' + mm;
+  },
+  do_hourify: function do_hourify(value) {
+    // str -> HH:MM
+    // ---
+    var value_hourified = '';
+    var hh_exp = /^(\d{1,2})\D*?$/;
+    var dt_exp = /^(\d{1,2})\D*(\d{1,2})\D*?$/;
+    if (hh_exp.exec(value)) value += ' 00';
+    var parts = dt_exp.exec(value);
+
+    if (parts && parts.length == 3) {
+      var hh = parseInt(parts[1], 10),
+          mm = parseInt(parts[2], 10);
+
+      if (0 <= hh <= 23 && 0 <= mm <= 59) {
+        value_hourified = '%02d:%02d'.format(hh, mm);
+      }
+    }
+
+    return value_hourified;
+  },
+  // Getters
+  // -
+  getNextDay: function getNextDay(date) {
+    var nextDay = (0,addDays/* default */.Z)(this.fromISOToDate(date), 1);
+    var nextDayIso = (0,format/* default */.Z)(nextDay, "yyyy-MM-dd");
+    return nextDayIso;
+  },
+  getPreviousDay: function getPreviousDay(date) {
+    var previousDay = (0,subDays/* default */.Z)(this.fromISOToDate(date), 1);
+    var previousDayIso = (0,format/* default */.Z)(previousDay, "yyyy-MM-dd");
+    return previousDayIso;
+  },
+  getWeekKey: function getWeekKey(dateIso) {
+    // AAAA-MM-JJ -> AAAA-WW
+    // ---
+    var weekKey = '';
+    var date = dateTools.fromISOToDate(dateIso);
+
+    if (date) {
+      weekKey = date.getWeekYear() + '-' + date.getWeekStr();
+    }
+
+    return weekKey;
+  },
+  getTodayIso: function getTodayIso() {
+    // Now -> AAAA-MM-JJ
+    // ---
+    var now = new Date();
+    return now.toISOString().substring(0, 10);
+  }
+};
+// EXTERNAL MODULE: ../../nexus/react/forms/field/Field.css
+var Field = __webpack_require__(651);
+;// CONCATENATED MODULE: ../../nexus/react/forms/field/Field.jsx
+function Field_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Field_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function Field_slicedToArray(arr, i) { return Field_arrayWithHoles(arr) || Field_iterableToArrayLimit(arr, i) || Field_unsupportedIterableToArray(arr, i) || Field_nonIterableRest(); }
+
+function Field_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function Field_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Field_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Field_arrayLikeToArray(o, minLen); }
+
+function Field_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function Field_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function Field_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -1917,21 +2782,642 @@ var Login = __webpack_require__(364);
 
 
  // Models
-// -------------------------------------------------------------------------------------------------------------
-// ***** LoginStore *****
-// **********************
+// ----------------------------------------------------------------------------------------------------------------------------
 
-var TAG_LoginStore = function TAG_LoginStore() {};
+var TAG_AutocompleteStore = function TAG_AutocompleteStore() {};
 
-var LoginStore = mobx_state_tree_module/* types.model */.V5.model({
-  login: ''
+var AutocompleteStore = mobx_state_tree_module/* types.model */.V5.model({
+  value: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  label: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
+}).views(function (self) {
+  return {
+    get isSet() {
+      if (self.value) {
+        return true;
+      }
+
+      return false;
+    }
+
+  };
 }).actions(function (self) {
   return {
     setField: function setField(field, value) {
       self[field] = value;
     },
     // -
-    update: function update(raw) {}
+    update: function update(raw) {
+      self.value = raw.value;
+      self.label = raw.label;
+    },
+    clear: function clear() {
+      self.value = '';
+      self.label = '';
+    }
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** Field *****
+// *****************
+
+var TAG_Field = function TAG_Field() {};
+
+var Field_Field = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... states
+
+  var _React$useState = react.useState(false),
+      _React$useState2 = Field_slicedToArray(_React$useState, 2),
+      focused = _React$useState2[0],
+      setFocused = _React$useState2[1];
+
+  var _React$useState3 = react.useState(null),
+      _React$useState4 = Field_slicedToArray(_React$useState3, 2),
+      autocompleteAnchor = _React$useState4[0],
+      setAutocompleteAnchor = _React$useState4[1];
+
+  var _React$useState5 = react.useState(false),
+      _React$useState6 = Field_slicedToArray(_React$useState5, 2),
+      autocompletePopupOpen = _React$useState6[0],
+      setAutocompletePopupOpen = _React$useState6[1];
+
+  var _React$useState7 = react.useState(false),
+      _React$useState8 = Field_slicedToArray(_React$useState7, 2),
+      autocompletePopperOpen = _React$useState8[0],
+      setAutocompletePopperOpen = _React$useState8[1];
+
+  var _React$useState9 = react.useState(false),
+      _React$useState10 = Field_slicedToArray(_React$useState9, 2),
+      autocompleteLoading = _React$useState10[0],
+      setAutocompleteLoading = _React$useState10[1]; // From ... store
+
+
+  var isLoading = app.isLoading;
+  var isDesktop = app.isDesktop;
+  var isMobile = app.isMobile;
+  var autocompleteResults = app.autocompleteResults; // From ... props
+
+  var id = props.id ? props.id : id;
+  var component = props.component ? props.component : 'input'; // input, textarea, select, checkbox, autocomplete, switcher, radios
+
+  var type = props.type ? props.type : 'text'; // text, number
+
+  var name = props.name ? props.name : '';
+  var label = props.label;
+  var ghostLabel = props.ghostLabel != undefined ? props.ghostLabel : false;
+  var placeholder = props.placeholder ? props.placeholder : '';
+  var title = props.title ? props.title : '';
+  var min = props.min ? props.min : 0;
+  var max = props.max;
+  var forceString = props.forceString != undefined ? props.forceString : false;
+  var forceStringVariant = props.format != undefined ? props.format : 'en';
+  var datas = props.datas;
+  var canBeEmpty = props.canBeEmpty == true ? true : false;
+  var savePath = props.savePath;
+  var savePathAutocomplete = props.savePathAutocomplete;
+  var forcePopupAutocomplete = props.forcePopupAutocomplete != undefined ? props.forcePopupAutocomplete : false;
+  var callbackSearch = props.callbackSearch != undefined ? props.callbackSearch : callbackSearchDefault;
+  var callbackSave = props.callbackSave;
+  var callbackChange = props.callbackChange;
+  var callbackSelect = props.callbackSelect;
+  var callbackClick = props.callbackClick;
+  var callbackFocus = props.callbackFocus;
+  var callbackBlur = props.callbackBlur;
+  var callbackKeyPress = props.callbackKeyPress;
+  var startAdornment = props.startAdornment ? props.startAdornment : null;
+  var endAdornment = props.endAdornment ? props.endAdornment : null;
+  var disabled = props.disabled ? props.disabled : isLoading;
+  var className = props.className ? props.className : '';
+  var style = props.style != undefined ? props.style : {};
+  var inputStyle = props.inputStyle != undefined ? props.inputStyle : {};
+
+  if (focused) {
+    inputStyle['borderColor'] = theme.palette.primary.main;
+    inputStyle['borderWidth'] = '2px';
+    inputStyle['padding'] = '5px 11px'; // inputStyle['outline'] = `2px solid ${theme.palette.primary.main}`;
+  } // Functions
+  // ==================================================================================================
+
+
+  var getError = function getError() {
+    var error = props.error;
+
+    if (error == undefined && savePath && savePath.length > 0) {
+      error = app.getError(savePath);
+    }
+
+    if (error && focused) {
+      inputStyle['borderColor'] = 'red';
+    }
+
+    return error;
+  };
+
+  var getValue = function getValue() {
+    var value = props.value;
+
+    if (value == undefined && savePath && savePath.length > 0) {
+      value = app.getValue(savePath, null);
+    }
+
+    if (value == null) {
+      value = '';
+    }
+
+    return value;
+  };
+
+  var getValueAutocomplete = function getValueAutocomplete() {
+    var valueAutocomplete = props.valueAutocomplete;
+
+    if (valueAutocomplete == undefined && savePathAutocomplete && savePathAutocomplete.length > 0) {
+      valueAutocomplete = app.getValue(savePathAutocomplete, null);
+    }
+
+    return valueAutocomplete;
+  }; // ...
+
+
+  var error = getError();
+  var value = getValue();
+  var valueAutocomplete = getValueAutocomplete(); // Callbacks
+  // ==================================================================================================
+
+  var callbackSearchDefault = function callbackSearchDefault(query, endSearchCallback) {
+    // Callback de recherche par défaut
+    // ---
+    var url = "/autocomplete/".concat(id); // Paramètres de recherche
+
+    var params = new FormData();
+    params.append('query', query); // Appel de la fonction de recherche
+
+    app.fetchJSON(url, {
+      'body': params
+    }, false, 'POST').then(function (json) {
+      app.setField('autocompleteResults', json.results);
+      endSearchCallback();
+    })["catch"](function (ex) {
+      console.error("Fetch failed for ".concat(url), ex);
+      snackbar.update(true, "Une erreur est survenue.", "error");
+    });
+  }; // Evènements
+  // ==================================================================================================
+
+
+  var handleInputFocus = function handleInputFocus(evt) {
+    // Sur focus du champ texte
+    // ---
+    setFocused(true);
+
+    if (callbackFocus) {
+      callbackFocus();
+    }
+  };
+
+  var handleInputChange = function handleInputChange(evt, ignoreCallbackChange) {
+    // Sur saisie dans le champ texte
+    // ---
+    var inputChange = ignoreCallbackChange == true ? null : callbackChange;
+    var newValue = null; // Récupération de la valeur
+
+    if (component == 'checkbox') {
+      newValue = evt.target.checked;
+
+      if (forceString) {
+        if (forceStringVariant == 'en') {
+          newValue = newValue == true ? 'yes' : 'no';
+        } else {
+          newValue = newValue == true ? 'oui' : 'non';
+        }
+      }
+    } else {
+      newValue = evt.target.value;
+    } // Convertion de la valeur
+
+
+    if (type == 'number') {
+      try {
+        newValue = parseInt(newValue);
+      } catch (err) {
+        newValue = 0;
+      }
+
+      if (Number.isNaN(newValue)) {
+        newValue = null;
+      } else {
+        if (newValue < min) {
+          newValue = min;
+        }
+
+        if (max != undefined && newValue > max) {
+          newValue = max;
+        }
+
+        if (forceString) {
+          newValue = newValue.toString();
+        }
+      }
+    }
+
+    if (type == 'date') {
+      newValue = dateTools.fromDateToISO(newValue, newValue);
+    }
+
+    if (type == 'time') {
+      newValue = dateTools.fromTimeToISO(newValue, newValue);
+    } // Sauvegarde de la valeur
+
+
+    if (savePath) {
+      if (callbackSave) {
+        callbackSave(savePath, newValue);
+      } else {
+        app.saveValue(savePath, newValue, callbackChange);
+      }
+
+      app.clearError(savePath);
+
+      if (component == 'autocomplete' && callbackSearch && (newValue.length == 0 || newValue.length > 1)) {
+        clearTimeout(window.searchTimeout);
+        setAutocompletePopperOpen(false);
+        app.setField('autocompleteResults', []);
+        window.searchTimeout = setTimeout(function () {
+          setAutocompleteLoading(true);
+          callbackSearch(newValue, function () {
+            // Affichage des résultats
+            setAutocompletePopperOpen(true);
+            setAutocompleteLoading(false);
+          });
+        }, 1000);
+      }
+    } else {
+      if (component == 'checkbox' && callbackClick) {
+        callbackClick();
+      }
+
+      if (callbackChange) {
+        callbackChange([], newValue);
+      }
+    }
+  };
+
+  var handleInputClick = function handleInputClick(evt) {
+    // Sur focus de l'input du field
+    // ---
+    setAutocompleteAnchor(evt.target); // Doit-on ouvrir la popup d'autocomplete en plein écran ? (pour les smartphones et tablettes)
+
+    if (component == 'autocomplete' && (isMobile && !valueAutocomplete || forcePopupAutocomplete)) {
+      setAutocompletePopupOpen(true); // Focus sur le champ de recherche
+
+      setTimeout(function () {
+        document.getElementById("popup_".concat(id)).focus();
+      }, 500);
+    }
+  };
+
+  var handleAutocompleteSelect = function handleAutocompleteSelect(result) {
+    // Sur sélection d'un résultat d'autocomplete
+    // ---
+    app.saveValue(savePath, result.label);
+    app.saveValue(savePathAutocomplete, result.value);
+    setAutocompletePopperOpen(false);
+    app.setField('autocompleteResults', []);
+    handleCloseAutocompletePopup(); // Callback nouvelle valeur
+
+    if (callbackChange) {
+      callbackChange(savePath, result.label, savePathAutocomplete, result.value, result.raw);
+    }
+
+    if (callbackSelect) {
+      callbackSelect(savePath, result.label, savePathAutocomplete, result.value, result.raw);
+    }
+  };
+
+  var handleClearAutocomplete = function handleClearAutocomplete() {
+    // Sur clic du bouton de nettoyage de l'autocomplete
+    // ---
+    app.setField('autocompleteResults', []);
+    setAutocompletePopperOpen(false);
+    app.saveValue(savePath, '');
+    app.saveValue(savePathAutocomplete, ''); // Callback nouvelle valeur
+
+    if (callbackChange) {
+      callbackChange(savePath, '', savePathAutocomplete, '');
+    }
+
+    if (callbackSelect) {
+      callbackSelect(savePath, '', savePathAutocomplete, '', null);
+    }
+  };
+
+  var handleInputBlur = function handleInputBlur(e) {
+    // Sur perte de focus du champ de recherche
+    // ---
+    setFocused(false); // Nettoyage automatique si aucune valeur sélectionnée dans l'autocomplete
+
+    setTimeout(function () {
+      var valueAutocomplete = getValueAutocomplete();
+
+      if (component == 'autocomplete' && !valueAutocomplete && !autocompleteLoading && isDesktop) {
+        handleClearAutocomplete();
+      }
+    }, 200); // Callback blur input
+
+    if (callbackBlur) {
+      callbackBlur(savePath, e.target.value);
+    }
+  };
+
+  var handleCloseAutocompletePopup = function handleCloseAutocompletePopup() {
+    // Sur clic du bouton "Annuler" dans la popup d'autocomplete
+    // ---
+    setAutocompletePopupOpen(false);
+    var node = document.getElementById(id);
+
+    if (node) {
+      node.blur();
+    }
+  };
+
+  var handleSaveValue = function handleSaveValue(savePath, value) {
+    // Mise à jour d'une valeur sur un target
+    // ---
+    // Sauvegarde de la valeur
+    if (savePath) {
+      app.saveValue(savePath, value, callbackChange);
+      app.clearError(savePath);
+    } else {
+      callbackChange([], value);
+    }
+  }; // Render
+  // ==================================================================================================
+
+
+  var input = null;
+
+  var renderInput = function renderInput() {
+    // Render :: Input
+    // ---
+    if (type == 'date' && !placeholder) {
+      placeholder = 'jj/mm/aaaa';
+    }
+
+    if (type == 'time' && !placeholder) {
+      placeholder = 'hh:mm';
+    } // Input basique
+
+
+    input = /*#__PURE__*/react.createElement("input", {
+      className: "nx-field-input",
+      id: id,
+      value: value,
+      type: type,
+      onChange: function onChange(e) {
+        return handleInputChange(e);
+      },
+      onFocus: function onFocus(e) {
+        return handleInputFocus(e);
+      },
+      onBlur: function onBlur(e) {
+        return handleInputBlur(e);
+      },
+      onKeyPress: callbackKeyPress,
+      placeholder: placeholder,
+      title: title,
+      style: inputStyle,
+      disabled: disabled
+    });
+  };
+
+  var renderTextarea = function renderTextarea() {
+    // Render :: Textarea
+    // ---
+    var textarea = /*#__PURE__*/react.createElement("textarea", {
+      className: "nx-field-textarea",
+      id: id,
+      value: value,
+      type: type,
+      onChange: function onChange(e) {
+        return handleInputChange(e);
+      },
+      onFocus: function onFocus(e) {
+        return handleInputFocus(e);
+      },
+      onBlur: function onBlur(e) {
+        return handleInputBlur(e);
+      },
+      onKeyPress: callbackKeyPress,
+      placeholder: placeholder,
+      title: title,
+      style: inputStyle,
+      disabled: disabled
+    });
+  };
+
+  var renderSelect = function renderSelect() {
+    // Render :: Select
+    // ---
+    // Options
+    var selectItems = [];
+    var nbDivider = 0;
+
+    if (datas) {
+      var _iterator = Field_createForOfIteratorHelper(datas),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var data = _step.value;
+
+          if (typeof data == 'string') {
+            data = {
+              value: data,
+              label: data
+            };
+          }
+
+          var itemStyle = {};
+
+          if (data.hidden == true) {
+            itemStyle['display'] = 'none';
+          }
+
+          if (data.divider == true) {
+            nbDivider += 1;
+            selectItems.push( /*#__PURE__*/react.createElement(Divider_Divider, {
+              light: true,
+              key: "".concat(id, "_divider_").concat(nbDivider),
+              style: {
+                marginBottom: '10px',
+                marginTop: '10px'
+              }
+            }));
+          } else {
+            selectItems.push( /*#__PURE__*/react.createElement("option", {
+              key: "".concat(id, "_").concat(data.value),
+              value: data.value,
+              disabled: data.disabled == true,
+              style: itemStyle
+            }, data.label));
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    }
+
+    input = /*#__PURE__*/react.createElement("select", {
+      className: "nx-field-select",
+      id: id,
+      value: value,
+      onChange: function onChange(e) {
+        return handleInputChange(e);
+      },
+      onFocus: function onFocus(e) {
+        return handleInputFocus(e);
+      },
+      onBlur: function onBlur(e) {
+        return handleInputBlur(e);
+      },
+      placeholder: placeholder,
+      title: title,
+      style: inputStyle,
+      disabled: disabled
+    }, canBeEmpty && /*#__PURE__*/react.createElement("option", {
+      value: ""
+    }, "---"), selectItems); // Icône de dropdown ?
+
+    if (!endAdornment) {
+      endAdornment = /*#__PURE__*/react.createElement(Icon_Icon, {
+        name: "arrow_drop_down"
+      });
+    }
+  };
+
+  switch (component) {
+    case 'input':
+      renderInput();
+      break;
+
+    case 'textarea':
+      renderTextarea();
+      break;
+
+    case 'select':
+      renderSelect();
+      break;
+    // case 'checkbox':
+    // 	renderCheckbox();
+    // 	break;
+    // case 'autocomplete':
+    // 	renderAutocomplete();
+    // 	break;
+    // case 'switcher':
+    // 	renderSwitcher();
+    // 	break;
+    // case 'radios':
+    // 	renderRadios();
+    // 	break;
+  }
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)('nx-field', component, type, {
+      'disabled': disabled
+    }, {
+      'focused': focused
+    }, {
+      'error': error
+    }, className),
+    style: style
+  }, (label || ghostLabel) && /*#__PURE__*/react.createElement("div", {
+    className: "nx-field-label"
+  }, label), /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-input-wrapper", {
+      "with-start-adornment": startAdornment
+    }, {
+      "with-end-adornment": endAdornment
+    })
+  }, startAdornment, input, endAdornment), error && /*#__PURE__*/react.createElement("div", {
+    className: "nx-field-error",
+    dangerouslySetInnerHTML: {
+      __html: error
+    }
+  }));
+});
+// EXTERNAL MODULE: ../../nexus/react/contexts/auth/Auth.css
+var Auth = __webpack_require__(1881);
+;// CONCATENATED MODULE: ../../nexus/react/contexts/auth/Auth.jsx
+
+
+
+
+
+
+
+
+
+
+
+ // Datas
+// -------------------------------------------------------------------------------------------------------------
+
+var AUTH_STEPS = (/* unused pure expression or super */ null && ([])); // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** AuthStore *****
+// *********************
+
+var TAG_AuthStore = function TAG_AuthStore() {};
+
+var AuthStore = mobx_state_tree_module/* types.model */.V5.model({
+  login: '',
+  password: '',
+  step: 'login' // login, password, register, lost, logged
+
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    validate: function validate(stepKey, callback) {
+      // Valide l'étape passée en paramètres
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var snackbar = app.snackbar;
+      var params = new FormData();
+      params.append('auth_raw', JSON.stringify(self.toJSON()));
+      app.clearErrors();
+      var url = '/auth_actions/validate';
+      app.fetchJSON(url, {
+        'body': params
+      }, false, 'POST').then(function (json) {
+        app.setField('errors', json.errors);
+
+        if (callback) {
+          callback(json.errors);
+        }
+      })["catch"](function (ex) {
+        console.error("Fetch failed for ".concat(url), ex);
+        snackbar.update(true, "Une erreur est survenue.", "error");
+      });
+    },
+    moveToStep: function moveToStep(stepKey) {
+      // Modifie l'étape courante avec celle passée en paramètres
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var authUrl = app.authUrl;
+      var authContext = app.authContext;
+      app.navigate(authUrl, authContext, [{
+        "op": "replace",
+        "path": "/app/auth/step",
+        "value": stepKey
+      }]);
+    }
   };
 }); // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
@@ -1946,11 +3432,17 @@ var LoginMenuItem = (0,es/* observer */.Pi)(function (props) {
   var account = app.account; // From ... store
 
   var isLogged = account.isLogged;
-  var breakPoint650 = app.breakPoint650; // Evènements
+  var breakPoint650 = app.breakPoint650;
+  var authUrl = app.authUrl;
+  var authContext = app.authContext; // Evènements
   // ==================================================================================================
 
   var handleMenuItemClick = function handleMenuItemClick() {
-    app.navigate('/login', 'login');
+    app.navigate(authUrl, authContext, [{
+      "op": "replace",
+      "path": "/app/auth/step",
+      "value": 'login'
+    }]);
   }; // Render
   // ==================================================================================================
 
@@ -1963,7 +3455,7 @@ var LoginMenuItem = (0,es/* observer */.Pi)(function (props) {
         name: "account_circle"
       }),
       label: "Se connecter",
-      activeContexts: ['login'],
+      activeContexts: ['auth'],
       callbackClick: handleMenuItemClick
     });
   }
@@ -2002,31 +3494,218 @@ var LogoutMenuItem = (0,es/* observer */.Pi)(function (props) {
   }
 
   return logoutMenuItem;
-}); // ***** LoginPage *****
-// *********************
+}); // ***** RenderStepLogin *****
+// ***************************
 
-var TAG_LoginPage = function TAG_LoginPage() {};
+var TAG_RenderStepLogin = function TAG_RenderStepLogin() {};
 
-var LoginPage = (0,es/* observer */.Pi)(function (props) {
+var RenderStepLogin = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading; // Evènements
   // ==================================================================================================
+
+  var _moveIt = function _moveIt() {
+    auth.validate('login', function (errors) {
+      if (errors.length == 0) {
+        auth.moveToStep('password');
+      }
+    });
+  };
+
+  var handleLoginKeyPress = function handleLoginKeyPress(evt) {
+    if (evt.code == 'Enter') {
+      _moveIt();
+    }
+  };
+
+  var handleLoginBlur = function handleLoginBlur(savePath, value) {
+    _moveIt();
+  };
+
+  var handleGotoRegisterClick = function handleGotoRegisterClick() {
+    auth.moveToStep('register');
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", null, /*#__PURE__*/react.createElement(HelperParaph, {
+    style: {
+      marginBottom: '20px'
+    }
+  }, /*#__PURE__*/react.createElement(HelperParaphTitle, {
+    color: "primary"
+  }, "D\xE9j\xE0 inscrit ?"), "Saisissez votre identifiant / pseudo dans le champ ci-dessous :"), /*#__PURE__*/react.createElement("div", {
+    className: "h-col flex-align-start"
+  }, /*#__PURE__*/react.createElement(Field_Field, {
+    id: "txt-login",
+    component: "input" // label="Identifiant / pseudo"
+    ,
+    placeholder: "Identifiant / pseudo",
+    savePath: ['app', 'auth', 'login'],
+    callbackKeyPress: handleLoginKeyPress // callbackBlur={handleLoginBlur}
+    ,
+    disabled: isLoading
+  }), /*#__PURE__*/react.createElement(Button_Button, {
+    color: "primary",
+    variant: "contained",
+    onClick: function onClick() {
+      return _moveIt();
+    },
+    style: {
+      // marginTop: '21px',
+      marginLeft: '5px',
+      minWidth: 'unset'
+    },
+    className: "flex-0",
+    disabled: isLoading
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "arrow_forward",
+    color: "white"
+  }))), /*#__PURE__*/react.createElement(Button_Button, {
+    color: "secondary",
+    onClick: function onClick() {
+      return handleGotoRegisterClick();
+    },
+    style: {
+      marginTop: '20px'
+    }
+  }, "Pas encore inscrit ?"));
+}); // ***** RenderStepPassword *****
+// ******************************
+
+var TAG_RenderStepPassword = function TAG_RenderStepPassword() {};
+
+var RenderStepPassword = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", null, "Password");
+}); // ***** RenderStepRegister *****
+// ******************************
+
+var TAG_RenderStepRegister = function TAG_RenderStepRegister() {};
+
+var RenderStepRegister = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", null, "Register");
+}); // ***** RenderStepLost *****
+// **************************
+
+var TAG_RenderStepLost = function TAG_RenderStepLost() {};
+
+var RenderStepLost = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", null, "Lost");
+}); // ***** RenderStepLogged *****
+// ****************************
+
+var TAG_RenderStepLogged = function TAG_RenderStepLogged() {};
+
+var RenderStepLogged = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", null, "Logged");
+}); // ***** RenderAuth *****
+// **********************
+
+var TAG_RenderAuth = function TAG_RenderAuth() {};
+
+var RenderAuth = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var auth = app.auth;
+  var account = app.account; // From ... store
+
+  var isLoading = app.isLoading;
+  var stepKey = auth.step; // ...
+
+  react.useEffect(function () {
+    if (stepKey == 'login') {
+      var input = document.getElementById('txt-login');
+
+      if (input) {
+        input.focus();
+      }
+    }
+  }, [stepKey]); // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(Section_Section, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "account_circle"
+    }),
+    title: "Connexion"
+  }, stepKey == 'login' && /*#__PURE__*/react.createElement(RenderStepLogin, null), stepKey == 'password' && /*#__PURE__*/react.createElement(RenderStepPassword, null), stepKey == 'register' && /*#__PURE__*/react.createElement(RenderStepRegister, null), stepKey == 'lost' && /*#__PURE__*/react.createElement(RenderStepLost, null), stepKey == 'logged' && /*#__PURE__*/react.createElement(RenderStepLogged, null));
+}); // ***** AuthPage *****
+// ********************
+
+var TAG_AuthPage = function TAG_AuthPage() {};
+
+var AuthPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // From ... store
+
+  var initialized = app.initialized; // ...
+
+  var showHelper = !initialized ? true : false; // Renderers
+  // ==================================================================================================
+
+  var renderPage = function renderPage() {
+    // Render :: Page -> que quand l'app est intitialisée (pour useEffect)
+    // ---
+    var pageContent = null;
+
+    if (initialized) {
+      pageContent = /*#__PURE__*/react.createElement(RenderAuth, null);
+    }
+
+    return pageContent;
+  };
 
   var renderHelper = function renderHelper() {
     // Render :: Helper
     // ---
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       iconName: "account_circle",
-      show: true
+      show: showHelper
     });
   };
 
   return /*#__PURE__*/react.createElement("div", {
-    className: "nx-page"
-  }, renderHelper());
+    className: "nx-page small"
+  }, renderPage(), renderHelper());
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/account/Account.css
-var Account = __webpack_require__(390);
+var Account = __webpack_require__(7390);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/account/Account.jsx
 function Account_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Account_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -2215,7 +3894,7 @@ var AccountPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/forbidden/Forbidden.css
-var Forbidden = __webpack_require__(429);
+var Forbidden = __webpack_require__(2429);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/forbidden/Forbidden.jsx
 
 
@@ -2254,7 +3933,7 @@ var ForbiddenPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/notfound/NotFound.css
-var NotFound = __webpack_require__(282);
+var NotFound = __webpack_require__(7282);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/notfound/NotFound.jsx
 
 
@@ -2282,7 +3961,7 @@ var NotFoundPage = function NotFoundPage(props) {
   }));
 };
 // EXTERNAL MODULE: ../../nexus/react/NxApp.css
-var NxApp = __webpack_require__(52);
+var NxApp = __webpack_require__(7052);
 ;// CONCATENATED MODULE: ../../nexus/react/NxApp.jsx
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -2342,6 +4021,7 @@ function NxApp_arrayLikeToArray(arr, len) { if (len == null || len > arr.length)
 
 
 
+
  // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** NxAppStore *****
@@ -2358,8 +4038,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   standaloneMode: false,
   services: mobx_state_tree_module/* types.optional */.V5.optional(ServicesStore, {}),
   // URLs
-  loginUrl: '/login',
-  loginContext: 'login',
+  authUrl: '/login',
+  authContext: 'auth',
   homeUrl: '/',
   homeContext: 'home',
   searchUrl: '/search',
@@ -2386,7 +4066,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   breakPoint320: false,
   // iPhone 5, SE
   // Authentification
-  login: mobx_state_tree_module/* types.optional */.V5.optional(LoginStore, {}),
+  auth: mobx_state_tree_module/* types.optional */.V5.optional(AuthStore, {}),
   account: mobx_state_tree_module/* types.optional */.V5.optional(AccountStore, {}),
   // Forms
   errors: mobx_state_tree_module/* types.array */.V5.array(mobx_state_tree_module/* types.frozen */.V5.frozen(null)),
@@ -2395,8 +4075,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   theme: mobx_state_tree_module/* types.optional */.V5.optional(ThemeStore, {}),
   header: mobx_state_tree_module/* types.optional */.V5.optional(HeaderStore, {}),
   menu: mobx_state_tree_module/* types.optional */.V5.optional(MenuStore, {}),
-  portal: mobx_state_tree_module/* types.optional */.V5.optional(PortalStore, {}) // snackbar: types.optional(SnackbarStore, {}),
-  // popup: types.optional(PopupStore, {}),
+  portal: mobx_state_tree_module/* types.optional */.V5.optional(PortalStore, {}),
+  snackbar: mobx_state_tree_module/* types.optional */.V5.optional(SnackbarStore, {}) // popup: types.optional(PopupStore, {}),
 
 }).views(function (self) {
   return {
@@ -2414,7 +4094,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       // Should Header & Drawer be hidden ?
       // ---
       var standaloneMode = self.standaloneMode;
-      var context = self.context; // if (standaloneMode || ['login', 'forbidden'].indexOf(context) > -1) {
+      var context = self.context; // if (standaloneMode || ['auth', 'forbidden'].indexOf(context) > -1) {
       // 	return true;
       // }
 
@@ -2425,7 +4105,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       return false;
     },
 
-    isLoading: function isLoading() {
+    get isLoading() {
       // Are there background tasks still running ?
       // ---
       if (self.tasks.length > 0) {
@@ -2434,6 +4114,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
 
       return false;
     },
+
     // isCurrent(targetContexts) {
     // 	// Le contexte courant de l'application correspond-t-il à ceux passés en paramètres ?
     // 	// ---
@@ -2473,6 +4154,65 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       // ---
       var url = document.location.pathname;
       return url;
+    },
+    getValue: function getValue(path, notFoundValue, source) {
+      // Récupère la valeur derrière le chemin passé en paramètres
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var loadTarget = source ? source : store;
+
+      for (var idx_path in path) {
+        var target = path[idx_path];
+
+        if (idx_path == path.length - 1) {
+          // A-t-on à faire à un node de mobx-state-tree ?
+          var value = loadTarget[target];
+
+          if (loadTarget == undefined) {
+            try {
+              value = loadTarget.get(target);
+            } catch (err) {}
+          }
+
+          return value;
+        } else {
+          // A-t-on à faire à un node de mobx-state-tree ?
+          var previousLoadTarget = loadTarget;
+          loadTarget = loadTarget[target];
+
+          if (loadTarget == undefined) {
+            try {
+              loadTarget = previousLoadTarget.get(target);
+            } catch (err) {}
+          }
+        }
+      }
+
+      return notFoundValue;
+    },
+    getError: function getError(savePath) {
+      // Il y a-t-il une erreur ?
+      // ---
+      var errors = self.errors;
+
+      var _iterator = NxApp_createForOfIteratorHelper(errors),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var error = _step.value;
+
+          if (JSON.stringify(error.path) == JSON.stringify(savePath)) {
+            return error.label;
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      return '';
     }
   };
 }).actions(function (self) {
@@ -2505,7 +4245,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
     update: function update(raw, callback) {
       self.history = []; // User logged
 
-      self.account.update(raw.user); // Edit mode ?
+      self.account.update(raw.user);
+      self.auth.setField('step', self.account.isLogged ? 'logged' : 'login'); // Edit mode ?
 
       var editMode = getFromStorage('editMode', false, 'bool');
 
@@ -2552,7 +4293,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
         var params = new FormData();
         params.append('extras', JSON.stringify(extras));
         var url = '/app/init';
-        self.fetchDatas(url, {
+        self.fetchJSON(url, {
           'body': params
         }, false, 'POST').then(function (json) {
           self.update(json, callback);
@@ -2635,12 +4376,12 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       var navHistory = self.getHistory();
       var navHistoryCleared = [];
 
-      var _iterator = NxApp_createForOfIteratorHelper(navHistory),
-          _step;
+      var _iterator2 = NxApp_createForOfIteratorHelper(navHistory),
+          _step2;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var _history = _step.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var _history = _step2.value;
 
           if (_history.destination != url) {
             navHistoryCleared.push(_history);
@@ -2648,9 +4389,9 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
         } // setToStorage('navHistory', navHistoryCleared, 'json');
 
       } catch (err) {
-        _iterator.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator.f();
+        _iterator2.f();
       }
 
       self.history = navHistoryCleared;
@@ -2862,7 +4603,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
         self.tasks.splice(self.tasks.indexOf(taskId), 1);
       }
     },
-    fetchDatas: function fetchDatas(input, init, quiet, method, params, jsonOnly) {
+    // -
+    _fetchDatas: function _fetchDatas(input, init, quiet, method, params, jsonOnly) {
       // AJAX / fetch call
       // ---
       quiet = quiet == true ? true : false;
@@ -2916,6 +4658,126 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
 
         throw Error(ex);
       });
+    },
+    fetchJSON: function fetchJSON(input, init, quiet, method, params) {
+      return self._fetchDatas(input, init, quiet, method, params, true);
+    },
+    fetchHTML: function fetchHTML(input, init, quiet, method, params) {
+      return self._fetchDatas(input, init, quiet, method, params, false);
+    },
+    // -
+    saveValue: function saveValue(path, value, callbackSaved) {
+      // Sauvegarde de la nouvelle valeur à travers un arbre MobxStateTree
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var jsonPath = convertToJSONPath(path);
+      (0,mobx_state_tree_module/* applyPatch */.af)(store, [{
+        "op": "replace",
+        "path": jsonPath,
+        "value": value
+      }]);
+
+      if (callbackSaved) {
+        callbackSaved(path, value);
+      }
+    },
+    saveFrozenValue: function saveFrozenValue(pathToFrozen, pathInFrozen, value, callbackSaved) {
+      // Sauvegarde de la valeur
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var frozen = self.getValue(pathToFrozen, null);
+
+      if (frozen == null) {
+        return;
+      }
+
+      var saveTarget = copyObj(frozen);
+
+      for (var idx_path in pathInFrozen) {
+        var target = pathInFrozen[idx_path];
+
+        if (idx_path == pathInFrozen.length - 1) {
+          saveTarget[target] = value;
+        } else {
+          try {
+            saveTarget[target];
+          } catch (err) {
+            if (!saveTarget.hasOwnProperty(target)) {
+              saveTarget[target] = {};
+            }
+          }
+        }
+      }
+
+      self.saveTarget(pathToFrozen, frozen);
+
+      if (callbackSaved) {
+        callbackSaved(path, value);
+      }
+    },
+    // -
+    addError: function addError(errorPath, errorMsg) {
+      // Ajoute l'erreur passée en paramètres
+      // ---
+      if (!self.errors) {
+        self.errors = [];
+      }
+
+      var errorDict = {
+        'path': errorPath,
+        'label': errorMsg
+      };
+      self.errors.push(errorDict);
+      return errorDict;
+    },
+    clearError: function clearError(savePath) {
+      // Nettoyage de l'erreur
+      // ---
+      var errors = self.errors;
+      var clearedErrors = [];
+
+      var _iterator3 = NxApp_createForOfIteratorHelper(errors),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var error = _step3.value;
+
+          if (JSON.stringify(error.path) != JSON.stringify(savePath)) {
+            clearedErrors.push(error);
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      self.setField('errors', clearedErrors);
+    },
+    clearErrors: function clearErrors() {
+      self.errors = [];
+    },
+    // -
+    setDocState: function setDocState(docId, newState, callback, ajaxBase) {
+      // Appel AJAX de la fonction de mise à jour du statut du document passé en paramètres
+      // ---
+      var app = self;
+      var snackbar = self.snackbar;
+      ajaxBase = ajaxBase ? ajaxBase : '';
+      var params = new FormData();
+      params.append('doc_id', docId);
+      params.append('new_state', newState);
+      var url = "".concat(ajaxBase, "/app/set_doc_state");
+      app.fetchJSON(url, {
+        'body': params
+      }, false, 'POST').then(function (json) {
+        if (callback) {
+          callback();
+        }
+      })["catch"](function (ex) {
+        console.error("Fetch failed for ".concat(url), ex);
+        snackbar.update(true, "Une erreur est survenue.", "error");
+      });
     }
   };
 }); // Functions
@@ -2931,7 +4793,7 @@ var makeInitSnapshot = function makeInitSnapshot(routes, snapshot, callback) {
 
   var routeNodes = new route_node_esm/* RouteNode */.k('', '');
   routeNodes.add(new route_node_esm/* RouteNode */.k('about', '/about'));
-  routeNodes.add(new route_node_esm/* RouteNode */.k('login', '/login'));
+  routeNodes.add(new route_node_esm/* RouteNode */.k('auth', '/login'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('forbidden', '/forbidden'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('account', '/account'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('infos', '/infos'));
@@ -3121,7 +4983,7 @@ var NxApp_NxApp = (0,es/* observer */.Pi)(function (props) {
   var theme = app.theme; // ...
 
   contexts['about'] = AboutPage;
-  contexts['login'] = LoginPage;
+  contexts['auth'] = AuthPage;
   contexts['forbidden'] = ForbiddenPage;
   contexts['account'] = AccountPage; // contexts['infos'] = InfoPage;
   // Render
@@ -3176,10 +5038,10 @@ var NxApp_NxApp = (0,es/* observer */.Pi)(function (props) {
     id: "nx-content"
   }, Menu && !isFullScreen && /*#__PURE__*/react.createElement(Menu, null), /*#__PURE__*/react.createElement("div", {
     id: "nx-main"
-  }, content), !isFullScreen && /*#__PURE__*/react.createElement(Portal_Portal, null), popupsRendered)));
+  }, content, /*#__PURE__*/react.createElement(Snackbar_Snackbar, null)), !isFullScreen && /*#__PURE__*/react.createElement(Portal_Portal, null), popupsRendered)));
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/home/Home.css
-var Home = __webpack_require__(37);
+var Home = __webpack_require__(2037);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/home/Home.jsx
 
 
@@ -3248,7 +5110,7 @@ var HomeMenuItem = (0,es/* observer */.Pi)(function (props) {
   return homeMenuItemContent;
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/admin/Admin.css
-var Admin = __webpack_require__(644);
+var Admin = __webpack_require__(4644);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/admin/Admin.jsx
 
 
@@ -3311,7 +5173,7 @@ var AdminMenuItem = (0,es/* observer */.Pi)(function (props) {
   return adminMenuItemContent;
 });
 // EXTERNAL MODULE: ./contexts/search/Search.css
-var Search = __webpack_require__(906);
+var Search = __webpack_require__(4906);
 ;// CONCATENATED MODULE: ./contexts/search/Search.jsx
 
 
@@ -3405,7 +5267,7 @@ var SearchPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/artists/Artists.css
-var Artists = __webpack_require__(664);
+var Artists = __webpack_require__(9664);
 ;// CONCATENATED MODULE: ./contexts/artists/Artists.jsx
 
 
@@ -3502,7 +5364,7 @@ var ArtistsPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/albums/Albums.css
-var Albums = __webpack_require__(789);
+var Albums = __webpack_require__(1789);
 ;// CONCATENATED MODULE: ./contexts/albums/Albums.jsx
 
 
@@ -3599,7 +5461,7 @@ var AlbumsPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/tracks/Tracks.css
-var Tracks = __webpack_require__(220);
+var Tracks = __webpack_require__(5220);
 ;// CONCATENATED MODULE: ./contexts/tracks/Tracks.jsx
 
 
@@ -3793,7 +5655,7 @@ var YearsPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/genres/Genres.css
-var Genres = __webpack_require__(597);
+var Genres = __webpack_require__(9597);
 ;// CONCATENATED MODULE: ./contexts/genres/Genres.jsx
 
 
@@ -3890,7 +5752,7 @@ var GenresPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/playlists/Playlists.css
-var Playlists = __webpack_require__(555);
+var Playlists = __webpack_require__(5555);
 ;// CONCATENATED MODULE: ./contexts/playlists/Playlists.jsx
 
 
@@ -4013,7 +5875,9 @@ var ContextualHeader = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app; // From ... store
 
-  var context = app.context; // Render
+  var context = app.context;
+  var homeContext = app.homeContext;
+  var authContext = app.authContext; // Render
   // ==================================================================================================
 
   var headerLeft = null;
@@ -4021,7 +5885,7 @@ var ContextualHeader = (0,es/* observer */.Pi)(function (props) {
   var headerRight = null; // -------------------------------------------------
 
   var renderHeaderHome = function renderHeaderHome() {
-    if ([app.homeContext, 'login'].indexOf(context) == -1) {
+    if ([homeContext, authContext].indexOf(context) == -1) {
       return;
     }
 
@@ -4165,7 +6029,7 @@ var ContextualMenu = (0,es/* observer */.Pi)(function (props) {
   return /*#__PURE__*/react.createElement(Menu_Menu, null, /*#__PURE__*/react.createElement(HomeMenuItem, null), /*#__PURE__*/react.createElement(SearchMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(ArtistsMenuItem, null), /*#__PURE__*/react.createElement(AlbumsMenuItem, null), /*#__PURE__*/react.createElement(TracksMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(YearsMenuItem, null), /*#__PURE__*/react.createElement(GenresMenuItem, null), /*#__PURE__*/react.createElement(PlaylistsMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(AboutMenuItem, null), /*#__PURE__*/react.createElement(AdminMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(LoginMenuItem, null), /*#__PURE__*/react.createElement(AccountMenuItem, null), /*#__PURE__*/react.createElement(LogoutMenuItem, null));
 });
 // EXTERNAL MODULE: ./contexts/home/Home.css
-var home_Home = __webpack_require__(319);
+var home_Home = __webpack_require__(8319);
 ;// CONCATENATED MODULE: ./contexts/home/Home.jsx
 
 
@@ -4205,7 +6069,7 @@ var HomePage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./contexts/admin/Admin.css
-var admin_Admin = __webpack_require__(251);
+var admin_Admin = __webpack_require__(4251);
 ;// CONCATENATED MODULE: ./contexts/admin/Admin.jsx
 
 
@@ -4237,7 +6101,7 @@ var AdminPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 // EXTERNAL MODULE: ./Main.css
-var Main = __webpack_require__(729);
+var Main = __webpack_require__(1729);
 ;// CONCATENATED MODULE: ./Main.jsx
 
 
@@ -4288,9 +6152,9 @@ var RootStore = mobx_state_tree_module/* types.model */.V5.model({
 }).views(function (self) {
   return {
     get ajaxGramophone() {
-      var app = self.app; // return app.getAjaxBase('gramophone');
-
-      return '/';
+      var app = self.app;
+      var services = app.services;
+      return services.getAjaxBase('gramophone');
     }
 
   };
@@ -4384,6 +6248,10 @@ var initSnapshot = makeInitSnapshot(routes, {
     'theme': {
       'variant': 'light',
       'palette': {
+        'default': {
+          'main': '#000000',
+          'contrastText': '#fff'
+        },
         'primary': {
           'main': '#424242',
           'contrastText': '#fff'
@@ -4429,63 +6297,63 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
-/***/ 729:
+/***/ 1729:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 251:
+/***/ 4251:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 789:
+/***/ 1789:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 664:
+/***/ 9664:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 597:
+/***/ 9597:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 319:
+/***/ 8319:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 555:
+/***/ 5555:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 906:
+/***/ 4906:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 220:
+/***/ 5220:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -4499,140 +6367,168 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
-/***/ 52:
+/***/ 7052:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 189:
+/***/ 2189:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 390:
+/***/ 7390:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 644:
+/***/ 4644:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 429:
+/***/ 1881:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 37:
+/***/ 2429:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 364:
+/***/ 2037:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 282:
+/***/ 7282:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 450:
+/***/ 651:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 397:
+/***/ 4450:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 230:
+/***/ 4397:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 130:
+/***/ 3230:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 181:
+/***/ 3447:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 236:
+/***/ 8461:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 575:
+/***/ 3130:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 742:
+/***/ 2181:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 244:
+/***/ 6236:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 817:
+/***/ 7575:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 443:
+/***/ 2742:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
 
 /***/ }),
 
-/***/ 824:
+/***/ 3244:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 7883:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 9443:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 7677:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 6824:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -4792,8 +6688,8 @@ window.addEventListener('DOMContentLoaded', function () {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, [216], () => (__webpack_require__(979)))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(188)))
+/******/ 	__webpack_require__.O(undefined, [216], () => (__webpack_require__(3979)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(3940)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -9,8 +9,8 @@ from nexus.db import NxRegistry
 
 # ======================================================================================================
 
-gramophone_registry = NxRegistry()
-# gramophone_registry.add(User, db=db_main)
+gramophone_registry = NxRegistry(db_main)
+# gramophone_registry.add(User)
 
 
 # Objects
