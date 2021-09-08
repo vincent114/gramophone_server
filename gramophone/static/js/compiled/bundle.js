@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3940:
+/***/ 4146:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -291,7 +291,11 @@ var ICON_KEYS_TO_FILES = {
     'palette': 'palette_black_24dp.svg',
     'arrow_drop_down': 'arrow_drop_down_black_24dp.svg',
     'arrow_forward': 'arrow_forward_black_24dp.svg',
-    'smart_button': 'smart_button_black_24dp.svg'
+    'smart_button': 'smart_button_black_24dp.svg',
+    'alternate_email': 'alternate_email_black_24dp.svg',
+    'person_add': 'person_add_black_24dp.svg',
+    'person_search': 'person_search_black_24dp.svg',
+    'verified_user': 'verified_user_black_24dp.svg'
   }
 }; // const ICON_SIZES = {
 // 	'small': {
@@ -1035,7 +1039,7 @@ var HeaderDivider = function HeaderDivider(props) {
   // ...
   // Render
   // ==================================================================================================
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/react.createElement("div", {
     className: "nx-header-divider"
   });
 }; // ***** HeaderTitle *****
@@ -1102,6 +1106,14 @@ var HeaderUserMenu = (0,es/* observer */.Pi)(function (props) {
 
   var handleLoginClick = function handleLoginClick() {
     app.navigate(authUrl, authContext, [{
+      "op": "replace",
+      "path": "/app/auth/password",
+      "value": ''
+    }, {
+      "op": "replace",
+      "path": "/app/auth/user_id",
+      "value": ''
+    }, {
       "op": "replace",
       "path": "/app/auth/step",
       "value": 'login'
@@ -2246,6 +2258,7 @@ var HelperParaphTitle = (0,es/* observer */.Pi)(function (props) {
 
   var color = props.color ? props.color : 'default'; // default, primary, secondary
 
+  var severity = props.severity;
   var children = props.children;
   var style = props.style ? props.style : {}; // ...
 
@@ -2259,6 +2272,10 @@ var HelperParaphTitle = (0,es/* observer */.Pi)(function (props) {
 
   if (color == 'secondary') {
     style['color'] = theme.palette.secondary.main;
+  }
+
+  if (severity && SEVERITY_COLORS_CONTRASTED.hasOwnProperty(severity)) {
+    style['color'] = SEVERITY_COLORS_CONTRASTED[severity];
   } // Render
   // ==================================================================================================
 
@@ -2274,14 +2291,38 @@ var TAG_HelperParaph = function TAG_HelperParaph() {};
 
 var HelperParaph = function HelperParaph(props) {
   // From ... props
+  var severity = props.severity;
   var children = props.children;
-  var style = props.style ? props.style : {}; // Render
+  var style = props.style ? props.style : {}; // ...
+
+  if (severity && SEVERITY_COLORS.hasOwnProperty(severity)) {
+    style['color'] = SEVERITY_COLORS[severity];
+  } // Render
   // ==================================================================================================
+
 
   return /*#__PURE__*/react.createElement("div", {
     className: "nx-helper-paraph",
     style: style
   }, children);
+}; // ***** HelperImg *****
+// *********************
+
+var TAG_HelperImg = function TAG_HelperImg() {};
+
+var HelperImg = function HelperImg(props) {
+  // From ... props
+  var src = props.src;
+  var children = props.children;
+  var style = props.style ? props.style : {}; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-helper-img",
+    style: style
+  }, /*#__PURE__*/react.createElement("img", {
+    src: src
+  }));
 }; // ***** Helper *****
 // ******************
 
@@ -2491,8 +2532,8 @@ var Row_Row = function Row(props) {
   var style = props.style ? props.style : {};
   var marginBottom = props.marginBottom == false ? false : true; // ==================================================================================================
 
-  return /*#__PURE__*/React.createElement("div", {
-    className: clsx("nx-row", "h-col-".concat(spacing), "flex-align-start", {
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-row", "h-col-".concat(spacing), "flex-align-start", {
       "responsive-vertical": responsive
     }, {
       "responsive-align-stretch": responsive
@@ -3347,9 +3388,741 @@ var Field_Field = (0,es/* observer */.Pi)(function (props) {
     }
   }));
 });
+// EXTERNAL MODULE: ../../nexus/react/forms/indicator/Indicator.css
+var Indicator = __webpack_require__(4439);
+;// CONCATENATED MODULE: ../../nexus/react/forms/indicator/Indicator.jsx
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** Indicator *****
+// *********************
+
+var TAG_Indicator = function TAG_Indicator() {};
+
+var Indicator_Indicator = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... props
+
+  var variant = props.variant ? props.variant : 'default'; // default, contrasted, outlined
+
+  var severity = props.severity ? props.severity : 'default';
+  var children = props.children;
+  var className = props.className ? props.className : '';
+  var color = props.color ? props.color : ''; // primary, secondary, #custom
+
+  var style = props.style ? props.style : {}; // ...
+
+  var severityDef = SEVERITIES.getDef(severity); // Quelle couleur ?
+
+  if (color == 'primary') {
+    color = theme.palette.primary.main;
+  }
+
+  if (color == 'secondary') {
+    color = theme.palette.secondary.main;
+  }
+
+  if (!color) {
+    color = severityDef.color;
+  }
+
+  style['color'] = color;
+  style['backgroundColor'] = hexToRgbA(color, 0.1);
+  style['border'] = '1px solid transparent';
+
+  if (variant == 'contrasted') {
+    style['color'] = 'white';
+    style['backgroundColor'] = color;
+  }
+
+  if (variant == 'outlined') {
+    style['backgroundColor'] = 'transparent';
+    style['borderColor'] = color;
+  } // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-indicator", className),
+    style: style
+  }, children);
+});
+// EXTERNAL MODULE: ../../nexus/react/forms/label/Label.css
+var Label = __webpack_require__(9988);
+;// CONCATENATED MODULE: ../../nexus/react/forms/label/Label.jsx
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** Label *****
+// *****************
+
+var TAG_Label = function TAG_Label() {};
+
+var Label_Label = function Label(props) {
+  // From ... props
+  var variant = props.variant ? props.variant : 'default'; // default, revnumber
+
+  var children = props.children;
+  var className = props.className ? props.className : '';
+  var style = props.style ? props.style : {}; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-label", variant, className),
+    style: style
+  }, children);
+};
+// EXTERNAL MODULE: ../../cerberus/react/components/items/RightItem.css
+var RightItem = __webpack_require__(5832);
+;// CONCATENATED MODULE: ../../cerberus/react/components/items/RightItem.jsx
+function RightItem_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = RightItem_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function RightItem_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return RightItem_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return RightItem_arrayLikeToArray(o, minLen); }
+
+function RightItem_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** RightItem *****
+// *********************
+
+var TAG_RightItem = function TAG_RightItem() {};
+
+var RightItem_RightItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user;
+  var services = app.services; // From ... store
+
+  var isLoading = app.isLoading; // From ... props
+
+  var appId = props.appId; // const savePath = (props.savePath) ? props.savePath : [];
+  // ...
+
+  var serviceInfo = services.getServiceInfo(appId);
+  var roles = serviceInfo.roles;
+  var externalUrl = serviceInfo.external;
+  var iconUrl = "".concat(externalUrl, "/static/favicons/android-icon-48x48.png");
+  var name = serviceInfo.name; // Evènements
+  // ==================================================================================================
+
+  var handleRight = function handleRight(savePath, value) {
+    var toAdd = [];
+    var toRemove = [];
+    var found = false;
+    var foundIdx = roles.indexOf(value);
+
+    if (foundIdx > -1) {
+      for (var roleIdx in roles) {
+        var roleKey = roles[roleIdx];
+
+        if (!found) {
+          toAdd.push(roleKey);
+        } else {
+          toRemove.push(roleKey);
+        }
+
+        if (roleKey == value) {
+          found = true;
+        }
+      }
+    } else {
+      toAdd = [];
+      toRemove = copyObj(roles);
+    }
+
+    user.addRoles(toAdd);
+    user.removeRoles(toRemove);
+  }; // Render
+  // ==================================================================================================
+
+
+  var rightLevels = [{
+    value: serviceInfo.view_role,
+    label: 'Lecteur'
+  }, {
+    value: serviceInfo.edit_role,
+    label: 'Contributeur'
+  }, {
+    value: serviceInfo.admin_role,
+    label: 'Administrateur'
+  }];
+  var rightValue = '';
+
+  var _iterator = RightItem_createForOfIteratorHelper(roles),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var roleKey = _step.value;
+
+      if (user.role_finder.indexOf(roleKey) > -1) {
+        rightValue = roleKey;
+      }
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "c-right-item"
+  }, /*#__PURE__*/react.createElement("img", {
+    className: "c-right-item-icon",
+    src: iconUrl
+  }), /*#__PURE__*/react.createElement("div", {
+    className: "c-right-item-name"
+  }, name), /*#__PURE__*/react.createElement("div", {
+    className: "c-right-item-select"
+  }, /*#__PURE__*/react.createElement(Field_Field, {
+    component: "select",
+    datas: rightLevels,
+    value: rightValue,
+    callbackChange: handleRight,
+    disabled: isLoading,
+    canBeEmpty: true,
+    style: {
+      minWidth: '140px'
+    }
+  })));
+});
+// EXTERNAL MODULE: ../../cerberus/react/contexts/user/User.css
+var User = __webpack_require__(1167);
+;// CONCATENATED MODULE: ../../cerberus/react/contexts/user/User.jsx
+function User_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = User_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function User_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return User_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return User_arrayLikeToArray(o, minLen); }
+
+function User_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Models
+// -------------------------------------------------------------------------------------------------------------
+// ***** UserStore *****
+// *********************
+
+var TAG_UserStore = function TAG_UserStore() {};
+
+var UserStore = mobx_state_tree_module/* types.model */.V5.model({
+  doc_id: '',
+  doc_rev: '',
+  doc_state: 0,
+  login: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  password: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  role_finder: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(mobx_state_tree_module/* types.string */.V5.string), []),
+  last_login: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  loaded: false
+}).views(function (self) {
+  return {
+    // Bools
+    // -
+    get isEditable() {
+      var docState = self.doc_state;
+
+      if (docState != -1) {
+        return true;
+      }
+
+      return false;
+    }
+
+  };
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      console.log(raw);
+      self.doc_id = raw.doc_id;
+      self.doc_rev = raw.doc_rev;
+      self.doc_state = raw.doc_state;
+      self.login = raw.login;
+      self.password = raw.password;
+      self.role_finder = [];
+
+      var _iterator = User_createForOfIteratorHelper(raw.role_finder),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var roleKey = _step.value;
+          self.role_finder.push(roleKey);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      self.loaded = true;
+    },
+    load: function load(callback) {
+      // Appel AJAX de la fonction de chargement des données de l'utilisateur
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var snackbar = app.snackbar;
+      var userId = store.userId;
+      var ajaxCerberus = store.ajaxCerberus;
+      var params = new FormData();
+      params.append('user_id', userId);
+      var url = "".concat(ajaxCerberus, "/user_actions/load");
+      app.fetchJSON(url, {
+        'body': params
+      }, false, 'POST').then(function (json) {
+        self.update(json.user_raw);
+
+        if (callback) {
+          callback();
+        }
+      })["catch"](function (ex) {
+        console.error("Fetch failed for ".concat(url), ex);
+        snackbar.update(true, "Une erreur est survenue.", "error");
+      });
+    },
+    validate: function validate(callback) {
+      // Validation des données de l'utilisateur
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var errors = []; // Pas d'identifiant ?
+
+      if (!self.login) {
+        errors.push(app.addError(['user', 'login'], "Nécessaire"));
+      }
+
+      if (callback) {
+        callback(errors);
+      }
+
+      return errors;
+    },
+    save: function save() {
+      // Appel AJAX de la fonction d'enregistrement de l'utilisateur
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var snackbar = app.snackbar;
+      var ajaxCerberus = store.ajaxCerberus;
+      var userRev = self.doc_rev;
+      var params = new FormData();
+      params.append('user_raw', JSON.stringify(self.toJSON()));
+      var url = "".concat(ajaxCerberus, "/user_actions/save");
+      app.fetchJSON(url, {
+        'body': params
+      }, false, 'POST').then(function (json) {
+        var userId = json.user_raw.doc_id;
+
+        if (!userRev) {
+          // Nouveau document enregistré ?
+          store.navigateTo('user', userId, undefined, undefined, function () {
+            snackbar.update(true, "Enregistrement effectué.", "success");
+          });
+        } else {
+          // Document existant mis à jour ?
+          self.load(function () {
+            snackbar.update(true, "Enregistrement effectué.", "success");
+          });
+        }
+      })["catch"](function (ex) {
+        console.error("Fetch failed for ".concat(url), ex);
+        snackbar.update(true, "Une erreur est survenue.", "error");
+      });
+    },
+    // -
+    addRoles: function addRoles(roles) {
+      // Ajoute les rôles passés en paramètres
+      // ---
+      if (typeof roles == "string") {
+        roles = [roles];
+      }
+
+      var _iterator2 = User_createForOfIteratorHelper(roles),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var roleKey = _step2.value;
+
+          if (self.role_finder.indexOf(roleKey) == -1) {
+            self.role_finder.push(roleKey);
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    },
+    removeRoles: function removeRoles(roles) {
+      // Retire les rôles passés en paramètres
+      // ---
+      if (typeof roles == "string") {
+        roles = [roles];
+      }
+
+      var cleanedRoleFinder = [];
+
+      var _iterator3 = User_createForOfIteratorHelper(self.role_finder),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var roleKey = _step3.value;
+
+          if (roles.indexOf(roleKey) == -1) {
+            cleanedRoleFinder.push(roleKey);
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      self.role_finder = cleanedRoleFinder;
+    }
+  };
+}); // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** UserHeaderLeft *****
+// **************************
+
+var TAG_UserHeaderLeft = function TAG_UserHeaderLeft() {};
+
+var UserHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Utilisateur",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** UserHeaderRight *****
+// ***************************
+
+var TAG_UserHeaderRight = function TAG_UserHeaderRight() {};
+
+var UserHeaderRight = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user; // From ... store
+
+  var isLoading = app.isLoading;
+  var docId = user.doc_id;
+  var docRev = user.doc_rev;
+  var docState = user.doc_state; // ...
+  // Evènements
+  // ==================================================================================================
+
+  var handleSaveClick = function handleSaveClick() {
+    user.validate(function (errors) {
+      if (errors.length == 0) {
+        user.save();
+      }
+    });
+  };
+
+  var handleDeleteClick = function handleDeleteClick() {
+    var confirmMsg = "Voulez-vous vraiment supprimer ce document ?";
+
+    if (!confirm(confirmMsg)) {
+      return;
+    }
+
+    app.setDocState(docId, -1, user.load);
+  };
+
+  var handleRestoreClick = function handleRestoreClick() {
+    var confirmMsg = "Voulez-vous vraiment restaurer ce document ?";
+
+    if (!confirm(confirmMsg)) {
+      return;
+    }
+
+    app.setDocState(docId, 0, user.load);
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(IconButton, {
+    onClick: function onClick() {
+      return handleSaveClick();
+    },
+    disabled: isLoading,
+    title: "Enregistrer"
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "save",
+    color: "white"
+  })), docRev && docState == 0 && /*#__PURE__*/react.createElement(IconButton, {
+    onClick: function onClick() {
+      return handleDeleteClick();
+    },
+    disabled: isLoading,
+    title: "Supprimer"
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "delete",
+    color: "white"
+  })), docRev && docState == -1 && /*#__PURE__*/react.createElement(IconButton, {
+    onClick: function onClick() {
+      return handleRestoreClick();
+    },
+    disabled: isLoading,
+    title: "Restaurer"
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "restore_from_trash",
+    color: "white"
+  })), /*#__PURE__*/react.createElement(HeaderDivider, null));
+}); // ***** UserMenuItem *****
+// ************************
+
+var TAG_UserMenuItem = function TAG_UserMenuItem() {};
+
+var UserMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var account = app.account;
+  var menu = app.menu; // From ... store
+
+  var isAdmin = account.id_admin; // ...
+
+  var userContext = 'user'; // Evènements
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    store.navigateTo(userContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  var menuItemContent = null;
+
+  if (isAdmin) {
+    menuItemContent = /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(MenuItem, {
+      icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+        name: "person",
+        width: "120px"
+      }),
+      label: "Utilisateur",
+      activeContexts: [userContext],
+      callbackClick: handleMenuItemClick
+    }));
+  }
+
+  return menuItemContent;
+}); // ***** RenderSectionUserIdentity *****
+// *************************************
+
+var TAG_RenderSectionUserIdentity = function TAG_RenderSectionUserIdentity() {};
+
+var RenderSectionUserIdentity = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user; // From ... store
+
+  var isLoading = app.isLoading;
+  var isEditable = user.isEditable; // Render
+  // ==================================================================================================
+  // Section -> Content
+  // ---
+
+  var sectionContent = /*#__PURE__*/react.createElement(Row_Row, null, /*#__PURE__*/react.createElement(Field_Field, {
+    id: "txt-login",
+    component: "input",
+    label: "Pseudo / identifiant",
+    savePath: ['user', 'login'],
+    disabled: isLoading || !isEditable
+  }), /*#__PURE__*/react.createElement(Field_Field, {
+    id: "txt-password",
+    component: "input",
+    type: "password",
+    label: "Mot de passe",
+    savePath: ['user', 'password'],
+    disabled: isLoading || !isEditable
+  }));
+  return /*#__PURE__*/react.createElement(Section_Section, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "face"
+    }),
+    title: "Identit\xE9"
+  }, sectionContent);
+}); // ***** RenderSectionUserIdentity *****
+// *************************************
+
+var TAG_RenderSectionUserRights = function TAG_RenderSectionUserRights() {};
+
+var RenderSectionUserRights = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user; // From ... store
+
+  var isLoading = app.isLoading;
+  var isEditable = user.isEditable; // Render
+  // ==================================================================================================
+
+  var dividerStyle = {
+    marginTop: '10px',
+    marginBottom: '10px'
+  }; // Section -> Content
+  // ---
+
+  var sectionContent = /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(RightItem_RightItem, {
+    appId: "cerberus"
+  }), /*#__PURE__*/react.createElement(Divider_Divider, {
+    style: dividerStyle
+  }), /*#__PURE__*/react.createElement(RightItem_RightItem, {
+    appId: "nexorium"
+  }), /*#__PURE__*/react.createElement(Divider_Divider, {
+    style: dividerStyle
+  }), /*#__PURE__*/react.createElement(RightItem_RightItem, {
+    appId: "nexora"
+  }), /*#__PURE__*/react.createElement(Divider_Divider, {
+    style: dividerStyle
+  }), /*#__PURE__*/react.createElement(RightItem_RightItem, {
+    appId: "vgm"
+  }), /*#__PURE__*/react.createElement(Divider_Divider, {
+    style: dividerStyle
+  }), /*#__PURE__*/react.createElement(RightItem_RightItem, {
+    appId: "gramophone"
+  }));
+  return /*#__PURE__*/react.createElement(Section_Section, {
+    icon: /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: "lock"
+    }),
+    title: "Droits d'acc\xE8s"
+  }, sectionContent);
+}); // ***** RenderPlayground *****
+// ****************************
+
+var TAG_RenderUser = function TAG_RenderUser() {};
+
+var RenderUser = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user; // From ... store
+
+  var loaded = user.loaded;
+  var userRev = user.doc_rev;
+  var userState = user.doc_state; // ...
+
+  react.useEffect(function () {
+    if (!loaded) {
+      user.load();
+    }
+  }, [loaded]); // Render
+  // ==================================================================================================
+
+  var contentPlayground = null;
+
+  if (loaded) {
+    contentPlayground = /*#__PURE__*/react.createElement(react.Fragment, null, userState == -1 && /*#__PURE__*/react.createElement(Indicator_Indicator, {
+      severity: "error",
+      variant: "contrasted",
+      style: {
+        marginBottom: '20px'
+      }
+    }, "Supprim\xE9"), /*#__PURE__*/react.createElement(RenderSectionUserIdentity, null), /*#__PURE__*/react.createElement("br", null), /*#__PURE__*/react.createElement(RenderSectionUserRights, null), userRev && /*#__PURE__*/react.createElement(Label_Label, {
+      variant: "revnumber"
+    }, userRev));
+  }
+
+  return contentPlayground;
+}); // ***** UserPage *****
+// ********************
+
+var TAG_UserPage = function TAG_UserPage() {};
+
+var UserPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var user = store.user; // From ... store
+
+  var initialized = app.initialized;
+  var loaded = user.loaded; // ...
+
+  var showHelper = !initialized || !loaded ? true : false; // Renderers
+  // ==================================================================================================
+
+  var renderPage = function renderPage() {
+    // Render :: Page -> que quand l'app est intitialisée (pour useEffect)
+    // ---
+    var pageContent = null;
+
+    if (initialized) {
+      pageContent = /*#__PURE__*/react.createElement(RenderUser, null);
+    }
+
+    return pageContent;
+  };
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "person",
+      show: showHelper
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderPage(), renderHelper());
+});
 // EXTERNAL MODULE: ../../nexus/react/contexts/auth/Auth.css
 var Auth = __webpack_require__(1881);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/auth/Auth.jsx
+function Auth_slicedToArray(arr, i) { return Auth_arrayWithHoles(arr) || Auth_iterableToArrayLimit(arr, i) || Auth_unsupportedIterableToArray(arr, i) || Auth_nonIterableRest(); }
+
+function Auth_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function Auth_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Auth_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Auth_arrayLikeToArray(o, minLen); }
+
+function Auth_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function Auth_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function Auth_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -3364,18 +4137,47 @@ var Auth = __webpack_require__(1881);
  // Datas
 // -------------------------------------------------------------------------------------------------------------
 
-var AUTH_STEPS = (/* unused pure expression or super */ null && ([])); // Models
+var AUTH_STEPS = [{
+  key: 'login',
+  label: 'Authentification',
+  icon: 'alternate_email'
+}, {
+  key: 'password',
+  label: 'Authentification',
+  icon: 'lock'
+}, {
+  key: 'register',
+  label: 'Inscription',
+  icon: 'person_add'
+}, {
+  key: 'lost',
+  label: 'Récupération',
+  icon: 'person_search'
+}, {
+  key: 'logged',
+  label: 'Authentifié',
+  icon: 'verified_user'
+}];
+var AUTH_STEPS_BY_KEY = {};
+
+for (var Auth_i = 0, _AUTH_STEPS = AUTH_STEPS; Auth_i < _AUTH_STEPS.length; Auth_i++) {
+  var authStepDef = _AUTH_STEPS[Auth_i];
+  AUTH_STEPS_BY_KEY[authStepDef.key] = authStepDef;
+} // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** AuthStore *****
 // *********************
+
 
 var TAG_AuthStore = function TAG_AuthStore() {};
 
 var AuthStore = mobx_state_tree_module/* types.model */.V5.model({
   login: '',
   password: '',
-  step: 'login' // login, password, register, lost, logged
-
+  user_id: '',
+  step: 'login',
+  // login, password, register, lost, logged
+  came_from: '/'
 }).actions(function (self) {
   return {
     setField: function setField(field, value) {
@@ -3397,6 +4199,10 @@ var AuthStore = mobx_state_tree_module/* types.model */.V5.model({
       }, false, 'POST').then(function (json) {
         app.setField('errors', json.errors);
 
+        if (json.user_id) {
+          self.setField('user_id', json.user_id);
+        }
+
         if (callback) {
           callback(json.errors);
         }
@@ -3412,7 +4218,13 @@ var AuthStore = mobx_state_tree_module/* types.model */.V5.model({
       var app = store.app;
       var authUrl = app.authUrl;
       var authContext = app.authContext;
-      app.navigate(authUrl, authContext, [{
+      var authUrlStep = '';
+
+      if (['logged'].indexOf(stepKey) > -1) {
+        authUrlStep = "/".concat(stepKey);
+      }
+
+      app.navigate("".concat(authUrl).concat(authUrlStep), authContext, [{
         "op": "replace",
         "path": "/app/auth/step",
         "value": stepKey
@@ -3439,6 +4251,14 @@ var LoginMenuItem = (0,es/* observer */.Pi)(function (props) {
 
   var handleMenuItemClick = function handleMenuItemClick() {
     app.navigate(authUrl, authContext, [{
+      "op": "replace",
+      "path": "/app/auth/password",
+      "value": ''
+    }, {
+      "op": "replace",
+      "path": "/app/auth/user_id",
+      "value": ''
+    }, {
       "op": "replace",
       "path": "/app/auth/step",
       "value": 'login'
@@ -3542,12 +4362,10 @@ var RenderStepLogin = (0,es/* observer */.Pi)(function (props) {
     className: "h-col flex-align-start"
   }, /*#__PURE__*/react.createElement(Field_Field, {
     id: "txt-login",
-    component: "input" // label="Identifiant / pseudo"
-    ,
+    component: "input",
     placeholder: "Identifiant / pseudo",
     savePath: ['app', 'auth', 'login'],
-    callbackKeyPress: handleLoginKeyPress // callbackBlur={handleLoginBlur}
-    ,
+    callbackKeyPress: handleLoginKeyPress,
     disabled: isLoading
   }), /*#__PURE__*/react.createElement(Button_Button, {
     color: "primary",
@@ -3556,7 +4374,6 @@ var RenderStepLogin = (0,es/* observer */.Pi)(function (props) {
       return _moveIt();
     },
     style: {
-      // marginTop: '21px',
       marginLeft: '5px',
       minWidth: 'unset'
     },
@@ -3585,10 +4402,81 @@ var RenderStepPassword = (0,es/* observer */.Pi)(function (props) {
   var auth = app.auth;
   var account = app.account; // From ... store
 
-  var isLoading = app.isLoading; // Render
+  var isLoading = app.isLoading;
+  var canGoBack = app.canGoBack();
+  var homeContext = app.homeContext;
+  var homeUrl = app.homeUrl;
+  var login = auth.login; // Evènements
   // ==================================================================================================
 
-  return /*#__PURE__*/react.createElement("div", null, "Password");
+  var _moveIt = function _moveIt() {
+    auth.validate('password', function (errors) {
+      if (errors.length == 0) {
+        app.setBrowserURL('/login/logged');
+        document.location.reload();
+      }
+    });
+  };
+
+  var handlePasswordKeyPress = function handlePasswordKeyPress(evt) {
+    if (evt.code == 'Enter') {
+      _moveIt();
+    }
+  };
+
+  var handleLoginBlur = function handleLoginBlur(savePath, value) {
+    _moveIt();
+  };
+
+  var handleChangeAccountClick = function handleChangeAccountClick() {
+    auth.setField('login', '');
+    auth.setField('password', '');
+    auth.setField('user_id', '');
+    auth.moveToStep('login');
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", null, /*#__PURE__*/react.createElement(HelperParaph, {
+    style: {
+      marginBottom: '20px'
+    }
+  }, /*#__PURE__*/react.createElement(HelperParaphTitle, {
+    color: "primary"
+  }, login), "Saissez votre mot de passe dans le champ ci-dessous :"), /*#__PURE__*/react.createElement("div", {
+    className: "h-col flex-align-start"
+  }, /*#__PURE__*/react.createElement(Field_Field, {
+    id: "txt-password",
+    component: "input",
+    type: "password",
+    placeholder: "Mot de passe",
+    savePath: ['app', 'auth', 'password'],
+    callbackKeyPress: handlePasswordKeyPress,
+    disabled: isLoading
+  }), /*#__PURE__*/react.createElement(Button_Button, {
+    color: "primary",
+    variant: "contained",
+    onClick: function onClick() {
+      return _moveIt();
+    },
+    style: {
+      marginLeft: '5px',
+      minWidth: 'unset'
+    },
+    className: "flex-0",
+    disabled: isLoading
+  }, /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "arrow_forward",
+    color: "white"
+  }))), /*#__PURE__*/react.createElement(Button_Button, {
+    color: "secondary",
+    onClick: function onClick() {
+      return handleChangeAccountClick();
+    },
+    style: {
+      marginTop: '20px'
+    }
+  }, "Essayer avec un autre compte ?"));
 }); // ***** RenderStepRegister *****
 // ******************************
 
@@ -3628,12 +4516,59 @@ var RenderStepLogged = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app;
   var auth = app.auth;
-  var account = app.account; // From ... store
+  var account = app.account; // From ... state
 
-  var isLoading = app.isLoading; // Render
+  var _React$useState = react.useState(5),
+      _React$useState2 = Auth_slicedToArray(_React$useState, 2),
+      secondsRemaining = _React$useState2[0],
+      setSecondsRemaining = _React$useState2[1]; // From ... store
+
+
+  var isLoading = app.isLoading;
+  var login = account.login;
+  var isLogged = account.isLogged;
+  var cameFrom = auth.came_from; // ...
+
+  react.useEffect(function () {
+    var redirectInterval = setInterval(function () {
+      if (secondsRemaining > 0) {
+        setSecondsRemaining(secondsRemaining - 1);
+      } else {
+        clearInterval(redirectInterval);
+        app.gotoInternal(cameFrom);
+      }
+    }, 1000);
+  }); // Evènements
   // ==================================================================================================
 
-  return /*#__PURE__*/react.createElement("div", null, "Logged");
+  var handleRedirectClick = function handleRedirectClick() {
+    app.gotoInternal(cameFrom);
+  }; // Render
+  // ==================================================================================================
+
+
+  var secondsRemainingLabel = secondsRemaining > 1 ? 'secondes' : 'seconde';
+  return /*#__PURE__*/react.createElement("div", null, /*#__PURE__*/react.createElement(HelperParaph, {
+    style: {
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/react.createElement(HelperParaphTitle, {
+    color: "primary"
+  }, "Bienvenue, ", login, " !"), "Vous \xEAtes connect\xE9 avec succ\xE8s sur l'\xE9cosyst\xE8me Nexorium."), /*#__PURE__*/react.createElement(HelperImg, {
+    src: "/nexus_static/img/emojis/jelly_smile.png",
+    style: {
+      marginTop: '20px',
+      marginBottom: '0px'
+    }
+  }), /*#__PURE__*/react.createElement(Button_Button, {
+    color: "secondary",
+    onClick: function onClick() {
+      return handleRedirectClick();
+    },
+    style: {
+      marginTop: '20px'
+    }
+  }, /*#__PURE__*/react.createElement("span", null, "Redirection dans ", /*#__PURE__*/react.createElement("b", null, secondsRemaining, " ", secondsRemainingLabel))));
 }); // ***** RenderAuth *****
 // **********************
 
@@ -3656,14 +4591,31 @@ var RenderAuth = (0,es/* observer */.Pi)(function (props) {
         input.focus();
       }
     }
+
+    if (stepKey == 'password') {
+      var _input = document.getElementById('txt-password');
+
+      if (_input) {
+        _input.focus();
+      }
+    }
   }, [stepKey]); // Render
   // ==================================================================================================
 
+  var stepIcon = 'account_circle';
+  var stepLabel = 'Connexion';
+
+  if (AUTH_STEPS_BY_KEY.hasOwnProperty(stepKey)) {
+    var stepDef = AUTH_STEPS_BY_KEY[stepKey];
+    stepIcon = stepDef.icon;
+    stepLabel = stepDef.label;
+  }
+
   return /*#__PURE__*/react.createElement(Section_Section, {
     icon: /*#__PURE__*/react.createElement(Icon_Icon, {
-      name: "account_circle"
+      name: stepIcon
     }),
-    title: "Connexion"
+    title: stepLabel
   }, stepKey == 'login' && /*#__PURE__*/react.createElement(RenderStepLogin, null), stepKey == 'password' && /*#__PURE__*/react.createElement(RenderStepPassword, null), stepKey == 'register' && /*#__PURE__*/react.createElement(RenderStepRegister, null), stepKey == 'lost' && /*#__PURE__*/react.createElement(RenderStepLost, null), stepKey == 'logged' && /*#__PURE__*/react.createElement(RenderStepLogged, null));
 }); // ***** AuthPage *****
 // ********************
@@ -3729,9 +4681,9 @@ function Account_arrayLikeToArray(arr, len) { if (len == null || len > arr.lengt
 var TAG_AccountStore = function TAG_AccountStore() {};
 
 var AccountStore = mobx_state_tree_module/* types.model */.V5.model({
-  _id: '',
-  _rev: '',
-  _state: 0,
+  doc_id: '',
+  doc_rev: '',
+  doc_state: 0,
   firstname: '',
   lastname: '',
   login: '',
@@ -3744,7 +4696,7 @@ var AccountStore = mobx_state_tree_module/* types.model */.V5.model({
     get name() {
       var name = '';
 
-      if (self._id) {
+      if (self.doc_id) {
         if (self.firstname) {
           name = self.firstname;
         }
@@ -3770,7 +4722,7 @@ var AccountStore = mobx_state_tree_module/* types.model */.V5.model({
     // Bools
     // -
     get isLogged() {
-      if (self._id) {
+      if (self.doc_id) {
         return true;
       }
 
@@ -3791,9 +4743,9 @@ var AccountStore = mobx_state_tree_module/* types.model */.V5.model({
     },
     // -
     update: function update(raw) {
-      self._id = raw._id;
-      self._rev = raw._rev;
-      self._state = raw._state;
+      self.doc_id = raw.doc_id;
+      self.doc_rev = raw.doc_rev;
+      self.doc_state = raw.doc_state;
       self.firstname = raw.firstname;
       self.lastname = raw.lastname;
       self.login = raw.login;
@@ -4049,7 +5001,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   adminUrl: '/admin',
   adminContext: 'admin',
   accountUrl: '/account',
-  accountContent: 'account',
+  accountContext: 'account',
   routes: mobx_state_tree_module/* types.frozen */.V5.frozen(null),
   urlParams: mobx_state_tree_module/* types.frozen */.V5.frozen(null),
   matchResult: mobx_state_tree_module/* types.frozen */.V5.frozen(null),
@@ -4794,6 +5746,7 @@ var makeInitSnapshot = function makeInitSnapshot(routes, snapshot, callback) {
   var routeNodes = new route_node_esm/* RouteNode */.k('', '');
   routeNodes.add(new route_node_esm/* RouteNode */.k('about', '/about'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('auth', '/login'));
+  routeNodes.add(new route_node_esm/* RouteNode */.k('auth:step', '/login/:step'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('forbidden', '/forbidden'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('account', '/account'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('infos', '/infos'));
@@ -6297,6 +7250,20 @@ window.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ 5832:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 1167:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
 /***/ 1729:
 /***/ (() => {
 
@@ -6424,6 +7391,20 @@ window.addEventListener('DOMContentLoaded', function () {
 /***/ }),
 
 /***/ 651:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 4439:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 9988:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -6689,7 +7670,7 @@ window.addEventListener('DOMContentLoaded', function () {
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, [216], () => (__webpack_require__(3979)))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(3940)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(4146)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
