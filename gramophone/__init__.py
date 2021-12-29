@@ -5,7 +5,7 @@ smap.register('gramophone')
 from pyramid.config import Configurator
 
 from gramophone.resources import Root
-from gramophone.resources.app_support import AppSupport
+from gramophone.resources.app_datas import AppDatasGramophone
 from gramophone import views
 
 
@@ -23,7 +23,7 @@ def main(global_config, **settings):
     config.include('nexus.pyramid')
 
     # Init callback
-    config.registry.settings['init_app_callback'] = AppSupport.to_raw
+    config.registry.settings['init_app_callback'] = AppDatasGramophone.to_raw
 
     # Routes
     # ------------------------------------------------------

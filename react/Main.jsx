@@ -191,7 +191,7 @@ let initSnapshot = makeInitSnapshot(routes, {
 					'contrastText': '#fff',
 				},
 				'primary': {
-					'main': '#424242',
+					'main': '#009688',
 					'contrastText': '#fff',
 				},
 				'secondary': {
