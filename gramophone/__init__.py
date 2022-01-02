@@ -34,6 +34,32 @@ def main(global_config, **settings):
 
     # ---
 
+    # Blog
+    # -
+
+    config.add_route('blog', '/blog')
+
+    # ---
+
+    # Download
+    # -
+
+    config.add_route('download', '/download')
+    config.add_route('download_actions', '/download_actions/{action}')
+
+    # Help
+    # -
+
+    config.add_route('help', '/help')
+    config.add_route('help_actions', '/help_actions/{action}')
+
+    # Changelog
+    # -
+
+    config.add_route('changelog', '/changelog')
+
+    # ---
+
     # A propos
     # -
 

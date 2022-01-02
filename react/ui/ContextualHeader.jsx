@@ -9,7 +9,20 @@ import { AboutHeaderLeft } from 'nexus/contexts/about/About';
 import { AdminHeaderLeft } from 'nexus/contexts/admin/Admin';
 import { AccountHeaderLeft } from 'nexus/contexts/account/Account';
 
+import {
+	BlogHeaderLeft,
+	BlogHeaderRight
+} from 'nexorium/contexts/blog/Blog';
+
 import { SearchHeaderMiddle } from 'gramophone_server/contexts/search/Search';
+import {
+	DownloadHeaderLeft,
+	DownloadHeaderRight
+} from 'gramophone_server/contexts/download/Download';
+import {
+	HelpHeaderLeft,
+	HelpHeaderRight
+} from 'gramophone_server/contexts/help/Help';
 
 
 // Functions Components ReactJS
@@ -55,6 +68,34 @@ export const ContextualHeader = observer((props) => {
 
 	// -------------------------------------------------
 
+	const renderHeaderBlog = () => {
+
+		if (context != 'blog') { return; }
+
+		headerLeft = <BlogHeaderLeft />
+		headerRight = <BlogHeaderRight />
+	}
+
+	// -------------------------------------------------
+
+	const renderHeaderDownload = () => {
+
+		if (context != 'download') { return; }
+
+		headerLeft = <DownloadHeaderLeft />
+		headerRight = <DownloadHeaderRight />
+	}
+
+	const renderHeaderHelp = () => {
+
+		if (context != 'help') { return; }
+
+		headerLeft = <HelpHeaderLeft />
+		headerRight = <HelpHeaderRight />
+	}
+
+	// -------------------------------------------------
+
 	const renderHeaderAbout = () => {
 
 		if (context != app.aboutContext) { return; }
@@ -82,6 +123,11 @@ export const ContextualHeader = observer((props) => {
 
 	renderHeaderHome();
 	renderHeaderSearch();
+
+	renderHeaderBlog();
+
+	renderHeaderDownload();
+	renderHeaderHelp();
 
 	renderHeaderAbout();
 	renderHeaderAdmin();

@@ -5,10 +5,14 @@ import { observer } from "mobx-react-lite";
 
 import { NxAppStore, NxApp, makeInitSnapshot } from 'nexus/NxApp';
 
+import { BlogStore, BlogPage } from 'nexorium/contexts/blog/Blog';
+
 import { ContextualHeader } from 'gramophone_server/ui/ContextualHeader';
 import { ContextualMenu } from 'gramophone_server/ui/ContextualMenu';
 import { HomePage } from 'gramophone_server/contexts/home/Home';
 import { SearchStore, SearchPage } from 'gramophone_server/contexts/search/Search';
+import { DownloadStore, DownloadPage } from 'gramophone_server/contexts/download/download';
+import { HelpStore, HelpPage } from 'gramophone_server/contexts/help/help';
 import { AdminPage } from 'gramophone_server/contexts/admin/Admin';
 
 import './Main.css';
@@ -29,6 +33,21 @@ const RootStore = types
 		// -
 
 		'search': types.optional(SearchStore, {}),
+
+		// Blog
+		// -
+
+		'blog': types.optional(BlogStore, {}),
+
+		// Download
+		// -
+
+		'download': types.optional(DownloadStore, {}),
+
+		// Help
+		// -
+
+		'help': types.optional(HelpStore, {}),
 
 	})
 	.views(self => ({
@@ -67,6 +86,29 @@ const RootStore = types
 
 			// -
 
+			// Blog
+			if (navContext == 'blog') {
+				app.navigate('/blog', 'blog', [
+					{"op": "replace", "path": "/blog/loaded", "value": false},
+				]);
+			}
+
+			// -
+
+			// Download
+			if (navContext == 'download') {
+				app.navigate('/download', 'download', [
+					{"op": "replace", "path": "/download/loaded", "value": false},
+				]);
+			}
+
+			// Help
+			if (navContext == 'help') {
+				app.navigate('/help', 'help', [
+					{"op": "replace", "path": "/help/loaded", "value": false},
+				]);
+			}
+
 		},
 
 	}))
@@ -81,6 +123,12 @@ const RootStore = types
 let contexts = {
 	'home': HomePage,
 	'search': SearchPage,
+
+	'blog': BlogPage,
+
+	'download': DownloadPage,
+	'help': HelpPage,
+
 	'admin': AdminPage,
 }
 
@@ -95,6 +143,12 @@ let popups = {}
 let routes = {
 	'home': '/',
 	'search': '/search',
+
+	'blog': '/blog',
+
+	'download': '/download',
+	'help': '/help',
+
 	'admin': '/admin',
 }
 

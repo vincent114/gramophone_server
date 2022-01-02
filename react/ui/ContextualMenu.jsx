@@ -18,33 +18,48 @@ import {
 import { AccountMenuItem } from 'nexus/contexts/account/Account';
 import { Icon } from 'nexus/ui/icon/Icon';
 
+import { BlogMenuItem } from 'nexorium/contexts/blog/Blog';
+
 import { SearchMenuItem } from 'gramophone_server/contexts/search/Search';
+import { DownloadMenuItem } from 'gramophone_server/contexts/download/Download';
+import { HelpMenuItem } from 'gramophone_server/contexts/help/Help';
 
 
 // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
 
-// ***** ContextualMenu *****
-// **************************
+// ***** GramophoneServerMenuItems *****
+// *************************************
 
-const TAG_ContextualMenu = () => {}
-export const ContextualMenu = observer((props) => {
+const TAG_GramophoneServerMenuItems = () => {}
+export const GramophoneServerMenuItems = observer((props) => {
 
 	const store = React.useContext(window.storeContext);
 	const app = store.app;
 
 	// From ... store
 
-	const context = app.context;
 	const breakPoint650 = app.breakPoint650;
 
 	// Render
 	// ==================================================================================================
 
 	return (
-		<Menu>
+		<React.Fragment>
+
 			<HomeMenuItem />
 			<SearchMenuItem />
+
+			<MenuDivider />
+
+			<BlogMenuItem />
+
+			<MenuDivider>
+				App
+			</MenuDivider>
+
+			<DownloadMenuItem />
+			<HelpMenuItem />
 
 			<MenuDivider />
 
@@ -56,6 +71,50 @@ export const ContextualMenu = observer((props) => {
 			<LoginMenuItem />
 			<AccountMenuItem />
 			<LogoutMenuItem />
+
+		</React.Fragment>
+	)
+})
+
+// ***** ContextualMenu *****
+// **************************
+
+const TAG_ContextualMenu = () => {}
+export const ContextualMenu = observer((props) => {
+
+	const store = React.useContext(window.storeContext);
+	const app = store.app;
+	const account = app.account;
+
+	// From ... store
+
+	const context = app.context;
+	const name = account.name;
+
+	// Render
+	// ==================================================================================================
+
+	// Items
+	// -
+
+	const contextualMenuItems = {}
+
+	let menuItems = null;
+	if (contextualMenuItems.hasOwnProperty(context)) {
+		const ContextualMenuItems = contextualMenuItems[context];
+		menuItems = <ContextualDrawerItems />
+	} else {
+		menuItems = <GramophoneServerMenuItems />
+	}
+
+	// -------------------------------------------------
+
+	return (
+		<Menu
+			title={name}
+			{...props}
+		>
+			{menuItems}
 		</Menu>
 	)
 })
