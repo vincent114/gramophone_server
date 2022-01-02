@@ -34,46 +34,6 @@ def main(global_config, **settings):
 
     # ---
 
-    # Artistes
-    # -
-
-    config.add_route('artists', '/artists')
-    config.add_route('artists_actions', '/artists_actions/{action}')
-
-    # Albums
-    # -
-
-    config.add_route('albums', '/albums')
-    config.add_route('albums_actions', '/albums_actions/{action}')
-
-    # Morceaux
-    # -
-
-    config.add_route('tracks', '/tracks')
-    config.add_route('tracks_actions', '/tracks_actions/{action}')
-
-    # ---
-
-    # Années
-    # -
-
-    config.add_route('years', '/years')
-    config.add_route('years_actions', '/years_actions/{action}')
-
-    # Genres
-    # -
-
-    config.add_route('genres', '/genres')
-    config.add_route('genres_actions', '/genres_actions/{action}')
-
-    # Playlists
-    # -
-
-    config.add_route('playlists', '/playlists')
-    config.add_route('playlists_actions', '/playlists_actions/{action}')
-
-    # ---
-
     # A propos
     # -
 

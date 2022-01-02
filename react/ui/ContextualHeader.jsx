@@ -9,13 +9,7 @@ import { AboutHeaderLeft } from 'nexus/contexts/about/About';
 import { AdminHeaderLeft } from 'nexus/contexts/admin/Admin';
 import { AccountHeaderLeft } from 'nexus/contexts/account/Account';
 
-import { SearchHeaderMiddle } from 'gramophone/contexts/search/Search';
-import { ArtistsHeaderLeft } from 'gramophone/contexts/artists/Artists';
-import { AlbumsHeaderLeft } from 'gramophone/contexts/albums/Albums';
-import { TracksHeaderLeft } from 'gramophone/contexts/tracks/Tracks';
-import { YearsHeaderLeft } from 'gramophone/contexts/years/Years';
-import { GenresHeaderLeft } from 'gramophone/contexts/genres/Genres';
-import { PlaylistsHeaderLeft } from 'gramophone/contexts/playlists/Playlists';
+import { SearchHeaderMiddle } from 'gramophone_server/contexts/search/Search';
 
 
 // Functions Components ReactJS
@@ -61,52 +55,6 @@ export const ContextualHeader = observer((props) => {
 
 	// -------------------------------------------------
 
-	const renderHeaderArtists = () => {
-
-		if (context != 'artists') { return; }
-
-		headerLeft = <ArtistsHeaderLeft />
-	}
-
-	const renderHeaderAlbums = () => {
-
-		if (context != 'albums') { return; }
-
-		headerLeft = <AlbumsHeaderLeft />
-	}
-
-	const renderHeaderTracks = () => {
-
-		if (context != 'tracks') { return; }
-
-		headerLeft = <TracksHeaderLeft />
-	}
-
-	// -------------------------------------------------
-
-	const renderHeaderYears = () => {
-
-		if (context != 'years') { return; }
-
-		headerLeft = <YearsHeaderLeft />
-	}
-
-	const renderHeaderGenres = () => {
-
-		if (context != 'genres') { return; }
-
-		headerLeft = <GenresHeaderLeft />
-	}
-
-	const renderHeaderPlaylists = () => {
-
-		if (context != 'playlists') { return; }
-
-		headerLeft = <PlaylistsHeaderLeft />
-	}
-
-	// -------------------------------------------------
-
 	const renderHeaderAbout = () => {
 
 		if (context != app.aboutContext) { return; }
@@ -134,14 +82,6 @@ export const ContextualHeader = observer((props) => {
 
 	renderHeaderHome();
 	renderHeaderSearch();
-
-	renderHeaderArtists();
-	renderHeaderAlbums();
-	renderHeaderTracks();
-
-	renderHeaderYears();
-	renderHeaderGenres();
-	renderHeaderPlaylists();
 
 	renderHeaderAbout();
 	renderHeaderAdmin();

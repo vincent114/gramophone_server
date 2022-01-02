@@ -1,5 +1,5 @@
 {
-  "name": "gramophone",
+  "name": "gramophone_server",
   "version": "1.0.0",
   "scripts": {
     "serve": "webpack --watch --progress",
