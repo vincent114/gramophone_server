@@ -5,16 +5,8 @@ import clsx from 'clsx';
 
 import { Header } from 'nexus/layout/header/Header';
 import { HomeHeaderMiddle } from 'nexus/contexts/home/Home';
-import { AboutHeaderLeft } from 'nexus/contexts/about/About';
-import { AdminHeaderLeft } from 'nexus/contexts/admin/Admin';
-import { AccountHeaderLeft } from 'nexus/contexts/account/Account';
+import { SearchHeaderMiddle } from 'nexus/contexts/search/Search';
 
-import {
-	BlogHeaderLeft,
-	BlogHeaderRight
-} from 'nexorium/contexts/blog/Blog';
-
-import { SearchHeaderMiddle } from 'gramophone_server/contexts/search/Search';
 import {
 	DownloadHeaderLeft,
 	DownloadHeaderRight
@@ -68,16 +60,6 @@ export const ContextualHeader = observer((props) => {
 
 	// -------------------------------------------------
 
-	const renderHeaderBlog = () => {
-
-		if (context != 'blog') { return; }
-
-		headerLeft = <BlogHeaderLeft />
-		headerRight = <BlogHeaderRight />
-	}
-
-	// -------------------------------------------------
-
 	const renderHeaderDownload = () => {
 
 		if (context != 'download') { return; }
@@ -96,43 +78,11 @@ export const ContextualHeader = observer((props) => {
 
 	// -------------------------------------------------
 
-	const renderHeaderAbout = () => {
-
-		if (context != app.aboutContext) { return; }
-
-		headerLeft = <AboutHeaderLeft />
-	}
-
-	const renderHeaderAdmin = () => {
-
-		if (context != app.adminContext) { return; }
-
-		headerLeft = <AdminHeaderLeft />
-	}
-
-	// -------------------------------------------------
-
-	const renderHeaderAccount = () => {
-
-		if (context != app.accountContext) { return; }
-
-		headerLeft = <AccountHeaderLeft />
-	}
-
-	// -------------------------------------------------
-
 	renderHeaderHome();
 	renderHeaderSearch();
 
-	renderHeaderBlog();
-
 	renderHeaderDownload();
 	renderHeaderHelp();
-
-	renderHeaderAbout();
-	renderHeaderAdmin();
-
-	renderHeaderAccount();
 
 	return (
 		<Header

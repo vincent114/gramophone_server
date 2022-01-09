@@ -8,7 +8,9 @@ import {
 	MenuItem,
 	Menu
 } from 'nexus/layout/menu/Menu';
+import { PortalMenuItem } from 'nexus/contexts/portal/Portal';
 import { HomeMenuItem } from 'nexus/contexts/home/Home';
+import { SearchMenuItem } from 'nexus/contexts/search/Search';
 import { AboutMenuItem } from 'nexus/contexts/about/About';
 import { AdminMenuItem } from 'nexus/contexts/admin/Admin';
 import {
@@ -20,7 +22,8 @@ import { Icon } from 'nexus/ui/icon/Icon';
 
 import { BlogMenuItem } from 'nexorium/contexts/blog/Blog';
 
-import { SearchMenuItem } from 'gramophone_server/contexts/search/Search';
+import { ChangelogsMenuItem } from 'ladybug/contexts/changelogs/Changelogs';
+
 import { DownloadMenuItem } from 'gramophone_server/contexts/download/Download';
 import { HelpMenuItem } from 'gramophone_server/contexts/help/Help';
 
@@ -47,6 +50,7 @@ export const GramophoneServerMenuItems = observer((props) => {
 	return (
 		<React.Fragment>
 
+			<PortalMenuItem />
 			<HomeMenuItem />
 			<SearchMenuItem />
 
@@ -54,12 +58,11 @@ export const GramophoneServerMenuItems = observer((props) => {
 
 			<BlogMenuItem />
 
-			<MenuDivider>
-				App
-			</MenuDivider>
+			<MenuDivider />
 
 			<DownloadMenuItem />
 			<HelpMenuItem />
+			<ChangelogsMenuItem />
 
 			<MenuDivider />
 

@@ -28,19 +28,6 @@ def main(global_config, **settings):
     # Routes
     # ------------------------------------------------------
 
-    config.add_route('home', '/')
-    config.add_route('search', '/search')
-    config.add_route('search_actions', '/search_actions/{action}')
-
-    # ---
-
-    # Blog
-    # -
-
-    config.add_route('blog', '/blog')
-
-    # ---
-
     # Download
     # -
 
@@ -52,29 +39,6 @@ def main(global_config, **settings):
 
     config.add_route('help', '/help')
     config.add_route('help_actions', '/help_actions/{action}')
-
-    # Changelog
-    # -
-
-    config.add_route('changelog', '/changelog')
-
-    # ---
-
-    # A propos
-    # -
-
-    config.add_route('about', '/about')
-
-    # Administration
-    # -
-
-    config.add_route('admin', '/admin')
-
-    # ---
-
-    # Mon compte
-
-    config.add_route('account', '/account')
 
     # ---
 
