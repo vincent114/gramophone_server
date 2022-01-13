@@ -56,7 +56,7 @@ export const HelpHeaderLeft = observer((props) => {
 
 	return (
 		<HeaderTitle
-			title="Aide"
+			title="F.A.Q"
 			titleStyle={{
 				marginLeft: '10px',
 			}}
@@ -109,7 +109,7 @@ export const HelpMenuItem = observer((props) => {
 	return (
 		<MenuItem
 			icon={<Icon name="help" width="120px" />}
-			label="Aide"
+			label="F.A.Q"
 			activeContexts={[helpContext]}
 			callbackClick={handleMenuItemClick}
 		/>
