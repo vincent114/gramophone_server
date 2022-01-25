@@ -47,6 +47,12 @@ export const SearchPage = observer((props) => {
 	const store = React.useContext(window.storeContext);
 	const app = store.app;
 
+	React.useEffect(() => {
+		setTimeout(() => {
+			document.getElementById('txt-main-search').focus();
+		}, 100);
+	}, []);
+
 	// Renderers
 	// ==================================================================================================
 
