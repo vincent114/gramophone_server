@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import { Helper } from 'nexus/ui/helper/Helper';
 import { HeaderTitle } from 'nexus/layout/header/Header';
 import { MenuItem } from 'nexus/layout/menu/Menu';
-import { Icon } from 'nexus/ui/icon/Icon';
 
 import './Download.css';
 
@@ -95,7 +94,7 @@ export const DownloadMenuItem = observer((props) => {
 
 	const downloadContext = 'download';
 
-	// Evènements
+	// Events
 	// ==================================================================================================
 
 	const handleMenuItemClick = () => {
@@ -108,7 +107,7 @@ export const DownloadMenuItem = observer((props) => {
 
 	return (
 		<MenuItem
-			icon={<Icon name="file_download" width="120px" />}
+			iconName="file_download"
 			label="Téléchargement"
 			activeContexts={[downloadContext]}
 			callbackClick={handleMenuItemClick}

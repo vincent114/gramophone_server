@@ -125,19 +125,20 @@ let routes = {
 let initSnapshot = makeInitSnapshot(routes, {
 	'app': {
 		'theme': {
-			'variant': 'light',
-			'palette': {
-				'default': {
-					'main': '#000000',
-					'contrastText': '#fff',
-				},
+			'palette_light': {
 				'primary': {
 					'main': '#009688',
-					'contrastText': '#fff',
 				},
 				'secondary': {
 					'main': '#607d8b',
-					'contrastText': '#fff',
+				},
+			},
+			'palette_dark': {
+				'primary': {
+					'main': '#009688',
+				},
+				'secondary': {
+					'main': '#607d8b',
 				},
 			}
 		}

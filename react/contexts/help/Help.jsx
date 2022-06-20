@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import { Helper } from 'nexus/ui/helper/Helper';
 import { HeaderTitle } from 'nexus/layout/header/Header';
 import { MenuItem } from 'nexus/layout/menu/Menu';
-import { Icon } from 'nexus/ui/icon/Icon';
 
 import './Help.css';
 
@@ -95,7 +94,7 @@ export const HelpMenuItem = observer((props) => {
 
 	const helpContext = 'help';
 
-	// Evènements
+	// Events
 	// ==================================================================================================
 
 	const handleMenuItemClick = () => {
@@ -108,7 +107,7 @@ export const HelpMenuItem = observer((props) => {
 
 	return (
 		<MenuItem
-			icon={<Icon name="help" width="120px" />}
+			iconName="help"
 			label="F.A.Q"
 			activeContexts={[helpContext]}
 			callbackClick={handleMenuItemClick}
