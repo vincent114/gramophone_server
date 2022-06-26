@@ -23,6 +23,12 @@ export const RenderHomeGrid = observer((props) => {
 	const store = React.useContext(window.storeContext);
 	const app = store.app;
 
+	// From ... store
+
+	const staticMode = app.staticMode;
+
+	// ...
+
 	// Renderers
 	// ==================================================================================================
 
@@ -33,7 +39,7 @@ export const RenderHomeGrid = observer((props) => {
 		<NavCard
 			key="nav-card-download"
 			icon="file_download"
-			label="Téléchargement"
+			label="Télécharger ici"
 			onClick={() => store.navigateTo('download')}
 		/>
 	)
@@ -41,14 +47,17 @@ export const RenderHomeGrid = observer((props) => {
 	// HomeGrid -> F.A.Q
 	// ---
 
-	const navCardHelp = (
-		<NavCard
-			key="nav-card-help"
-			icon="help"
-			label="F.A.Q"
-			onClick={() => store.navigateTo('help')}
-		/>
-	)
+	let navCardHelp = null;
+	if (!staticMode) {
+		const navCardHelp = (
+			<NavCard
+				key="nav-card-help"
+				icon="help"
+				label="F.A.Q"
+				onClick={() => store.navigateTo('help')}
+			/>
+		)
+	}
 
 	// HomeGrid -> Changelogs
 	// ---
@@ -57,7 +66,7 @@ export const RenderHomeGrid = observer((props) => {
 		<NavCard
 			key="nav-card-changelogs"
 			icon="history"
-			label="Changelogs"
+			label="Historique des versions"
 			onClick={() => app.navigateTo('changelogs')}
 		/>
 	)
@@ -89,6 +98,12 @@ export const HomePage = observer((props) => {
 	const store = React.useContext(window.storeContext);
 	const app = store.app;
 
+	// From ... store
+
+	const staticUrl = app.staticUrl;
+
+	// ...
+
 	// Renderers
 	// ==================================================================================================
 
@@ -99,7 +114,7 @@ export const HomePage = observer((props) => {
 
 		return (
 			<Helper
-				icon={<img className="nx-helper-icon" src="/static/favicons/android-icon-192x192.png" />}
+				icon={<img className="nx-helper-icon" src={`${staticUrl}/favicons/android-icon-192x192.png`} />}
 				title="Bienvenue sur Gramophone !"
 				subtitle="Votre discothèque MP3 / FLAC / AAC dans une application-jukebox à l'ancienne."
 				show={true}
