@@ -12,6 +12,7 @@ import { PortalMenuItem } from 'nexus/contexts/portal/Portal';
 import { HomeMenuItem } from 'nexus/contexts/home/Home';
 import { SearchMenuItem } from 'nexus/contexts/search/Search';
 import { AboutMenuItem } from 'nexus/contexts/about/About';
+import { PreferencesMenuItem } from 'nexus/contexts/preferences/Preferences';
 import { AdminMenuItem } from 'nexus/contexts/admin/Admin';
 import {
 	LoginMenuItem,
@@ -42,6 +43,7 @@ export const GramophoneServerMenuItems = observer((props) => {
 
 	// From ... store
 
+	const staticMode = app.staticMode;
 	const breakPoint650 = app.breakPoint650;
 
 	// Render
@@ -52,28 +54,29 @@ export const GramophoneServerMenuItems = observer((props) => {
 
 			<PortalMenuItem />
 			<HomeMenuItem />
-			<SearchMenuItem />
+			{!staticMode && <SearchMenuItem />}
 
-			<MenuDivider />
+			{breakPoint650 && <MenuDivider />}
 
-			<BlogMenuItem />
+			{!staticMode && <BlogMenuItem />}
 
-			<MenuDivider />
+			{!staticMode && <MenuDivider />}
 
 			<DownloadMenuItem />
-			<HelpMenuItem />
+			{!staticMode && <HelpMenuItem />}
 			<ChangelogsMenuItem />
 
 			<MenuDivider />
 
 			<AboutMenuItem />
-			<AdminMenuItem />
+			<PreferencesMenuItem />
+			{!staticMode && <AdminMenuItem />}
 
-			{breakPoint650 && <MenuDivider />}
+			{(!staticMode && breakPoint650) && <MenuDivider />}
 
-			<LoginMenuItem />
-			<AccountMenuItem />
-			<LogoutMenuItem />
+			{!staticMode && <LoginMenuItem />}
+			{!staticMode && <AccountMenuItem />}
+			{!staticMode && <LogoutMenuItem />}
 
 		</React.Fragment>
 	)

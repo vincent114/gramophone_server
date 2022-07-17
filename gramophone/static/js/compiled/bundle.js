@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 3973:
+/***/ 4708:
 /***/ ((__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -18,6 +18,10 @@ var mobx_state_tree_module = __webpack_require__(7947);
 var es = __webpack_require__(589);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__(9354);
+// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__(368);
+// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.index-of.js
+var es_array_index_of = __webpack_require__(6265);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/web.timers.js
 var web_timers = __webpack_require__(6213);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.splice.js
@@ -28,8 +32,6 @@ var es_array_concat = __webpack_require__(207);
 var es_regexp_exec = __webpack_require__(8717);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__(5876);
-// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.index-of.js
-var es_array_index_of = __webpack_require__(6265);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.object.entries.js
 var es_object_entries = __webpack_require__(5830);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.object.to-string.js
@@ -70,6 +72,8 @@ var es_object_define_property = __webpack_require__(3204);
 var route_node_esm = __webpack_require__(6285);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/clsx/dist/clsx.m.js
 var clsx_m = __webpack_require__(4641);
+// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__(6813);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.map.js
 var es_array_map = __webpack_require__(9162);
 ;// CONCATENATED MODULE: ../../nexus/react/models/Services.jsx
@@ -102,7 +106,109 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
- // Models
+
+
+
+ // Datas
+// ======================================================================================================
+// VBO : Recopie temporaire de nexus/services.py (pour le mode static)
+
+var STATIC_SMAP = {
+  'nexorium': {
+    app_key: 'nexorium',
+    app_variant: 'default',
+    app_id: 'nexorium',
+    name: "Nexorium",
+    description: "Portail d'accueil",
+    kind: "webserver",
+    port: 7301,
+    database: null,
+    version: '0.0.2',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "M_VIEW",
+    edit_role: "M_EDIT",
+    admin_role: "M_ADMIN"
+  },
+  'nexora': {
+    app_key: 'nexora',
+    app_variant: 'default',
+    app_id: 'nexora',
+    name: "Nexora",
+    description: "Histoire de science-fiction",
+    kind: "webserver",
+    port: 7302,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "N_VIEW",
+    edit_role: "N_EDIT",
+    admin_role: "N_ADMIN"
+  },
+  // Applications
+  // -
+  'gramophone': {
+    app_key: 'gramophone',
+    app_variant: 'default',
+    app_id: 'gramophone',
+    name: "Gramophone",
+    description: "Bibliothèque musicale",
+    kind: "webserver",
+    port: 7304,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "G_VIEW",
+    edit_role: "G_EDIT",
+    admin_role: "G_ADMIN"
+  },
+  'vgm': {
+    app_key: 'vgm',
+    app_variant: 'default',
+    app_id: 'vgm',
+    name: "VGM",
+    description: "Bibliothèque vidéoludique",
+    kind: "webserver",
+    port: 7303,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "G_VIEW",
+    edit_role: "G_EDIT",
+    admin_role: "G_ADMIN"
+  },
+  // Support
+  // -
+  'nexus': {
+    app_key: 'nexus',
+    app_variant: 'default',
+    app_id: 'nexus',
+    name: "Nexus",
+    description: "Librairie de l'écosystème Nexorium",
+    kind: "library",
+    port: null,
+    database: null,
+    version: '0.0.2',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: null,
+    external: null,
+    view_role: null,
+    edit_role: null,
+    admin_role: null
+  }
+}; // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** ServiceInfoStore *****
 // ****************************
@@ -128,12 +234,112 @@ var ServiceInfoStore = mobx_state_tree_module/* types.model */.V5.model({
   admin_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
 }).views(function (self) {
   return {
-    // Getters
-    // -
     get roles() {
       return [self.view_role, self.edit_role, self.admin_role];
-    }
+    },
 
+    get shortcutIconUrl() {
+      return self.getIconUrl(48);
+    },
+
+    get iconUrl() {
+      return self.getIconUrl(192);
+    },
+
+    // -
+    get folderName() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var isProd = app.isProd;
+
+      if (['gramophone', 'vgm'].includes(self.app_key) && !isProd) {
+        return "".concat(self.app_key, "_server");
+      }
+
+      return self.app_key;
+    },
+
+    // -
+    get internalPrefix() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var appKey = app.appKey;
+      var isProd = app.isProd;
+      var prefix = "./".concat(self.app_key);
+
+      if (appKey != self.app_key) {
+        prefix = "../".concat(self.folderName);
+
+        if (!isProd || self.app_key != 'nexorium') {
+          prefix = "".concat(prefix, "/").concat(self.app_key);
+        }
+      }
+
+      return prefix;
+    },
+
+    get externalPrefix() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var folderName = app.folderName;
+      var isProd = app.isProd;
+      var prefix = "/";
+
+      if (isProd) {
+        prefix = "https://vincentboni.pagesperso-orange.fr/";
+
+        if (self.app_key != 'nexorium') {
+          prefix = "".concat(prefix, "/").concat(self.app_key, "/");
+        }
+      } else {
+        prefix = window.location.pathname;
+        prefix = prefix.replace('index.html', '');
+        prefix = prefix.replace(folderName, self.folderName);
+      }
+
+      return prefix;
+    },
+
+    // -
+    get githubLink() {
+      return "https://github.com/vincent114/".concat(self.folderName);
+    },
+
+    get githubLinkClient() {
+      if (["gramophone", "vgm"].includes(self.app_key)) {
+        return "https://github.com/vincent114/".concat(self.app_key, "_client");
+      }
+
+      return "";
+    },
+
+    // Getters
+    // -
+    getIconUrl: function getIconUrl() {
+      var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '192';
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var staticMode = app.staticMode;
+      var external = self.external;
+      var dimention = "".concat(size, "x").concat(size);
+
+      if (staticMode) {
+        return "".concat(self.internalPrefix, "/static/favicons/android-icon-").concat(dimention, ".png");
+      }
+
+      return "".concat(external, "/static/favicons/android-icon-").concat(dimention, ".png");
+    },
+    getExternalUrl: function getExternalUrl() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var staticMode = app.staticMode;
+
+      if (staticMode && self.kind == 'webserver') {
+        return "".concat(self.externalPrefix, "index.html");
+      }
+
+      return self.external;
+    }
   };
 }).actions(function (self) {
   return {
@@ -229,8 +435,6 @@ var es_date_to_iso_string = __webpack_require__(2308);
 var es_regexp_to_string = __webpack_require__(6965);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.string.trim.js
 var es_string_trim = __webpack_require__(3269);
-// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__(6813);
 ;// CONCATENATED MODULE: ../../nexus/react/utils/Helpers.jsx
 
 
@@ -957,6 +1161,54 @@ var CardGiftCardIcon = function CardGiftCardIcon(props) {
     d: "M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"
   }));
 };
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/CheckBox.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var CheckBoxIcon = function CheckBoxIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+  }));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/CheckBoxOutlineBlank.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var CheckBoxOutlineBlankIcon = function CheckBoxOutlineBlankIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+  }));
+};
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/CheckCircle.jsx
  // Functions Components ReactJS
 // ======================================================================================================
@@ -1458,6 +1710,31 @@ var FolderIcon = function FolderIcon(props) {
     d: "M9.17 6l2 2H20v10H4V6h5.17M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
   }));
 };
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/FolderZip.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var FolderZipIcon = function FolderZipIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("rect", {
+    fill: "none",
+    height: "24",
+    width: "24"
+  })), /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("path", {
+    d: "M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M16,16h2v-2h-2v-2 h2v-2h-2V8h4v10h-4V16z M16,16h-2v2H4V6h5.17l2,2H14v2h2v2h-2v2h2V16z"
+  })));
+};
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/Forum.jsx
  // Functions Components ReactJS
 // ======================================================================================================
@@ -1708,6 +1985,30 @@ var Inventory2Icon = function Inventory2Icon(props) {
     x: "9",
     y: "12"
   }))));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/Launch.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var LaunchIcon = function LaunchIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"
+  }));
 };
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/LightMode.jsx
  // Functions Components ReactJS
@@ -2217,6 +2518,30 @@ var PersonSearchIcon = function PersonSearchIcon(props) {
     d: "M19.43,18.02C19.79,17.43,20,16.74,20,16c0-2.21-1.79-4-4-4s-4,1.79-4,4c0,2.21,1.79,4,4,4c0.74,0,1.43-0.22,2.02-0.57 c0.93,0.93,1.62,1.62,2.57,2.57L22,20.59C20.5,19.09,21.21,19.79,19.43,18.02z M16,18c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2s2,0.9,2,2 C18,17.1,17.1,18,16,18z"
   }))));
 };
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/PictureAsPdf.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var PictureAsPdfIcon = function PictureAsPdfIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0V0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm12 6V9c0-.55-.45-1-1-1h-2v5h2c.55 0 1-.45 1-1zm-2-3h1v3h-1V9zm4 2h1v-1h-1V9h1V8h-2v5h1zm-8 0h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H9v5h1v-2zm0-2h1v1h-1V9z"
+  }));
+};
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/PlayCircleFilled.jsx
  // Functions Components ReactJS
 // ======================================================================================================
@@ -2313,7 +2638,9 @@ var PushPinIcon = function PushPinIcon(props) {
   // From ... props
   var color = props.color ? props.color : '#000000';
   var height = props.height ? props.height : 24;
-  var width = props.width ? props.width : 24; // Render
+  var width = props.width ? props.width : 24;
+  var variant = props.variant ? props.variant : 'outlined'; // outlined, filled
+  // Render
   // ==================================================================================================
 
   return /*#__PURE__*/react.createElement("svg", {
@@ -2322,14 +2649,20 @@ var PushPinIcon = function PushPinIcon(props) {
     viewBox: "0 0 24 24",
     width: width,
     fill: color
-  }, /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("rect", {
+  }, variant == "outlined" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("rect", {
+    fill: "none",
+    height: "24",
+    width: "24"
+  })), /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("path", {
+    d: "M14,4v5c0,1.12,0.37,2.16,1,3H9c0.65-0.86,1-1.9,1-3V4H14 M17,2H7C6.45,2,6,2.45,6,3c0,0.55,0.45,1,1,1c0,0,0,0,0,0l1,0v5 c0,1.66-1.34,3-3,3v2h5.97v7l1,1l1-1v-7H19v-2c0,0,0,0,0,0c-1.66,0-3-1.34-3-3V4l1,0c0,0,0,0,0,0c0.55,0,1-0.45,1-1 C18,2.45,17.55,2,17,2L17,2z"
+  }))), variant == "filled" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("rect", {
     fill: "none",
     height: "24",
     width: "24"
   })), /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("path", {
     d: "M16,9V4l1,0c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1H7C6.45,2,6,2.45,6,3v0 c0,0.55,0.45,1,1,1l1,0v5c0,1.66-1.34,3-3,3h0v2h5.97v7l1,1l1-1v-7H19v-2h0C17.34,12,16,10.66,16,9z",
     fillRule: "evenodd"
-  })));
+  }))));
 };
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/QueueMusic.jsx
  // Functions Components ReactJS
@@ -2355,6 +2688,58 @@ var QueueMusicIcon = function QueueMusicIcon(props) {
   })), /*#__PURE__*/react.createElement("g", null, /*#__PURE__*/react.createElement("path", {
     d: "M22,6h-5v8.18C16.69,14.07,16.35,14,16,14c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3V8h3V6z M15,6H3v2h12V6z M15,10H3v2h12 V10z M11,14H3v2h8V14z"
   })));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/RadioButtonChecked.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var RadioButtonCheckedIcon = function RadioButtonCheckedIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0V0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+  }), /*#__PURE__*/react.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "5"
+  }));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/RadioButtonUnchecked.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var RadioButtonUncheckedIcon = function RadioButtonUncheckedIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24; // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0V0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+  }));
 };
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/Refresh.jsx
  // Functions Components ReactJS
@@ -2818,6 +3203,68 @@ var ToggleOffIcon = function ToggleOffIcon(props) {
   // From ... props
   var color = props.color ? props.color : '#000000';
   var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24;
+  var variant = props.variant ? props.variant : 'outlined'; // outlined, filled
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, variant == "outlined" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0V0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+  })), variant == "filled" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M17 7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h10c2.76 0 5-2.24 5-5s-2.24-5-5-5zM7 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"
+  })));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/ToggleOn.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var ToggleOnIcon = function ToggleOnIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
+  var width = props.width ? props.width : 24;
+  var variant = props.variant ? props.variant : 'outlined'; // outlined, filled
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    height: height,
+    viewBox: "0 0 24 24",
+    width: width,
+    fill: color
+  }, variant == "outlined" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zm0-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+  })), variant == "filled" && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("path", {
+    d: "M0 0h24v24H0z",
+    fill: "none"
+  }), /*#__PURE__*/react.createElement("path", {
+    d: "M17 7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h10c2.76 0 5-2.24 5-5s-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"
+  })));
+};
+;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/Tune.jsx
+ // Functions Components ReactJS
+// ======================================================================================================
+
+var TuneIcon = function TuneIcon(props) {
+  // From ... props
+  var color = props.color ? props.color : '#000000';
+  var height = props.height ? props.height : 24;
   var width = props.width ? props.width : 24; // Render
   // ==================================================================================================
 
@@ -2831,7 +3278,7 @@ var ToggleOffIcon = function ToggleOffIcon(props) {
     d: "M0 0h24v24H0V0z",
     fill: "none"
   }), /*#__PURE__*/react.createElement("path", {
-    d: "M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+    d: "M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"
   }));
 };
 ;// CONCATENATED MODULE: ../../nexus/react/components/svg_icons/VerifiedUser.jsx
@@ -3186,6 +3633,15 @@ var Icon = __webpack_require__(3244);
 
 
 
+
+
+
+
+
+
+
+
+
  // Datas
 // -------------------------------------------------------------------------------------------------------------
 
@@ -3214,6 +3670,8 @@ var ICON_KEYS_TO_COMPONENT = {
   'bug_report': BugReportIcon,
   'call_to_action': CallToActionIcon,
   'card_giftcard': CardGiftCardIcon,
+  'check_box': CheckBoxIcon,
+  'check_box_outline_blank': CheckBoxOutlineBlankIcon,
   'check_circle': CheckCircleIcon,
   'clear': ClearIcon,
   'close': CloseIcon,
@@ -3234,6 +3692,7 @@ var ICON_KEYS_TO_COMPONENT = {
   'feedback_black': FeedbackIcon,
   'file_download': FileDownloadIcon,
   'folder': FolderIcon,
+  'folder_zip': FolderZipIcon,
   'forum': ForumIcon,
   'fullscreen': FullscreenIcon,
   'help': HelpIcon,
@@ -3244,6 +3703,7 @@ var ICON_KEYS_TO_COMPONENT = {
   'info': InfoIcon,
   'input': InputIcon,
   'inventory_2': Inventory2Icon,
+  'launch': LaunchIcon,
   'light_mode': LightModeIcon,
   'link': LinkIcon,
   'list': ListIcon,
@@ -3263,11 +3723,14 @@ var ICON_KEYS_TO_COMPONENT = {
   'person': PersonIcon,
   'person_add': PersonAddIcon,
   'person_search': PersonSearchIcon,
+  'picture_as_pdf': PictureAsPdfIcon,
   'play_circle_filled': PlayCircleFilledIcon,
   'playlist_play': PlaylistPlayIcon,
   'power_setting': PowerSettingIcon,
   'push_pin': PushPinIcon,
   'queue_music': QueueMusicIcon,
+  'radio_button_checked': RadioButtonCheckedIcon,
+  'radio_button_unchecked': RadioButtonUncheckedIcon,
   'refresh': RefreshIcon,
   'report': ReportIcon,
   'restore_from_trash': RestoreFromTrashIcon,
@@ -3287,6 +3750,8 @@ var ICON_KEYS_TO_COMPONENT = {
   'text_fields': TextFieldsIcon,
   'text_snippet': TextSnippetIcon,
   'toggle_off': ToggleOffIcon,
+  'toggle_on': ToggleOnIcon,
+  'tune': TuneIcon,
   'verified_user': VerifiedUserIcon,
   'view_column': ViewColumnIcon,
   'view_headline': ViewHeadlineIcon,
@@ -3316,7 +3781,7 @@ var Icon_Icon = (0,es/* observer */.Pi)(function (props) {
   var theme = app.theme; // From ... store
 
   var themeMode = theme.mode;
-  var staticUrl = app.staticUrl; // From ... props
+  var commonStaticUrl = app.commonStaticUrl; // From ... props
 
   var kind = props.kind ? props.kind : 'material'; // material, fontawesome, ...
 
@@ -3339,7 +3804,7 @@ var Icon_Icon = (0,es/* observer */.Pi)(function (props) {
 
   if (!IconSvg && ICON_KEYS_TO_FILES[kind].hasOwnProperty(name)) {
     var iconFilename = ICON_KEYS_TO_FILES[kind][name];
-    iconUrl = "".concat(staticUrl, "/icons/").concat(kind, "/").concat(iconFilename);
+    iconUrl = "".concat(commonStaticUrl, "/icons/").concat(kind, "/").concat(iconFilename);
 
     if (color == 'white') {
       iconUrl = iconUrl.replace('black', 'white');
@@ -3353,8 +3818,11 @@ var Icon_Icon = (0,es/* observer */.Pi)(function (props) {
   } // Quelle couleur ?
 
 
-  style['color'] = 'transparent'; // Render
+  if (color != theme.palette["default"].main) {
+    color = theme.getColorFromKey(color);
+  } // Render
   // ==================================================================================================
+
 
   return /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)("nx-icon", name, className),
@@ -3362,7 +3830,8 @@ var Icon_Icon = (0,es/* observer */.Pi)(function (props) {
   }, IconSvg && /*#__PURE__*/react.createElement(IconSvg, {
     color: color,
     width: ICON_SIZES[size],
-    height: ICON_SIZES[size]
+    height: ICON_SIZES[size],
+    variant: variant
   }), iconUrl && /*#__PURE__*/react.createElement("img", {
     src: iconUrl
   }));
@@ -3394,6 +3863,9 @@ var Avatar_Avatar = (0,es/* observer */.Pi)(function (props) {
 
   var src = props.src ? props.src : '';
   var iconName = props.iconName;
+  var iconVariant = props.iconVariant ? props.iconVariant : 'outlined'; // filled, outlined
+
+  var iconSize = props.iconSize ? props.iconSize : 'normal';
   var iconColor = props.iconColor ? props.iconColor : 'default';
   var className = props.className ? props.className : '';
   var style = props.style ? props.style : {}; // ...
@@ -3433,7 +3905,9 @@ var Avatar_Avatar = (0,es/* observer */.Pi)(function (props) {
   if (iconName) {
     icon = /*#__PURE__*/react.createElement(Icon_Icon, {
       name: iconName,
-      color: iconColor
+      color: iconColor,
+      size: iconSize,
+      variant: iconVariant
     });
   } // Render
   // ==================================================================================================
@@ -4122,8 +4596,10 @@ var IconButton = (0,es/* observer */.Pi)(function (props) {
 
   var disabled = props.disabled == true ? true : false;
   var iconName = props.iconName;
+  var iconVariant = props.iconVariant ? props.iconVariant : "outlined"; // filled, outlined
+
   var children = props.children;
-  var color = props.color ? props.color : 'default'; // primary, secondary, severityKey, custom
+  var color = props.color ? props.color : 'default'; // primary, secondary, severityKey, custom, typography
 
   var className = props.className ? props.className : '';
   var style = props.style ? copyObj(props.style) : {};
@@ -4135,6 +4611,7 @@ var IconButton = (0,es/* observer */.Pi)(function (props) {
   if (!children && iconName) {
     content = /*#__PURE__*/react.createElement(Icon_Icon, {
       name: iconName,
+      variant: iconVariant,
       color: iconColor
     });
   }
@@ -4200,6 +4677,8 @@ var Button_Button = (0,es/* observer */.Pi)(function (props) {
 
   var color = props.color ? props.color : 'default'; // default, primary, secondary
 
+  var href = props.href ? props.href : '';
+  var target = props.target ? props.target : '';
   var disabled = props.disabled == true ? true : false;
   var startAdornment = props.startAdornment ? props.startAdornment : '';
   var startAdornmentStyle = props.startAdornmentStyle ? copyObj(props.startAdornmentStyle) : {};
@@ -4213,8 +4692,15 @@ var Button_Button = (0,es/* observer */.Pi)(function (props) {
   var textColor = theme.getTextColorFromKey(color);
   var startAdornmentColor = null;
   var endAdornmentColor = null;
-  style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : textColor;
-  style['backgroundColor'] = hover ? hexToRgbA(hexColor, 0.1) : 'transparent';
+
+  if (!style.hasOwnProperty('color')) {
+    style['color'] = disabled ? "rgba(0, 0, 0, 0.26)" : textColor;
+  }
+
+  if (!style.hasOwnProperty('backgroundColor')) {
+    style['backgroundColor'] = hover ? hexToRgbA(hexColor, 0.1) : 'transparent';
+  }
+
   style['border'] = '1px solid transparent';
 
   if (variant == 'outlined') {
@@ -4260,7 +4746,8 @@ var Button_Button = (0,es/* observer */.Pi)(function (props) {
   // ==================================================================================================
 
 
-  return /*#__PURE__*/react.createElement("div", {
+  var buttonContent = null;
+  var button = /*#__PURE__*/react.createElement("div", {
     id: id,
     className: (0,clsx_m/* default */.Z)("nx-button", variant, className, {
       "hover": hover
@@ -4292,6 +4779,18 @@ var Button_Button = (0,es/* observer */.Pi)(function (props) {
     name: endAdornment,
     color: style['color']
   })));
+
+  if (href) {
+    buttonContent = /*#__PURE__*/react.createElement("a", {
+      className: "nx-button-link",
+      href: href,
+      target: target
+    }, button);
+  } else {
+    buttonContent = button;
+  }
+
+  return buttonContent;
 });
 // EXTERNAL MODULE: ../../nexus/react/layout/portal/Portal.css
 var Portal = __webpack_require__(3114);
@@ -4351,8 +4850,8 @@ var PortalLink = (0,es/* observer */.Pi)(function (props) {
   var portalLinkContent = null;
 
   if (serviceInfo) {
-    var externalUrl = serviceInfo.external;
-    var iconUrl = "".concat(externalUrl, "/static/favicons/android-icon-48x48.png");
+    var externalUrl = serviceInfo.getExternalUrl();
+    var shortcutIconUrl = serviceInfo.shortcutIconUrl;
     var name = serviceInfo.name;
     portalLinkContent = /*#__PURE__*/react.createElement("a", {
       className: "nx-portal-shortcut",
@@ -4360,7 +4859,7 @@ var PortalLink = (0,es/* observer */.Pi)(function (props) {
       title: !expanded ? name : ''
     }, /*#__PURE__*/react.createElement("img", {
       className: "nx-portal-shortcut-icon",
-      src: iconUrl
+      src: shortcutIconUrl
     }), /*#__PURE__*/react.createElement("div", {
       className: "nx-portal-shortcut-label"
     }, name));
@@ -4380,7 +4879,8 @@ var PortalGrid = (0,es/* observer */.Pi)(function (props) {
   var showPin = props.showPin == true ? true : false; // From ... store
 
   var breakPoint650 = app.breakPoint650;
-  var expanded = portal.expanded; // Events
+  var expanded = portal.expanded;
+  var staticMode = app.staticMode; // Events
   // ==================================================================================================
 
   var handlePinClick = function handlePinClick() {
@@ -4407,7 +4907,7 @@ var PortalGrid = (0,es/* observer */.Pi)(function (props) {
     appKey: "gramophone"
   }), /*#__PURE__*/react.createElement(PortalLink, {
     appKey: "vgm"
-  })), /*#__PURE__*/react.createElement(PortalDivider, {
+  })), !staticMode && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(PortalDivider, {
     title: expanded ? "Support" : null
   }), /*#__PURE__*/react.createElement("div", {
     className: "nx-portal-shortcuts-wrapper"
@@ -4417,7 +4917,7 @@ var PortalGrid = (0,es/* observer */.Pi)(function (props) {
     appKey: "ladybug"
   }), /*#__PURE__*/react.createElement(PortalLink, {
     appKey: "herald"
-  }))), !breakPoint650 && showPin && /*#__PURE__*/react.createElement(IconButton, {
+  })))), !breakPoint650 && showPin && /*#__PURE__*/react.createElement(IconButton, {
     iconName: "push_pin",
     onClick: function onClick() {
       return handlePinClick();
@@ -4949,6 +5449,74 @@ var NavCard_NavCard = (0,es/* observer */.Pi)(function (props) {
     }
   }, label)));
 });
+// EXTERNAL MODULE: ../../nexus/react/contexts/home/Home.css
+var Home = __webpack_require__(2037);
+;// CONCATENATED MODULE: ../../nexus/react/contexts/home/Home.jsx
+
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** HomeHeaderMiddle *****
+// ****************************
+
+var TAG_HomeHeaderMiddle = function TAG_HomeHeaderMiddle() {};
+
+var HomeHeaderMiddle = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var services = app.services; // From ... store
+
+  var appName = services.me.name; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: appName,
+    titleStyle: {
+      fontWeight: 'bold'
+    },
+    centered: true
+  });
+}); // ***** HomeMenuItem *****
+// ************************
+
+var TAG_HomeMenuItem = function TAG_HomeMenuItem() {};
+
+var HomeMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var menu = app.menu; // From ... store
+
+  var breakPoint650 = app.breakPoint650;
+  var homeContext = app.homeContext; // Events
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    app.navigateTo(homeContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  var homeMenuItemContent = null;
+
+  if (breakPoint650) {
+    homeMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
+      iconName: "home",
+      label: "Accueil",
+      activeContexts: [homeContext],
+      callbackClick: handleMenuItemClick
+    });
+  }
+
+  return homeMenuItemContent;
+});
 // EXTERNAL MODULE: ../../nexus/react/forms/heading/Heading.css
 var Heading = __webpack_require__(4297);
 ;// CONCATENATED MODULE: ../../nexus/react/forms/heading/Heading.jsx
@@ -5020,11 +5588,14 @@ var Section_Section = (0,es/* observer */.Pi)(function (props) {
   var buttons = props.buttons;
   var buttonsPosition = props.buttonsPosition ? props.buttonsPosition : 'right'; // left, right, center, stretch
 
-  var buttonsResponsive = props.buttonsResponsive == true ? true : false; // Render
+  var buttonsResponsive = props.buttonsResponsive == true ? true : false;
+  var className = props.className ? props.className : '';
+  var style = props.style ? props.style : {}; // Render
   // ==================================================================================================
 
   return /*#__PURE__*/react.createElement("div", {
-    className: "nx-section"
+    className: "nx-section",
+    style: style
   }, (icon || title || right) && /*#__PURE__*/react.createElement("div", {
     className: "nx-section-header"
   }, icon && /*#__PURE__*/react.createElement("div", {
@@ -5556,6 +6127,8 @@ function Field_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
  // Models
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -5936,7 +6509,7 @@ var Field_Field = (0,es/* observer */.Pi)(function (props) {
     }
   };
 
-  var handleSaveValue = function handleSaveValue(savePath, value) {
+  var handleSaveValue = function handleSaveValue(value) {
     // Mise à jour d'une valeur sur un target
     // ---
     // Sauvegarde de la valeur
@@ -6124,6 +6697,164 @@ var Field_Field = (0,es/* observer */.Pi)(function (props) {
     }
 
     renderInput();
+  };
+
+  var renderButtonGroup = function renderButtonGroup() {
+    // Render :: ButtonGroup
+    // ---
+    var groupButtons = [];
+
+    if (datas) {
+      var _iterator2 = Field_createForOfIteratorHelper(datas),
+          _step2;
+
+      try {
+        var _loop = function _loop() {
+          var data = _step2.value;
+
+          if (typeof data == 'string') {
+            data = {
+              value: data,
+              label: data
+            };
+          }
+
+          var buttonStyle = {};
+
+          if (data.hidden == true) {
+            buttonStyle['display'] = 'none';
+          }
+
+          if (data.value == value) {
+            buttonStyle['color'] = "white";
+            buttonStyle['backgroundColor'] = theme.palette.primary.main;
+          }
+
+          groupButtons.push( /*#__PURE__*/react.createElement(Button_Button, {
+            key: "".concat(id, "_").concat(data.value),
+            color: color,
+            variant: "outlined",
+            disabled: data.disabled == true || disabled,
+            style: buttonStyle,
+            onClick: function onClick(e) {
+              return handleSaveValue(data.value);
+            }
+          }, data.label));
+        };
+
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          _loop();
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    }
+
+    input = /*#__PURE__*/react.createElement("div", {
+      className: "nx-button-group-wrapper h-col"
+    }, groupButtons);
+  };
+
+  var renderRadios = function renderRadios() {
+    // Render :: Radios
+    // ---
+    var radios = [];
+
+    if (datas) {
+      var _iterator3 = Field_createForOfIteratorHelper(datas),
+          _step3;
+
+      try {
+        var _loop2 = function _loop2() {
+          var data = _step3.value;
+
+          if (typeof data == 'string') {
+            data = {
+              value: data,
+              label: data
+            };
+          }
+
+          var radioStyle = {};
+          var radioIconName = "radio_button_unchecked";
+          var radioIconColor = "typography";
+
+          if (data.hidden == true) {
+            radioStyle['display'] = 'none';
+          }
+
+          if (data.value == value) {
+            radioIconName = "radio_button_checked";
+            radioIconColor = "primary";
+          }
+
+          radios.push( /*#__PURE__*/react.createElement("div", {
+            key: "".concat(id, "_").concat(data.value),
+            className: "nx-radio-item",
+            "data-value": data.value,
+            style: radioStyle,
+            onClick: function onClick(e) {
+              return handleSaveValue(data.value);
+            }
+          }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
+            color: "transparent",
+            size: "small",
+            iconName: radioIconName,
+            iconColor: radioIconColor,
+            style: {
+              marginLeft: '-8px'
+            }
+          }), /*#__PURE__*/react.createElement("div", {
+            className: "nx-field-label-aside"
+          }, data.label)));
+        };
+
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          _loop2();
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+    }
+
+    input = /*#__PURE__*/react.createElement("div", {
+      className: "nx-radios-wrapper v-col"
+    }, radios);
+  };
+
+  var renderCheckbox = function renderCheckbox() {
+    // Render :: Checkbox
+    // ---
+    var checkboxStyle = {};
+    var checkboxIconName = "check_box_outline_blank";
+    var checkboxIconColor = "typography";
+
+    if (value == true) {
+      checkboxIconName = "check_box";
+      checkboxIconColor = "primary";
+    }
+
+    input = /*#__PURE__*/react.createElement("div", {
+      className: "nx-checkbox-item",
+      style: checkboxStyle,
+      onClick: function onClick(e) {
+        return handleSaveValue(!value);
+      }
+    }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
+      color: "transparent",
+      size: "small",
+      iconName: checkboxIconName,
+      iconColor: checkboxIconColor,
+      style: {
+        marginLeft: '-8px'
+      }
+    }), /*#__PURE__*/react.createElement("div", {
+      className: "nx-field-label-aside"
+    }, label));
   }; // -------------------------------------------------
 
 
@@ -6143,15 +6874,18 @@ var Field_Field = (0,es/* observer */.Pi)(function (props) {
     case 'autocomplete':
       renderAutocomplete();
       break;
-    // case 'checkbox':
-    // 	renderCheckbox();
-    // 	break;
-    // case 'switcher':
-    // 	renderSwitcher();
-    // 	break;
-    // case 'radios':
-    // 	renderRadios();
-    // 	break;
+
+    case 'button_group':
+      renderButtonGroup();
+      break;
+
+    case 'radios':
+      renderRadios();
+      break;
+
+    case 'checkbox':
+      renderCheckbox();
+      break;
   } // -------------------------------------------------
 
 
@@ -6167,9 +6901,9 @@ var Field_Field = (0,es/* observer */.Pi)(function (props) {
       return handleClick(e);
     },
     style: style
-  }, (label || ghostLabel) && /*#__PURE__*/react.createElement("div", {
+  }, (label && component != 'checkbox' || ghostLabel) && /*#__PURE__*/react.createElement("div", {
     className: "nx-field-label"
-  }, label), /*#__PURE__*/react.createElement("div", {
+  }, component != 'checkbox' ? label : ''), /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)("nx-input-wrapper", {
       "with-start-adornment": startAdornment
     }, {
@@ -6371,6 +7105,39 @@ var RenderSectionField = (0,es/* observer */.Pi)(function (props) {
     disabled: isLoading // callbackChange={handleAutocomplete}
     ,
     callbackSelect: handleAutocomplete
+  })), /*#__PURE__*/react.createElement(Row_Row, {
+    marginBottom: "normal"
+  }, /*#__PURE__*/react.createElement(Field_Field, {
+    id: "btn-group-test",
+    component: "button_group",
+    label: "Button Group",
+    datas: CHOICES_TEST,
+    savePath: ['app', 'playground', 'value_switcher'],
+    disabled: isLoading // callbackChange={handleFieldChange}
+    ,
+    callbackBlur: handleFieldChange
+  })), /*#__PURE__*/react.createElement(Row_Row, {
+    marginBottom: "normal",
+    align: "center"
+  }, /*#__PURE__*/react.createElement(Field_Field, {
+    id: "rad-test",
+    component: "radios",
+    label: "Radios",
+    datas: CHOICES_TEST,
+    savePath: ['app', 'playground', 'value_radio'],
+    disabled: isLoading // callbackChange={handleFieldChange}
+    ,
+    callbackBlur: handleFieldChange
+  }), /*#__PURE__*/react.createElement(Field_Field, {
+    id: "chk-test",
+    component: "checkbox",
+    label: "Test checkbox",
+    ghostLabel: false,
+    datas: CHOICES_TEST,
+    savePath: ['app', 'playground', 'value_checkbox'],
+    disabled: isLoading // callbackChange={handleFieldChange}
+    ,
+    callbackBlur: handleFieldChange
   }))); // Section -> Buttons
   // -------------------------------------------------
 
@@ -6415,6 +7182,31 @@ var RenderSectionField = (0,es/* observer */.Pi)(function (props) {
     buttonsResponsive: true
   }, sectionContent);
 });
+// EXTERNAL MODULE: ../../nexus/react/layout/column/Column.css
+var Column = __webpack_require__(5906);
+;// CONCATENATED MODULE: ../../nexus/react/layout/column/Column.jsx
+
+
+ // Functions Components ReactJS
+// ----------------------------------------------------------------------------------------------------------------------------
+// ***** Column *****
+// ***************
+
+var TAG_Column = function TAG_Column() {};
+
+var Column_Column = function Column(props) {
+  // From ... props
+  var children = props.children;
+  var spacing = props.spacing ? props.spacing : 'small';
+  var align = props.align ? props.align : 'center';
+  var className = props.className ? props.className : '';
+  var style = props.style ? props.style : {}; // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-row", "v-col-".concat(spacing), "flex-align-".concat(align), className),
+    style: style
+  }, children);
+};
 // EXTERNAL MODULE: ../../nexus/react/ui/typography/Typography.css
 var Typography = __webpack_require__(1815);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/typography/Typography.jsx
@@ -6459,9 +7251,185 @@ var Typography_Typography = (0,es/* observer */.Pi)(function (props) {
     style: style
   }, children);
 });
+// EXTERNAL MODULE: ../../nexus/react/ui/alert/Alert.css
+var Alert = __webpack_require__(2306);
+;// CONCATENATED MODULE: ../../nexus/react/ui/alert/Alert.jsx
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// ======================================================================================================
+// ***** Alert *****
+// *****************
+
+var TAG_Alert = function TAG_Alert() {};
+
+var Alert_Alert = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... store
+
+  var themeMode = theme.mode; // From ... props
+
+  var severity = props.severity ? props.severity : 'default'; // can also be "help"
+
+  var icon = props.icon ? props.icon : null;
+  var children = props.children;
+  var className = props.className ? props.className : '';
+  var style = props.style ? props.style : {}; // ...
+
+  var severityDef = SEVERITIES.get(severity); // Quel icône ?
+
+  if (!icon) {
+    icon = /*#__PURE__*/react.createElement(Icon_Icon, {
+      name: severityDef.icon_name,
+      color: severityDef.color
+    });
+  } // Quelle couleur de fond ?
+
+
+  if (!style.hasOwnProperty('backgroundColor')) {
+    style['backgroundColor'] = severityDef.backgroundColor;
+  } // Quelle couleur de texte ?
+
+
+  if (!style.hasOwnProperty('color')) {
+    style['color'] = themeMode == 'light' ? severityDef.text_color : severityDef.color;
+  } // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-alert", severity, className, themeMode),
+    style: style
+  }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
+    color: "transparent"
+  }, icon), /*#__PURE__*/react.createElement("div", {
+    className: "nx-alert-content",
+    "data-flex": "1"
+  }, children));
+});
+// EXTERNAL MODULE: ../../nexus/react/ui/switch/Switch.css
+var Switch = __webpack_require__(1796);
+;// CONCATENATED MODULE: ../../nexus/react/ui/switch/Switch.jsx
+
+
+
+
+
+
+ // Functions Components ReactJS
+// ======================================================================================================
+// ***** Switch *****
+// ******************
+
+var TAG_Switch = function TAG_Switch() {};
+
+var Switch_Switch = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var theme = app.theme; // From ... store
+
+  var isLoading = app.isLoading; // From ... props
+
+  var id = props.id ? props.id : id;
+  var name = props.name ? props.name : '';
+  var disabled = props.disabled ? props.disabled : isLoading;
+  var label = props.label;
+  var savePath = props.savePath;
+  var callbackChange = props.callbackChange;
+  var className = props.className ? props.className : "";
+  var style = props.style ? props.style : {}; // Events
+  // ==================================================================================================
+
+  var handleSaveValue = function handleSaveValue(value) {
+    // Mise à jour d'une valeur sur un target
+    // ---
+    // Sauvegarde de la valeur
+    if (savePath) {
+      app.saveValue(savePath, value, callbackChange);
+      app.clearError(savePath);
+    } else {
+      callbackChange([], value);
+    }
+  }; // Functions
+  // ==================================================================================================
+
+
+  var getError = function getError() {
+    var error = props.error;
+
+    if (error == undefined && savePath && savePath.length > 0) {
+      error = app.getError(savePath);
+    }
+
+    return error;
+  };
+
+  var getValue = function getValue() {
+    var value = props.value;
+
+    if (value == undefined && savePath && savePath.length > 0) {
+      value = app.getValue(savePath, null);
+    }
+
+    if (value == null) {
+      value = '';
+    }
+
+    return value;
+  }; // ...
+
+
+  var error = getError();
+  var value = getValue(); // Render
+  // ==================================================================================================
+
+  var switchIconName = "toggle_off";
+  var switchIconColor = "typography";
+
+  if (value == true) {
+    switchIconName = "toggle_on";
+    switchIconColor = "primary";
+  }
+
+  if (error) {
+    switchIconColor = "error";
+  }
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-switch", {
+      'disabled': disabled
+    }, {
+      'error': error
+    }, className),
+    onClick: function onClick(e) {
+      return handleSaveValue(!value);
+    },
+    style: style
+  }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
+    color: "transparent",
+    size: "small",
+    iconName: switchIconName,
+    iconColor: switchIconColor,
+    iconSize: "large",
+    iconVariant: "filled",
+    style: {
+      marginLeft: '-8px'
+    }
+  }), label && /*#__PURE__*/react.createElement("div", {
+    className: "nx-field-label-aside"
+  }, label));
+});
 // EXTERNAL MODULE: ../../nexus/react/contexts/playground/input/PlaygroundSwitch.css
 var PlaygroundSwitch = __webpack_require__(2761);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/playground/input/PlaygroundSwitch.jsx
+
+
 
 
 
@@ -6498,7 +7466,23 @@ var RenderSectionSwitch = (0,es/* observer */.Pi)(function (props) {
   }); // Section -> Content
   // -------------------------------------------------
 
-  var sectionContent = /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(Typography_Typography, null, "Bient\xF4t !")); // -------------------------------------------------
+  var sectionContent = /*#__PURE__*/react.createElement("div", null, /*#__PURE__*/react.createElement(Alert_Alert, {
+    severity: "info"
+  }, "Le composant Switch se comporte comme un Field de type \"checkbox\". Il se repose sur une valeur bool\xE9enne et il convient de l'utiliser pour des param\xE8tres."), /*#__PURE__*/react.createElement("br", null), /*#__PURE__*/react.createElement(Column_Column, {
+    align: "start",
+    style: {
+      padding: '10px'
+    }
+  }, /*#__PURE__*/react.createElement(Switch_Switch, {
+    label: "Switch 1",
+    savePath: ['app', 'playground', 'value_switch_1']
+  }), /*#__PURE__*/react.createElement(Switch_Switch, {
+    label: "Switch 2",
+    savePath: ['app', 'playground', 'value_switch_2']
+  }), /*#__PURE__*/react.createElement(Switch_Switch, {
+    label: "Switch 3",
+    savePath: ['app', 'playground', 'value_switch_3']
+  }))); // -------------------------------------------------
 
   return /*#__PURE__*/react.createElement(Section_Section, {
     icon: sectionIcon,
@@ -6560,6 +7544,7 @@ var Indicator = __webpack_require__(4439);
 
 
 
+
  // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
 // ***** Indicator *****
@@ -6575,11 +7560,14 @@ var Indicator_Indicator = (0,es/* observer */.Pi)(function (props) {
   var variant = props.variant ? props.variant : 'default'; // default, contrasted, outlined
 
   var severity = props.severity ? props.severity : 'default';
+  var iconName = props.iconName ? props.iconName : '';
+  var href = props.href ? props.href : '';
   var children = props.children;
   var className = props.className ? props.className : '';
   var color = props.color ? props.color : ''; // primary, secondary, #custom
 
-  var style = props.style ? props.style : {}; // ...
+  var style = props.style ? props.style : {};
+  var callbackClick = props.callbackClick; // ...
 
   var severityDef = SEVERITIES.getDef(severity); // Quelle couleur ?
 
@@ -6607,40 +7595,59 @@ var Indicator_Indicator = (0,es/* observer */.Pi)(function (props) {
   if (variant == 'outlined') {
     style['backgroundColor'] = 'transparent';
     style['borderColor'] = color;
-  } // Render
+  } // Quelle icône ?
+
+
+  var icon = null;
+
+  if (iconName) {
+    icon = /*#__PURE__*/react.createElement(Icon_Icon, {
+      color: severity,
+      name: iconName,
+      style: {
+        flex: 'none',
+        marginRight: '5px'
+      }
+    });
+  } // Events
   // ==================================================================================================
 
 
-  return /*#__PURE__*/react.createElement("div", {
-    className: (0,clsx_m/* default */.Z)("nx-indicator", className),
-    style: style
-  }, children);
+  var handleClick = function handleClick() {
+    if (callbackClick) {
+      callbackClick();
+    }
+  }; // Render
+  // ==================================================================================================
+
+
+  var indicator = /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("nx-indicator", {
+      "with-icon": icon
+    }, {
+      "clickable": callbackClick
+    }, className),
+    style: style,
+    onClick: function onClick() {
+      return handleClick();
+    }
+  }, icon, /*#__PURE__*/react.createElement("div", null, children));
+
+  if (href) {
+    indicator = /*#__PURE__*/react.createElement("a", {
+      className: (0,clsx_m/* default */.Z)("nx-indicator", {
+        "with-icon": icon
+      }, {
+        "clickable": callbackClick
+      }, className),
+      href: href,
+      target: "_blanc",
+      style: style
+    }, icon, /*#__PURE__*/react.createElement("div", null, children));
+  }
+
+  return indicator;
 });
-// EXTERNAL MODULE: ../../nexus/react/layout/column/Column.css
-var Column = __webpack_require__(5906);
-;// CONCATENATED MODULE: ../../nexus/react/layout/column/Column.jsx
-
-
- // Functions Components ReactJS
-// ----------------------------------------------------------------------------------------------------------------------------
-// ***** Column *****
-// ***************
-
-var TAG_Column = function TAG_Column() {};
-
-var Column_Column = function Column(props) {
-  // From ... props
-  var children = props.children;
-  var spacing = props.spacing ? props.spacing : 'small';
-  var align = props.align ? props.align : 'center';
-  var className = props.className ? props.className : '';
-  var style = props.style ? props.style : {}; // ==================================================================================================
-
-  return /*#__PURE__*/react.createElement("div", {
-    className: (0,clsx_m/* default */.Z)("nx-row", "v-col-".concat(spacing), "flex-align-".concat(align), className),
-    style: style
-  }, children);
-};
 // EXTERNAL MODULE: ../../nexus/react/contexts/playground/display/PlaygroundAvatar.css
 var PlaygroundAvatar = __webpack_require__(89);
 ;// CONCATENATED MODULE: ../../nexus/react/contexts/playground/display/PlaygroundAvatar.jsx
@@ -6812,68 +7819,6 @@ var Grid_Grid = function Grid(props) {
     style: style
   }, children);
 };
-// EXTERNAL MODULE: ../../nexus/react/ui/alert/Alert.css
-var Alert = __webpack_require__(2306);
-;// CONCATENATED MODULE: ../../nexus/react/ui/alert/Alert.jsx
-
-
-
-
-
-
-
- // Functions Components ReactJS
-// ======================================================================================================
-// ***** Alert *****
-// *****************
-
-var TAG_Alert = function TAG_Alert() {};
-
-var Alert_Alert = (0,es/* observer */.Pi)(function (props) {
-  var store = react.useContext(window.storeContext);
-  var app = store.app;
-  var theme = app.theme; // From ... store
-
-  var themeMode = theme.mode; // From ... props
-
-  var severity = props.severity ? props.severity : 'default'; // can also be "help"
-
-  var icon = props.icon ? props.icon : null;
-  var children = props.children;
-  var className = props.className ? props.className : '';
-  var style = props.style ? props.style : {}; // ...
-
-  var severityDef = SEVERITIES.get(severity); // Quel icône ?
-
-  if (!icon) {
-    icon = /*#__PURE__*/react.createElement(Icon_Icon, {
-      name: severityDef.icon_name,
-      color: severityDef.color
-    });
-  } // Quelle couleur de fond ?
-
-
-  if (!style.hasOwnProperty('backgroundColor')) {
-    style['backgroundColor'] = severityDef.backgroundColor;
-  } // Quelle couleur de texte ?
-
-
-  if (!style.hasOwnProperty('color')) {
-    style['color'] = themeMode == 'light' ? severityDef.text_color : severityDef.color;
-  } // Render
-  // ==================================================================================================
-
-
-  return /*#__PURE__*/react.createElement("div", {
-    className: (0,clsx_m/* default */.Z)("nx-alert", severity, className, themeMode),
-    style: style
-  }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
-    color: "transparent"
-  }, icon), /*#__PURE__*/react.createElement("div", {
-    className: "nx-alert-content",
-    "data-flex": "1"
-  }, children));
-});
 // EXTERNAL MODULE: ../../nexus/react/ui/link/Link.css
 var Link = __webpack_require__(7370);
 ;// CONCATENATED MODULE: ../../nexus/react/ui/link/Link.jsx
@@ -6963,9 +7908,11 @@ var RenderSectionIcon = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app;
   var playground = app.playground;
-  var snackbar = app.snackbar; // From ... store
+  var snackbar = app.snackbar;
+  var theme = app.theme; // From ... store
 
   var isLoading = app.isLoading;
+  var themeMode = theme.mode;
   var pageDef = playground.pageDef;
   var searchIcons = playground.search_icons; // ...
 
@@ -7041,7 +7988,7 @@ var RenderSectionIcon = (0,es/* observer */.Pi)(function (props) {
     }, /*#__PURE__*/react.createElement("div", {
       className: "nx-playground-icon"
     }, /*#__PURE__*/react.createElement(IconComponent, {
-      color: "#5F6368"
+      color: themeMode == 'light' ? "#5F6368" : "lightgray"
     })), /*#__PURE__*/react.createElement("div", {
       className: "nx-playground-icon-name selectable"
     }, iconName));
@@ -8017,6 +8964,9 @@ function Playground_arrayLikeToArray(arr, len) { if (len == null || len > arr.le
 
 
 
+
+
+
  // Datas
 // -------------------------------------------------------------------------------------------------------------
 
@@ -8132,6 +9082,10 @@ var PlaygroundStore = mobx_state_tree_module/* types.model */.V5.model({
   // -
   list: mobx_state_tree_module/* types.optional */.V5.optional(PlaygroundListStore, {}),
   // -
+  value_switch_1: false,
+  value_switch_2: false,
+  value_switch_3: false,
+  // -
   currentPageKey: '',
   loaded: false
 }).views(function (self) {
@@ -8199,24 +9153,26 @@ var PlaygroundStore = mobx_state_tree_module/* types.model */.V5.model({
     },
     // -
     update: function update(raw) {
-      console.log(raw);
-      self.doc_id = raw.doc_id;
-      self.doc_rev = raw.doc_rev;
-      self.doc_state = raw.doc_state;
-      self.value_text = raw.value_text;
-      self.value_number = raw.value_number;
-      self.value_date = raw.value_date;
-      self.value_time = raw.value_time;
-      self.value_select = raw.value_select;
-      self.value_textarea = raw.value_textarea;
-      self.value_autocomplete_1 = AutocompleteStore.create({});
-      self.value_autocomplete_1.update(raw.value_autocomplete_1);
-      self.value_autocomplete_2 = AutocompleteStore.create({});
-      self.value_autocomplete_2.update(raw.value_autocomplete_2);
-      self.value_switcher = raw.value_switcher;
-      self.value_radio = raw.value_radio;
-      self.value_checkbox = raw.value_checkbox;
-      self.value_html = raw.value_html; // -
+      if (raw) {
+        self.doc_id = raw.doc_id;
+        self.doc_rev = raw.doc_rev;
+        self.doc_state = raw.doc_state;
+        self.value_text = raw.value_text;
+        self.value_number = raw.value_number;
+        self.value_date = raw.value_date;
+        self.value_time = raw.value_time;
+        self.value_select = raw.value_select;
+        self.value_textarea = raw.value_textarea;
+        self.value_autocomplete_1 = AutocompleteStore.create({});
+        self.value_autocomplete_1.update(raw.value_autocomplete_1);
+        self.value_autocomplete_2 = AutocompleteStore.create({});
+        self.value_autocomplete_2.update(raw.value_autocomplete_2);
+        self.value_switcher = raw.value_switcher;
+        self.value_radio = raw.value_radio;
+        self.value_checkbox = raw.value_checkbox;
+        self.value_html = raw.value_html;
+      } // -
+
 
       self.list.init(); // -
 
@@ -8228,13 +9184,19 @@ var PlaygroundStore = mobx_state_tree_module/* types.model */.V5.model({
       var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
       var app = store.app;
       var snackbar = app.snackbar;
-      var url = "/playground_actions/load";
-      app.fetchJSON(url, null, false, 'POST').then(function (json) {
-        self.update(json.playground_raw);
-      })["catch"](function (ex) {
-        console.error("Fetch failed for ".concat(url), ex);
-        snackbar.update(true, "Une erreur est survenue.", "error");
-      });
+      var staticMode = app.staticMode;
+
+      if (!staticMode) {
+        var url = "/playground_actions/load";
+        app.fetchJSON(url, null, false, 'POST').then(function (json) {
+          self.update(json.playground_raw);
+        })["catch"](function (ex) {
+          console.error("Fetch failed for ".concat(url), ex);
+          snackbar.update(true, "Une erreur est survenue.", "error");
+        });
+      } else {
+        self.update(null);
+      }
     },
     validate: function validate(callback) {
       // Validation des données du playground
@@ -8338,7 +9300,8 @@ var PlaygroundHeaderRight = (0,es/* observer */.Pi)(function (props) {
   var app = store.app;
   var playground = app.playground; // From ... store
 
-  var isLoading = app.isLoading; // ...
+  var isLoading = app.isLoading;
+  var staticMode = app.staticMode; // ...
   // Events
   // ==================================================================================================
 
@@ -8352,7 +9315,7 @@ var PlaygroundHeaderRight = (0,es/* observer */.Pi)(function (props) {
   // ==================================================================================================
 
 
-  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(IconButton, {
+  return /*#__PURE__*/react.createElement(react.Fragment, null, !staticMode && /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(IconButton, {
     onClick: function onClick() {
       return handleSaveClick();
     },
@@ -8361,7 +9324,7 @@ var PlaygroundHeaderRight = (0,es/* observer */.Pi)(function (props) {
   }, /*#__PURE__*/react.createElement(Icon_Icon, {
     name: "save",
     color: "white"
-  })), /*#__PURE__*/react.createElement(HeaderDivider, null));
+  })), /*#__PURE__*/react.createElement(HeaderDivider, null)));
 }); // ***** PlaygroundMenuItem *****
 // ******************************
 
@@ -8395,7 +9358,10 @@ var TAG_RenderDrawerPlaygroundItems = function TAG_RenderDrawerPlaygroundItems()
 var RenderDrawerPlaygroundItems = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app;
-  var playground = app.playground; // Renderers
+  var playground = app.playground; // From ... store
+
+  var staticMode = app.staticMode;
+  var breakPoint650 = app.breakPoint650; // Renderers
   // ==================================================================================================
 
   var renderItemPlaygroundPage = function renderItemPlaygroundPage(page) {
@@ -8420,9 +9386,9 @@ var RenderDrawerPlaygroundItems = (0,es/* observer */.Pi)(function (props) {
   }; // -----------------------------------------------------
 
 
-  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(MenuSwitch, {
-    switchKey: "editMode"
-  }), /*#__PURE__*/react.createElement(MenuDivider, null), PLAYGROUND_PAGES.map(function (page, pageIdx) {
+  return /*#__PURE__*/react.createElement(react.Fragment, null, breakPoint650 && /*#__PURE__*/react.createElement(HomeMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), !staticMode && /*#__PURE__*/react.createElement(MenuSwitches, {
+    allowedEditContexts: ['playground']
+  }), PLAYGROUND_PAGES.map(function (page, pageIdx) {
     return renderItemPlaygroundPage(page);
   }));
 }); // ***** PlaygroundPage *****
@@ -8527,9 +9493,30 @@ var PlaygroundPage = (0,es/* observer */.Pi)(function (props) {
         style: {
           textAlign: 'left'
         }
-      }, "Cette section est d\xE9di\xE9e \xE0 la partie Front de Nexus. Elle se nomme ", /*#__PURE__*/react.createElement("b", null, "NxApp"), " et fournit un squelette accompagn\xE9 d'une suite de composants qui, essemble, d\xE9finissent ma vision de ce que qu'est une webapp.", /*#__PURE__*/react.createElement("br", null)), /*#__PURE__*/react.createElement("br", null), "Explorez les diverses d\xE9mo des composants d'affichage pour avoir un aper\xE7u des capacit\xE9s d'NxApp ! \uD83D\uDE80"),
+      }, "Cette section est d\xE9di\xE9e \xE0 la partie Front de Nexus. Elle se nomme ", /*#__PURE__*/react.createElement("b", null, "NxApp"), " et fournit un squelette accompagn\xE9 d'une suite de composants qui, essemble, d\xE9finissent ma vision de ce qu'est une webapp.", /*#__PURE__*/react.createElement("br", null)), /*#__PURE__*/react.createElement("br", null), "Explorez les diverses d\xE9mo des composants d'affichage pour avoir un aper\xE7u des capacit\xE9s d'NxApp ! \uD83D\uDE80", /*#__PURE__*/react.createElement(Row_Row, {
+        style: {
+          marginTop: '20px'
+        }
+      }, /*#__PURE__*/react.createElement(Indicator_Indicator, {
+        color: "primary"
+      }, /*#__PURE__*/react.createElement("b", null, "Back :"), " Python \uD83D\uDC0D + Pyramid"), /*#__PURE__*/react.createElement(Indicator_Indicator, {
+        color: "primary"
+      }, /*#__PURE__*/react.createElement("b", null, "Front :"), " ReactJS + mobx-state-tree \uD83D\uDE0E")), /*#__PURE__*/react.createElement(Link_Link, {
+        href: "https://github.com/vincent114/nexus",
+        target: "_blank",
+        style: {
+          display: 'block',
+          marginTop: '20px'
+        }
+      }, "Voir le code de Nexus sur Github"), /*#__PURE__*/react.createElement(Alert_Alert, {
+        severity: "warning",
+        style: {
+          textAlign: 'left',
+          marginTop: '20px'
+        }
+      }, "Une grande partie de tout ce que vous verrez ici est toujours sous l'objet d'un d\xE9veloppement intensif \uD83E\uDD75")),
       show: showHelper,
-      inFlux: breakPoint650
+      inFlux: true
     }, helperContent);
   };
 
@@ -8537,30 +9524,6 @@ var PlaygroundPage = (0,es/* observer */.Pi)(function (props) {
     className: "nx-page"
   }, renderPage(), renderHelper());
 });
-// EXTERNAL MODULE: ../../nexus/react/ui/switch/Switch.css
-var Switch = __webpack_require__(1796);
-;// CONCATENATED MODULE: ../../nexus/react/ui/switch/Switch.jsx
-
-
-
-
- // Functions Components ReactJS
-// ======================================================================================================
-// ***** Switch *****
-// ******************
-
-var TAG_Switch = function TAG_Switch() {};
-
-var Switch_Switch = function Switch(props) {
-  var store = React.useContext(window.storeContext);
-  var app = store.app;
-  var theme = app.theme; // Render
-  // ==================================================================================================
-
-  return /*#__PURE__*/React.createElement("div", {
-    className: "nx-switch"
-  });
-};
 // EXTERNAL MODULE: ../../nexus/react/layout/menu/Menu.css
 var Menu = __webpack_require__(4397);
 ;// CONCATENATED MODULE: ../../nexus/react/layout/menu/Menu.jsx
@@ -8757,21 +9720,60 @@ var MenuItem = (0,es/* observer */.Pi)(function (props) {
     className: "nx-menu-item-label",
     style: styleLabel
   }, label));
-}); // ***** MenuSwitch *****
-// **********************
+}); // ***** MenuSwitches *****
+// ************************
 
-var TAG_MenuSwitch = function TAG_MenuSwitch() {};
+var TAG_MenuSwitches = function TAG_MenuSwitches() {};
 
-var MenuSwitch = function MenuSwitch(props) {
-  // From ... props
-  var switchKey = props.switchKey ? props.switchKey : ''; // ...
+var MenuSwitches = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var account = app.account; // From ... props
+
+  var switchKey = props.switchKey ? props.switchKey : '';
+  var allowedEditContexts = props.allowedEditContexts ? props.allowedEditContexts : ['playground'];
+  var allowedDebugContexts = props.allowedDebugContexts ? props.allowedDebugContexts : ['admin']; // From ... store
+
+  var isLoading = app.isLoading;
+  var context = app.context; // ...
   // Render
   // ==================================================================================================
+  // Edit
+  // -------------------------------------------------
 
-  return /*#__PURE__*/react.createElement("div", {
-    className: "nx-menu-switch"
-  });
-}; // ***** Menu *****
+  var editSwitch = null;
+
+  if (account.is_editor || allowedEditContexts.indexOf(context) > -1) {
+    editSwitch = /*#__PURE__*/react.createElement(Switch_Switch, {
+      label: "Edition",
+      savePath: ['app', 'editMode'],
+      disabled: isLoading
+    });
+  } // Debug
+  // -------------------------------------------------
+
+
+  var debugSwitch = null;
+
+  if (account.is_admin || allowedDebugContexts.indexOf(context) > -1) {
+    debugSwitch = /*#__PURE__*/react.createElement(Switch_Switch, {
+      label: "Debug",
+      savePath: ['app', 'debugMode'],
+      disabled: isLoading
+    });
+  } // -------------------------------------------------
+
+
+  var menuSwitchContent = null;
+
+  if (editSwitch || debugSwitch) {
+    menuSwitchContent = /*#__PURE__*/react.createElement("div", {
+      className: "nx-menu-switch"
+    }, editSwitch, debugSwitch, /*#__PURE__*/react.createElement(MenuDivider, null));
+  }
+
+  return menuSwitchContent;
+}); // ***** Menu *****
 // ****************
 
 var TAG_Menu = function TAG_Menu() {};
@@ -8822,6 +9824,8 @@ var Menu_Menu = (0,es/* observer */.Pi)(function (props) {
     className: "nx-menu-items-wrapper"
   }, content), !breakPoint650 && /*#__PURE__*/react.createElement(IconButton, {
     iconName: "push_pin",
+    iconVariant: pinned ? "filled" : "outlined",
+    color: "typography",
     onClick: function onClick() {
       return handlePinClick();
     }
@@ -8929,7 +9933,7 @@ var PortalHeaderLeft = (0,es/* observer */.Pi)(function (props) {
   // ==================================================================================================
 
   return /*#__PURE__*/react.createElement(HeaderTitle, {
-    title: "Applications",
+    title: "Portail",
     titleStyle: {
       marginLeft: '10px'
     }
@@ -8972,7 +9976,7 @@ var PortalMenuItem = (0,es/* observer */.Pi)(function (props) {
   if (breakPoint650) {
     portalMenuItem = /*#__PURE__*/react.createElement(MenuItem, {
       iconName: "explore",
-      label: "Applications",
+      label: "Portail",
       activeContexts: [portalContext],
       callbackClick: handleMenuItemClick
     });
@@ -9138,6 +10142,9 @@ var About = __webpack_require__(2189);
 
 
 
+
+
+
  // Models
 // ======================================================================================================
 // ***** AboutStore *****
@@ -9164,13 +10171,20 @@ var AboutStore = mobx_state_tree_module/* types.model */.V5.model({
       var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
       var app = store.app;
       var snackbar = app.snackbar;
-      var url = '/app/about_load';
-      app.fetchJSON(url, null, false, 'POST').then(function (json) {
-        self.update(json.me);
-      })["catch"](function (ex) {
-        console.error("Fetch failed for ".concat(url), ex);
-        snackbar.update(true, "Une erreur est survenue.", "error");
-      });
+      var services = app.services;
+      var staticMode = app.staticMode;
+
+      if (!staticMode) {
+        var url = '/app/about_load';
+        app.fetchJSON(url, null, false, 'POST').then(function (json) {
+          self.update(json.me);
+        })["catch"](function (ex) {
+          console.error("Fetch failed for ".concat(url), ex);
+          snackbar.update(true, "Une erreur est survenue.", "error");
+        });
+      } else {
+        self.update(services.me.toJSON());
+      }
     }
   };
 }); // Functions Components ReactJS
@@ -9237,15 +10251,22 @@ var TAG_RenderAbout = function TAG_RenderAbout() {};
 var RenderAbout = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app;
-  var about = app.about; // From ... store
+  var about = app.about;
+  var services = app.services; // From ... store
 
   var isLoading = app.isLoading;
   var breakPoint414 = app.breakPoint414;
   var loaded = about.loaded;
   var service = about.service;
+  var staticMode = app.staticMode;
   var version = service.version;
   var changeset = service.changeset;
-  var changeset_instance = service.changeset_instance; // ...
+  var changeset_instance = service.changeset_instance;
+  var iconUrl = service.iconUrl;
+  var githubLink = service.githubLink;
+  var githubLinkClient = service.githubLinkClient;
+  var nexusServiceInfo = services.getServiceInfo('nexus');
+  var nexusGithubLink = nexusServiceInfo.githubLink; // ...
 
   react.useEffect(function () {
     if (!loaded) {
@@ -9277,7 +10298,8 @@ var RenderAbout = (0,es/* observer */.Pi)(function (props) {
   var sectionContent = /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)("h-col-medium", "responsive-vertical", "responsive-spaced-medium")
   }, /*#__PURE__*/react.createElement(Avatar_Avatar, {
-    src: "/static/favicons/android-icon-192x192.png",
+    src: iconUrl,
+    color: "primary",
     size: "big"
   }), /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)({
@@ -9296,10 +10318,34 @@ var RenderAbout = (0,es/* observer */.Pi)(function (props) {
     className: "h-col-small responsive-vertical responsive-spaced-none responsive-align-start"
   }, /*#__PURE__*/react.createElement("div", {
     className: "nx-t nx-t-default"
+  }, "Lien Github"), /*#__PURE__*/react.createElement(Link_Link, {
+    href: githubLink,
+    target: "_blank",
+    className: "flex-2"
+  }, githubLink)), githubLinkClient && /*#__PURE__*/react.createElement("div", {
+    className: "h-col-small responsive-vertical responsive-spaced-none responsive-align-start"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "nx-t nx-t-default"
+  }, "Lien Github (client)"), /*#__PURE__*/react.createElement(Link_Link, {
+    href: githubLinkClient,
+    target: "_blank",
+    className: "flex-2"
+  }, githubLinkClient)), nexusGithubLink && /*#__PURE__*/react.createElement("div", {
+    className: "h-col-small responsive-vertical responsive-spaced-none responsive-align-start"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "nx-t nx-t-default"
+  }, "Lien Github (nexus)"), /*#__PURE__*/react.createElement(Link_Link, {
+    href: nexusGithubLink,
+    target: "_blank",
+    className: "flex-2"
+  }, nexusGithubLink)), !staticMode && /*#__PURE__*/react.createElement("br", null), !staticMode && /*#__PURE__*/react.createElement("div", {
+    className: "h-col-small responsive-vertical responsive-spaced-none responsive-align-start"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "nx-t nx-t-default"
   }, "R\xE9vision instance"), /*#__PURE__*/react.createElement("div", {
     className: "nx-about-changeset selectable",
     "data-flex": "2"
-  }, changeset_instance)), /*#__PURE__*/react.createElement("div", {
+  }, changeset_instance)), !staticMode && /*#__PURE__*/react.createElement("div", {
     className: "h-col-small responsive-vertical responsive-spaced-none responsive-align-start"
   }, /*#__PURE__*/react.createElement("div", {
     className: "nx-t nx-t-default"
@@ -9320,16 +10366,20 @@ var RenderAbout = (0,es/* observer */.Pi)(function (props) {
     disabled: isLoading,
     startAdornment: "history"
   }, "Changelog"));
-  sectionButtons.push( /*#__PURE__*/react.createElement(Button_Button, {
-    key: "btn-bugs",
-    variant: "outlined",
-    color: "primary",
-    onClick: function onClick() {
-      return handleBugsClick();
-    },
-    disabled: isLoading,
-    startAdornment: "bug_report"
-  }, "Bugs")); // -------------------------------------------------
+
+  if (!staticMode) {
+    sectionButtons.push( /*#__PURE__*/react.createElement(Button_Button, {
+      key: "btn-bugs",
+      variant: "outlined",
+      color: "primary",
+      onClick: function onClick() {
+        return handleBugsClick();
+      },
+      disabled: isLoading,
+      startAdornment: "bug_report"
+    }, "Bugs"));
+  } // -------------------------------------------------
+
 
   var contentAbout = null;
 
@@ -9375,6 +10425,144 @@ var AboutPage = (0,es/* observer */.Pi)(function (props) {
     // ---
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       iconName: "code",
+      show: showHelper
+    });
+  };
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "nx-page"
+  }, renderPage(), renderHelper());
+});
+// EXTERNAL MODULE: ../../nexus/react/contexts/preferences/Preferences.css
+var Preferences = __webpack_require__(2359);
+;// CONCATENATED MODULE: ../../nexus/react/contexts/preferences/Preferences.jsx
+
+
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// -------------------------------------------------------------------------------------------------------------
+// ***** PreferencesHeaderLeft *****
+// *********************************
+
+var TAG_PreferencesHeaderLeft = function TAG_PreferencesHeaderLeft() {};
+
+var PreferencesHeaderLeft = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // ...
+  // Render
+  // ==================================================================================================
+
+  return /*#__PURE__*/react.createElement(HeaderTitle, {
+    title: "Pr\xE9f\xE9rences",
+    titleStyle: {
+      marginLeft: '10px'
+    }
+  });
+}); // ***** PreferencesHeaderRight *****
+// **********************************
+
+var TAG_PreferencesHeaderRight = function TAG_PreferencesHeaderRight() {};
+
+var PreferencesHeaderRight = (0,es/* observer */.Pi)(function (props) {
+  // const store = React.useContext(window.storeContext);
+  // const app = store.app;
+  // ...
+  // Render
+  // ==================================================================================================
+  return null;
+}); // ***** PreferencesMenuItem *****
+// *******************************
+
+var TAG_PreferencesMenuItem = function TAG_PreferencesMenuItem() {};
+
+var PreferencesMenuItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // From ... store
+
+  var preferencesContext = app.preferencesContext; // Events
+  // ==================================================================================================
+
+  var handleMenuItemClick = function handleMenuItemClick() {
+    app.navigateTo(preferencesContext);
+    app.menu.close();
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement(MenuItem, {
+    iconName: "tune",
+    label: "Pr\xE9f\xE9rences",
+    activeContexts: [preferencesContext],
+    callbackClick: handleMenuItemClick
+  });
+}); // ***** RenderSectionTheme *****
+// ******************************
+
+var TAG_RenderSectionTheme = function TAG_RenderSectionTheme() {};
+
+var RenderSectionTheme = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // From ... store
+
+  var isLoading = app.isLoading; // ...
+  // Events
+  // ==================================================================================================
+  // Render
+  // ==================================================================================================
+  // Section -> Icon
+  // ---
+
+  var sectionIcon = /*#__PURE__*/react.createElement(Icon_Icon, {
+    name: "palette"
+  }); // Section -> Title
+  // ---
+
+  var sectionTitle = "Mode d'apparence"; // Section -> Content
+  // ---
+
+  var sectionContent = /*#__PURE__*/react.createElement("div", null, "Bient\xF4t !"); // -------------------------------------------------
+
+  return /*#__PURE__*/react.createElement(Section_Section, {
+    icon: sectionIcon,
+    title: sectionTitle
+  }, sectionContent);
+}); // ***** PreferencesPage *****
+// ***************************
+
+var TAG_PreferencesPage = function TAG_PreferencesPage() {};
+
+var PreferencesPage = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app; // From ... store
+
+  var initialized = app.initialized; // ...
+
+  var showHelper = !initialized ? true : false; // Renderers
+  // ==================================================================================================
+
+  var renderPage = function renderPage() {
+    // Render :: Page -> que quand l'app est intitialisée (pour useEffect)
+    // ---
+    var pageContent = null;
+
+    if (initialized) {
+      pageContent = /*#__PURE__*/react.createElement(RenderSectionTheme, null);
+    }
+
+    return pageContent;
+  };
+
+  var renderHelper = function renderHelper() {
+    // Render :: Helper
+    // ---
+    return /*#__PURE__*/react.createElement(Helper_Helper, {
+      iconName: "tune",
       show: showHelper
     });
   };
@@ -10026,9 +11214,1114 @@ var BlogPage = (0,es/* observer */.Pi)(function (props) {
     className: "nx-page"
   }, renderHelper());
 });
+;// CONCATENATED MODULE: ../../nexorium/react/models/Datas.jsx
+// Datas
+// ======================================================================================================
+var NEXORIUM_CHANGELOGS = [{
+  "status": "prod",
+  "date": "2022-06-26",
+  "app_key": "nexorium",
+  "version": "0.0.2",
+  "changes": [{
+    "title": "Portail vers les autres projets"
+  }]
+}, {
+  "status": "prod",
+  "date": "2022-06-24",
+  "app_key": "nexorium",
+  "version": "0.0.1",
+  "changes": [{
+    "title": "Version statique initiale"
+  }]
+}];
+;// CONCATENATED MODULE: ../../nexora/react/models/Datas.jsx
+// Datas
+// ======================================================================================================
+var NEXORA_CHANGELOGS = [{
+  "status": "prod",
+  "date": "2022-06-26",
+  "app_key": "nexora",
+  "version": "0.0.1",
+  "changes": [{
+    "title": "Version statique initiale"
+  }]
+}];
+;// CONCATENATED MODULE: ./models/Datas.jsx
+// Datas
+// ======================================================================================================
+// {
+// 	"status": "prod",
+// 	"date": null,
+// 	"app_key": "gramophone",
+// 	"version": "",
+// 	"version_name": "",
+// 	"changes": [
+// 		{"title": ""},
+// 	],
+// },
+var GRAMOPHONE_CHANGELOGS = [{
+  "status": "daft",
+  "date": null,
+  "app_key": "gramophone",
+  "version": "4.0.0",
+  "version_name": "New wave",
+  "changes": [{
+    "title": "Réécriture complète à l'aide de ReactJS et de mobx-state-tree"
+  }, {
+    "title": "Abandon de MaterialUI pour des raisons de performance d'affichage",
+    "content": "Et de facilité de maintenance."
+  }]
+}, {
+  "status": "prod",
+  "date": "2019-09-07",
+  "app_key": "gramophone",
+  "version": "3.0.0",
+  "version_name": "Mambo",
+  "changes": [{
+    "title": "Réécriture complète à l'aide de React.JS et de MaterialUI"
+  }, {
+    "title": "Plusieurs vues dédiées aux articles, albums, morceaux, genres, années et playlists"
+  }, {
+    "title": "Possibilité de créer des playlists personnalisés"
+  }, {
+    "title": "Historique de lecture"
+  }, {
+    "title": "Liste de lecture"
+  }, {
+    "title": "Jeté de dés pour lecture aléatoire de quelques dizaines de morceaux"
+  }, {
+    "title": "Fonction de recherche améliorée"
+  }],
+  "version_assets": [{
+    "plateform_key": "macos",
+    "filename": "gramophone_300_macOS.zip"
+  }, {
+    "plateform_key": "win64",
+    "filename": "gramophone_300_win64.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2018-03-20",
+  "app_key": "gramophone",
+  "version": "2.4.0",
+  "version_name": "Lounge",
+  "changes": [{
+    "title": "Menu d'application personnalisé sur macOS"
+  }, {
+    "title": "Menu contextuel sur l'icône du dock sur macOS"
+  }, {
+    "title": "Notification sur changement de musique quand le focus est sur une autre application"
+  }, {
+    "title": "Fix compteur de fichiers dans les dossiers surveillés"
+  }, {
+    "title": "Fix recherche après une première recherche"
+  }, {
+    "title": "Pas d'affichage de numéro de musique à 0"
+  }, {
+    "title": "Artiste cliquable dans le contenu d'un album"
+  }, {
+    "title": "Lecture continue depuis la grille"
+  }, {
+    "title": "Lecture aléatoire"
+  }, {
+    "title": "Option permettant de désactiver le scan automatique au démarrage de l'application"
+  }, {
+    "title": "Option de déclenchement manuel du scan rapide depuis l'écran de préférences"
+  }, {
+    "title": "Lecture du premier morceau de la playlist sur clic du bouton de lecture juste après ouverture"
+  }, {
+    "title": "Navigation vers la musique en cours de lecture sur clic du titre affiché sur le lecteur (dans l'entête de l'application)"
+  }],
+  "version_assets": [{
+    "plateform_key": "macos",
+    "filename": "gramophone_240_macOS.zip"
+  }, {
+    "plateform_key": "win64",
+    "filename": "gramophone_240_win64.zip"
+  }, {
+    "plateform_key": "win32",
+    "filename": "gramophone_240_win32.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2018-02-04",
+  "app_key": "gramophone",
+  "version": "2.3.1",
+  "version_name": "Kompa",
+  "changes": [{
+    "title": "Icône de lecture rapide plus petite et à gauche sur la grille"
+  }, {
+    "title": "Fix lecture première musique d'album depuis la grille"
+  }, {
+    "title": "Fix tri des colonnes dans les favoris"
+  }, {
+    "title": "Fix débordement des libellés de chançon et d'artiste sur le player"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-08-28",
+  "app_key": "gramophone",
+  "version": "2.3.0",
+  "version_name": "Jungle",
+  "changes": [{
+    "title": "Distinction groupement par artiste et alphabétique"
+  }, {
+    "title": "Petit effet de volume sur l'entête pour macOS"
+  }, {
+    "title": "Affichage du nom de la version dans la fenêtre 'A propos'"
+  }, {
+    "title": "Plus de glisser-déplacer pour les vignettes (mais toujours actif pour le zoom de jaquette)"
+  }, {
+    "title": "Il n'est plus possible de glisser-déplacer un dossier lorsqu'un scan est en cours"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-08-08",
+  "app_key": "gramophone",
+  "version": "2.2.0",
+  "version_name": "Indie pop",
+  "changes": [{
+    "title": "Glisser-déplacer pour ajouter un dossier surveillé contenant des musiques à indexer"
+  }, {
+    "title": "Zoom sur clic de la jaquette d'album"
+  }, {
+    "title": "Haut-parleur musique courante en pause"
+  }, {
+    "title": "Affichage de l'artiste de la musique courante"
+  }, {
+    "title": "Espace en bas de la liste des morceaux d'un album"
+  }, {
+    "title": "Diverses évolutions indexer"
+  }, {
+    "title": "F6 précédent, F7 play / pause, F8 suivant"
+  }, {
+    "title": "Fenêtre 'A propos' pour Windows (macOS en dispose d'une nativement)"
+  }, {
+    "title": "Indicateurs dernier scan complet et dernier scan rapide"
+  }, {
+    "title": "Fix coeur coupé sous Windows"
+  }, {
+    "title": "Fix débordement nom album"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-07-10",
+  "app_key": "gramophone",
+  "version": "2.1.0",
+  "version_name": "Heavy metal",
+  "changes": [{
+    "title": "Ajout d'un bouton permettant de mettre en évidence un morceau dans l'explorateur de fichier de l'OS"
+  }, {
+    "title": "Possibilité de grouper par artistes"
+  }, {
+    "title": "Possibilité de trier par années, artistes ou albums"
+  }, {
+    "title": "Prise en charge de plus de formats de date"
+  }, {
+    "title": "Fix ouverture de l'explorateur de fichier sous Windows"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-06-24",
+  "app_key": "gramophone",
+  "version": "2.0.1",
+  "version_name": "Groove metal",
+  "changes": [{
+    "title": "Fix fast play / resume dans les vues par liste"
+  }, {
+    "title": "Fix artiste de l'album au scan des musiques"
+  }, {
+    "title": "Fix plantage scan des musiques vers un dossier accentué"
+  }, {
+    "title": "Fix slider lorsque repositionné manuellement au début d'une chançon"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-05-25",
+  "app_key": "gramophone",
+  "version": "2.0.0",
+  "version_name": "Future house",
+  "changes": [{
+    "title": "Migration de NWjs vers Electron"
+  }, {
+    "title": "Prise en charge des formats AAC et FLAC"
+  }, {
+    "title": "Indexer intégré dans l'interface de paramétrage"
+  }, {
+    "title": "Options d'affichage : Filtrage par dossier surveillé + Possibilité de ne plus grouper par années"
+  }, {
+    "title": "Finalisation des contrôles de lecture et de pause rapide (lecture, pause, indicateur de lecture)"
+  }, {
+    "title": "Coeurs de favoris déplacés à gauche"
+  }, {
+    "title": "Fix compatibilité macOS 10.12.4 : collection par défaut dans le dossier utilisateur"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-01-30",
+  "app_key": "gramophone",
+  "version": "1.2.0",
+  "version_name": "Electro",
+  "changes": [{
+    "title": "Boutons de lecture rapide sur les albums et sur les morceaux"
+  }, {
+    "title": "Amélioration des performances d'affichage à l'aide du système de cache HTML et des vignettes JPEG"
+  }, {
+    "title": "Fix vignettes JPEG sous macOS"
+  }],
+  "version_assets": [{
+    "plateform_key": "macos",
+    "filename": "gramophone_120_macOS.zip"
+  }, {
+    "plateform_key": "win64",
+    "filename": "gramophone_120_win64.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-11-07",
+  "app_key": "gramophone",
+  "version": "1.1.1",
+  "version_name": "Dance",
+  "changes": [{
+    "title": "Compatibilité Windows / macOS sur le comportement lors de la femerture de la fenêtre"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-10-30",
+  "app_key": "gramophone",
+  "version": "1.1.0",
+  "version_name": "Chillwave",
+  "changes": [{
+    "title": "Contrôles de fenêtres natifs pour macOS"
+  }, {
+    "title": "L'application quitte plus lorsqu'on ferme sa fenêtre sous macOS"
+  }, {
+    "title": "Meilleure séparation des morceaux d'un album + meilleur visuel pour les coeurs de favoris"
+  }, {
+    "title": "Seuls les morceaux d'un album défilent en cas d'overflow (la jaquette et l'entête restent à leur place"
+  }, {
+    "title": "Possibilité d'ouvrir le dossier contenant les musiques d'un album"
+  }, {
+    "title": "Possibilité de cliquer sur un artiste pour écrire son nom dans la recherche"
+  }, {
+    "title": "Meilleur affichage du sélecteur par années avec séparation des décennies"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-06-26",
+  "app_key": "gramophone",
+  "version": "1.0.1",
+  "version_name": "Beat",
+  "changes": [{
+    "title": "Bordures noires sur la version Windows"
+  }, {
+    "title": "Compatibilité avec les contrôles multimédia sur les claviers (pause, lecture, suivant, précédent, ...)"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-03-29",
+  "app_key": "gramophone",
+  "version": "1.0.0",
+  "version_name": "Acid jazz",
+  "changes": [{
+    "title": "Implémentation des fonctionalités initiales (scan, collection, favoris, lecture et export)"
+  }]
+}];
+;// CONCATENATED MODULE: ../../vgm_server/react/models/Datas.jsx
+// Datas
+// ======================================================================================================
+// {
+// 	"status": "prod",
+// 	"date": null,
+// 	"app_key": "vgm",
+// 	"version": "",
+// 	"version_name": "",
+// 	"changes": [
+// 		{"title": ""},
+// 	],
+// },
+var VGM_CHANGELOGS = [{
+  "status": "daft",
+  "date": null,
+  "app_key": "vgm",
+  "version": "8.0.0",
+  "version_name": "Dante",
+  "changes": [{
+    "title": "Réécriture complète à l'aide de ReactJS et de mobx-state-tree"
+  }, {
+    "title": "Simplification du projet",
+    "content": "Focus sur la présentation pure et simple d'une ludothèque pour les collectionneurs."
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-07-23",
+  "app_key": "vgm",
+  "version": "7.0.1",
+  "version_name": "Nariko",
+  "changes": [{
+    "title": "Plus de synchronisation à outrance"
+  }, {
+    "title": "Nettoyage du code de migration"
+  }, {
+    "title": "Fix redémarrage application après synchronisation"
+  }, {
+    "title": "Fix suppression de jeu sans dossier dans la collection"
+  }],
+  "version_assets": [{
+    "plateform_key": "macos",
+    "filename": "vgm_701_macOS.zip"
+  }, {
+    "plateform_key": "win64",
+    "filename": "vgm_701_win64.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2017-05-25",
+  "app_key": "vgm",
+  "version": "7.0.0",
+  "version_name": "Ryder",
+  "changes": [{
+    "title": "Migration de NWjs vers Electron"
+  }, {
+    "title": "Fix compatibilité macOS 10.12.4 : collection par défaut dans le dossier utilisateur"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-11-07",
+  "app_key": "vgm",
+  "version": "6.2.5",
+  "version_name": "",
+  "changes": [{
+    "title": "Compatibilité Windows / macOS sur le comportement lors de la femerture de la fenêtre"
+  }, {
+    "title": "Fix mise à jour de la liste des supports et des genres lors d'un glisser / déplacer sur une collection vide"
+  }, {
+    "title": "Fix arrêt prématuré des compteurs quand on masque la fenêtre sous macOS"
+  }],
+  "version_assets": [{
+    "plateform_key": "macos",
+    "filename": "vgm_625_macOS.zip"
+  }, {
+    "plateform_key": "win64",
+    "filename": "vgm_625_win64.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-10-29",
+  "app_key": "vgm",
+  "version": "6.2.4",
+  "version_name": "",
+  "changes": [{
+    "title": "Contrôles de fenêtres natifs pour macOS (compatibilité split view)"
+  }, {
+    "title": "L'application ne se ferme plus lorsqu'on ferme sa fenêtre sous macOS"
+  }, {
+    "title": "Légers raffinements graphiques pour macOS"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-06-06",
+  "app_key": "vgm",
+  "version": "6.2.3",
+  "version_name": "",
+  "changes": [{
+    "title": "Indicateur visuel des jeux nécessitant un disque optique"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-03-30",
+  "app_key": "vgm",
+  "version": "6.2.2",
+  "version_name": "",
+  "changes": [{
+    "title": "Autorisation des doublons de jeux tant qu'ils sont sur des plateformes différentes"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-03-14",
+  "app_key": "vgm",
+  "version": "6.2.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Fusions des spécificités Windows et macOS dans le même code, conditionné par os.platform()"
+  }, {
+    "title": "Pastilles de contrôle de la fenêtre pour macOS"
+  }]
+}, {
+  "status": "prod",
+  "date": "2016-01-01",
+  "app_key": "vgm",
+  "version": "6.2.0",
+  "version_name": "",
+  "changes": [{
+    "title": "VGM laisse le temps à la fenêtre de se dessiner avant de s'afficher"
+  }, {
+    "title": "Sauvegarde des chronos toutes les minutes en cas de plantage"
+  }, {
+    "title": "Meilleur affichage des chronos en cours sur les raccourcis"
+  }, {
+    "title": "Légère réorganisation du code pour le rendre plus facilement maintenable"
+  }, {
+    "title": "Fix passage du mode édition de soluce au mode lecture"
+  }, {
+    "title": "Fix images des jeux après déplacement de l'exécutable de VGM"
+  }, {
+    "title": "Fix affichage de l'animation de synchronisation"
+  }, {
+    "title": "Possibilité de minimiser la fenêtre au lancement d'un jeu"
+  }, {
+    "title": "Possibilité de sauvegarder l'affichage des vues par ordinateur"
+  }, {
+    "title": "Possibilité de lier des jeux entre eux, et de définir la nature du lien (remake, restauration, plateforme alternative, ...)"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-09-16",
+  "app_key": "vgm",
+  "version": "6.1.2",
+  "version_name": "",
+  "changes": [{
+    "title": "Sauvegarde de la position de la fenêtre avant agrandissement"
+  }, {
+    "title": "Compatibilité avec les bords arrondis de macOS"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-07-23",
+  "app_key": "vgm",
+  "version": "6.1.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Compatibilité avec les fichiers .bat et .vbs pour la version Windows"
+  }, {
+    "title": "Compatibilité avec les fichiers .app pour la version macOS"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-07-14",
+  "app_key": "vgm",
+  "version": "6.1.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout popup de gestion de mot clés correspondant à des valeurs"
+  }, {
+    "title": "Possibilité d'utiliser ces mots clés dans les champs raccourci d'un jeu, par exemple {steam_cmd} ou {doc_dir}"
+  }, {
+    "title": "Sélection exclusive d'un support dans le ruban à l'aide d'un clic-droit"
+  }, {
+    "title": "Possibilité d'ajouter de nouveaux jeux par glisser / déplacer d'un exécutable ou d'une image"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-06-29",
+  "app_key": "vgm",
+  "version": "6.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Refactoring complet du projet"
+  }, {
+    "title": "Abandon de la gestion multi-utilisateurs et du partage de jeux"
+  }, {
+    "title": "Gestion par collections stockées sur disque / NAS"
+  }, {
+    "title": "Rafraichissement des vues automatique"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-05-09",
+  "app_key": "vgm",
+  "version": "5.2.2",
+  "version_name": "",
+  "changes": [{
+    "title": "Fix suppression de vues en mode local"
+  }, {
+    "title": "Fix sélection et remplacement d'images dans l'interface d'administration"
+  }, {
+    "title": "Fix sauvegarde des chronos en local"
+  }, {
+    "title": "Fix message d'erreur fullscreen quand ouverture de raccourci impossible"
+  }],
+  "version_assets": [{
+    "plateform_key": "win64",
+    "filename": "vgm_522_win64.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-04-10",
+  "app_key": "vgm",
+  "version": "5.2.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout des tags 'disc' et 'HS'"
+  }, {
+    "title": "Mise en évidence du tag 'HS' sur les raccourcis"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-03-12",
+  "app_key": "vgm",
+  "version": "5.2.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Fenêtre de paramètres (environnement, mode, infos de connexion)"
+  }, {
+    "title": "Possibilité de fonctionner en mode local 'portable' ou en mode connecté 'NAS'"
+  }, {
+    "title": "Ajout du champ 'démarrer dans' pour les raccourcis"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-02-22",
+  "app_key": "vgm",
+  "version": "5.1.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Section administration locale au client"
+  }, {
+    "title": "Ajout du marché de jeux avec système de panier"
+  }, {
+    "title": "Ajout d'un système de visualisation et d'édition de soluce"
+  }, {
+    "title": "Fix affichage animation de synchronisation"
+  }, {
+    "title": "Gestion lors de la déconnexion du serveur"
+  }, {
+    "title": "Recopie des jaquettes en local (meilleurs temps de chargement + disponibles en mode hors ligne)"
+  }]
+}, {
+  "status": "prod",
+  "date": "2015-01-25",
+  "app_key": "vgm",
+  "version": "5.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Changement de technologie de TideSDK vers Node Webkit"
+  }, {
+    "title": "Architecture client / NAS"
+  }, {
+    "title": "Partie client et serveur reconstruites de zéro"
+  }, {
+    "title": "Multi-utilisateurs"
+  }, {
+    "title": "Systèmes de vues utilisateur personnalisables identiques à des playlist"
+  }, {
+    "title": "Ajout du tag 'Original'"
+  }, {
+    "title": "Suppression du tag 'Disque'"
+  }, {
+    "title": "Le client reconnait automatiquement le type des commandes de lancement des jeux"
+  }]
+}, {
+  "status": "prod",
+  "date": "2014-11-11",
+  "app_key": "vgm",
+  "version": "4.0.2",
+  "version_name": "",
+  "changes": [{
+    "title": "Checkbox CSS local + clic-droit pour sélectionner exclusivement"
+  }, {
+    "title": "Groupes repliables (individuellement ou collectivement)"
+  }, {
+    "title": "Rafraichissement correct de l'affichage après changement d'image d'un raccourci"
+  }, {
+    "title": "Popup de manipulation du chrono (ajout, suppression d'heures)"
+  }, {
+    "title": "Flat design"
+  }],
+  "version_assets": [{
+    "plateform_key": "win32",
+    "filename": "vgm_402_win32.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2014-09-08",
+  "app_key": "vgm",
+  "version": "4.0.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Sections 'ALL' et 'FAVORITES' modifiées en 'LIST' et 'GRID'"
+  }, {
+    "title": "Tags 'ghost' et 'check' déplacés au niveau des raccourcis"
+  }, {
+    "title": "Favori modifié en tant que tag"
+  }]
+}, {
+  "status": "prod",
+  "date": "2014-04-29",
+  "app_key": "vgm",
+  "version": "4.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Réécriture complète + refonte de l'interface"
+  }, {
+    "title": "Metadatas personnalisés pour chaque jeu"
+  }, {
+    "title": "Meilleure gestion des profils et des dossiers associés"
+  }]
+}, {
+  "status": "prod",
+  "date": "2014-01-18",
+  "app_key": "vgm",
+  "version": "3.2.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Pas de plantage quand le root folder est innaccessible"
+  }, {
+    "title": "Possibilité d'exécuter custom_script.vbs au démarrage de l'application sous windows"
+  }],
+  "version_assets": [{
+    "plateform_key": "win32",
+    "filename": "vgm_321_win32.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2014-01-14",
+  "app_key": "vgm",
+  "version": "3.2.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout du système d'export et d'import d'un raccourci"
+  }, {
+    "title": "Les images ne sont plus perturbées par la sélection d'autres profils dans la fenêtre des paramètres"
+  }, {
+    "title": "Ajout d'un contrôle vérifiant si le profil n'est pas actif sur suppression dans la fenêtre des paramètres"
+  }, {
+    "title": "Méthode de lancement des raccourcis définie sur 'Aucun' par défaut"
+  }, {
+    "title": "Maintient de la touche CTRL pour ne sélectionner qu'un seul support dans le filtre d'affichage"
+  }, {
+    "title": "Affichage du nombre total de raccourcis"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-12-27",
+  "app_key": "vgm",
+  "version": "3.1.1",
+  "version_name": "",
+  "changes": [{
+    "title": "Possibilité de supprimer le lien vers la base VGM personnalisée ainsi que les liens vers les dossier racine, les images et les sauvegardes"
+  }, {
+    "title": "Ajout du profil REFERENCE associé systématiquement à tous les raccourcis"
+  }, {
+    "title": "Le message d'avertissement sur le lock de la base de données ne s'affiche plus après fermeture brutale de l'application"
+  }, {
+    "title": "Gestion de la mise à jour automatique de la base de données après mise à jour de l'application (ne sera effectif que pour les prochaines versions)"
+  }, {
+    "title": "Nom des images de raccourcis liés aux noms de ces derniers"
+  }, {
+    "title": "Un click gauche sur les raccourcis ouvre directement l'édition des métadatas"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-11-24",
+  "app_key": "vgm",
+  "version": "3.1.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Chrono total fenêtre about"
+  }, {
+    "title": "Thème paramétrable (gris ou noir)"
+  }, {
+    "title": "Système de recopie des dossiers de sauvegardes des raccourcis"
+  }, {
+    "title": "Ajout du tag 'Gamepad'"
+  }, {
+    "title": "Système à trois états pour les filtres des tags"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-11-10",
+  "app_key": "vgm",
+  "version": "3.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout du chronomètre sur la popup Réécriture complète pour optimisation"
+  }, {
+    "title": "Thème gris"
+  }, {
+    "title": "Gestion des profils"
+  }, {
+    "title": "Gestion des Emplacement de sauvegarde"
+  }, {
+    "title": "Ajout des tags 'Check' et 'Network'"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-09-04",
+  "app_key": "vgm",
+  "version": "2.1.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout du chronomètre sur la popup d'information"
+  }, {
+    "title": "Remplacement du texte par des icônes dans la popup d'information"
+  }, {
+    "title": "Suppression de la section « About », déplacée dans le site web"
+  }],
+  "version_assets": [{
+    "plateform_key": "win32",
+    "filename": "vgm_210_win32.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-08-22",
+  "app_key": "vgm",
+  "version": "2.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout des tags « Favoris », « Masqué » et « Disque » pour les raccourcis"
+  }, {
+    "title": "Affichage des tags sur la popup d'information + possibilité de mise à jour sur clic"
+  }, {
+    "title": "Sauvegarde de la position du défilement par catégorie et par type d'affichage"
+  }, {
+    "title": "Ajout de la visualisation « Jaquette »"
+  }, {
+    "title": "Ajout des filtres des tags « Favoris », « Masqué » et « Disque »"
+  }, {
+    "title": "Ajout des mots clé de recherche « fav » et « hid » dans la zone de recherche"
+  }, {
+    "title": "Ajout de l'option de déplacement d'un raccourci"
+  }, {
+    "title": "Ajout du groupement « support »"
+  }, {
+    "title": "Sauvegarde de la catégorie affichée"
+  }, {
+    "title": "Réduction automatique de la fenêtre sur le lancement d'un raccourci paramétrable"
+  }, {
+    "title": "Fermeture automatique de la popup de détail sur le lancement d'un raccourci paramétrable"
+  }, {
+    "title": "Ajout du système de dossier racine"
+  }, {
+    "title": "Ajout du système de vérification de l'intégrité des dossiers"
+  }, {
+    "title": "Ajout de la possibilité de mettre à jour les tags de tous les raccourcis d'un groupe"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-06-30",
+  "app_key": "vgm",
+  "version": "1.8.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout des propriétés « Dossier », « Site » pour les raccourcis"
+  }, {
+    "title": "Ajout d'une popup de détail des propriétés d'un raccourci sur clic en mode d'affichage mosaïque"
+  }, {
+    "title": "Ajout des méthodes de lancement « Batch » et « VBScript » prenant en charge le 'current working directory'"
+  }],
+  "version_assets": [{
+    "plateform_key": "win32",
+    "filename": "vgm_180_win32.zip"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-06-29",
+  "app_key": "vgm",
+  "version": "1.7.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout des propriétés « Plateforme », « Configuration », « Notes », « Dossier », « Site », « Login » et « Password » pour les raccourcis"
+  }, {
+    "title": "Ajout du filtre « Plateforme »"
+  }, {
+    "title": "Autocomplete sur les propriétés « Genre » et « Plateforme » dans l'interface de gestion"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-05-17",
+  "app_key": "vgm",
+  "version": "1.6.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Focus sur le zone de recherche sur appuit d'une touche du clavier"
+  }, {
+    "title": "Ajout de la propriété « Méthode d'exécution » pour les raccourcis"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-05-03",
+  "app_key": "vgm",
+  "version": "1.5.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Compatibilité avec l'environnement Unix (macOS, Ubuntu, ...)"
+  }, {
+    "title": "Ajout de la visualisation par icônes"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-04-30",
+  "app_key": "vgm",
+  "version": "1.4.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout de la propriété « Genre » pour les raccourcis"
+  }, {
+    "title": "Ajout des tri et des groupements 'aucun', 'groupe', 'date', 'genre' par catégorie"
+  }, {
+    "title": "Ajout de la visualisation « détail »"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-04-24",
+  "app_key": "vgm",
+  "version": "1.3.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout propriété « exécutable » pour les raccourcis avec indicateur visuel (blanc ou rouge)"
+  }, {
+    "title": "Ajout propriété « nouveau » pour les raccourcis avec indicateur visuel (bleu)"
+  }, {
+    "title": "Ajout de la fonction de recherche avec mots clés et sauvegarde par catégorie"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-04-17",
+  "app_key": "vgm",
+  "version": "1.2.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Ajout de la date de sortie sur les raccourcis + tri par date de sortie décroissant"
+  }, {
+    "title": "Ajout du slider pour régler la taille des mosaïques par catégorie"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-04-14",
+  "app_key": "vgm",
+  "version": "1.1.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Surlignement des raccourcis avec affichage du nom"
+  }, {
+    "title": "Sauvegarde de la position et de l’état de la fenêtre"
+  }, {
+    "title": "Ajout du choix d'affichage en liste ou mosaïque par catégorie"
+  }]
+}, {
+  "status": "prod",
+  "date": "2013-04-07",
+  "app_key": "vgm",
+  "version": "1.0.0",
+  "version_name": "",
+  "changes": [{
+    "title": "Implémentation des fonctionnalités initiales"
+  }]
+}];
+// EXTERNAL MODULE: ../../ladybug/react/components/items/ChangelogDateItem.css
+var ChangelogDateItem = __webpack_require__(4591);
+;// CONCATENATED MODULE: ../../ladybug/react/components/items/ChangelogDateItem.jsx
+
+
+
+
+
+ // Functions Components ReactJS
+// ======================================================================================================
+// ***** ChangelogDateItem *****
+// *****************************
+
+var TAG_ChangelogDateItem = function TAG_ChangelogDateItem() {};
+
+var ChangelogDateItem_ChangelogDateItem = (0,es/* observer */.Pi)(function (props) {
+  // From ... props
+  var date = props.date;
+  var editable = props.editable == true ? true : false;
+  var showShare = props.showShare == true ? true : false;
+  var showFocus = props.showFocus == true ? true : false;
+  var children = props.children;
+  var callbackShare = props.callbackShare;
+  var callbackFocus = props.callbackFocus; // ...
+
+  var dateLabel = "Prochainement";
+
+  if (date) {
+    dateLabel = dateTools.fromDateToHumanized(date);
+  } // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-date-item"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-date-item-header"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-date-item-header-name"
+  }, dateLabel)), /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-date-item-content"
+  }, children));
+});
+// EXTERNAL MODULE: ../../ladybug/react/components/items/ChangelogReleaseItem.css
+var ChangelogReleaseItem = __webpack_require__(4606);
+;// CONCATENATED MODULE: ../../ladybug/react/components/items/ChangelogReleaseItem.jsx
+
+
+
+
+
+
+
+
+
+ // Functions Components ReactJS
+// ======================================================================================================
+// ***** ChangelogReleaseItem *****
+// ********************************
+
+var TAG_ChangelogReleaseItem = function TAG_ChangelogReleaseItem() {};
+
+var ChangelogReleaseItem_ChangelogReleaseItem = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var services = app.services; // From ... store
+
+  var staticUrl = app.staticUrl;
+  var breakPoint414 = app.breakPoint414; // From ... props
+
+  var release = props.release;
+  var editable = props.editable == true ? true : false;
+  var children = props.children;
+  var callbackAssetClick = props.callbackAssetClick; // ...
+
+  var releaseId = release.doc_id;
+  var releaseAppKey = release.app_key;
+  var releaseVersion = release.version;
+  var releaseVersionName = release.version_name;
+  var releaseVersionAssets = release.version_assets;
+  var serviceInfo = services.getServiceInfo(releaseAppKey);
+  var serviceName = serviceInfo.name;
+
+  if (releaseVersionName) {
+    // serviceName = `${serviceName} - ${releaseVersionName}`;
+    serviceName = releaseVersionName;
+  } // Events
+  // ==================================================================================================
+
+
+  var handleAssetClick = function handleAssetClick(asset) {
+    if (callbackAssetClick) {
+      callbackAssetClick(asset.filename);
+    }
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-release-item",
+    "data-id": releaseId
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-release-item-header responsive-vertical responsive-align-stretch"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-release-item-service-name selectable"
+  }, serviceName), /*#__PURE__*/react.createElement("div", {
+    className: "h-col flex-0 flex-wrap"
+  }, releaseVersionAssets.map(function (asset, assetIdx) {
+    var plateformKey = asset.plateform_key;
+    var plateform = PLATEFORMS_BY_KEYS[plateformKey];
+    var assetLink = "".concat(staticUrl, "/file/").concat(asset.filename);
+    return /*#__PURE__*/react.createElement(Indicator_Indicator, {
+      severity: "info",
+      iconName: "folder_zip",
+      style: {
+        flex: 'none',
+        marginLeft: '2px',
+        marginBottom: breakPoint414 ? '10px' : ''
+      },
+      href: assetLink // callbackClick={() => handleAssetClick(asset)}
+
+    }, plateform.label);
+  }), releaseVersion && /*#__PURE__*/react.createElement(Indicator_Indicator, {
+    severity: "hot",
+    style: {
+      flex: 'none',
+      marginLeft: '2px',
+      marginBottom: breakPoint414 ? '10px' : ''
+    }
+  }, "v", releaseVersion))), /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-release-item-content"
+  }, children));
+});
+// EXTERNAL MODULE: ../../ladybug/react/components/items/ChangelogChangeItem.css
+var ChangelogChangeItem = __webpack_require__(5205);
+;// CONCATENATED MODULE: ../../ladybug/react/components/items/ChangelogChangeItem.jsx
+
+
+
+
+
+
+
+
+
+
+
+
+
+function ChangelogChangeItem_slicedToArray(arr, i) { return ChangelogChangeItem_arrayWithHoles(arr) || ChangelogChangeItem_iterableToArrayLimit(arr, i) || ChangelogChangeItem_unsupportedIterableToArray(arr, i) || ChangelogChangeItem_nonIterableRest(); }
+
+function ChangelogChangeItem_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function ChangelogChangeItem_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return ChangelogChangeItem_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return ChangelogChangeItem_arrayLikeToArray(o, minLen); }
+
+function ChangelogChangeItem_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ChangelogChangeItem_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function ChangelogChangeItem_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+ // Functions Components ReactJS
+// ======================================================================================================
+// ***** ChangelogChangeItem *****
+// *******************************
+
+var TAG_ChangelogChangeItem = function TAG_ChangelogChangeItem() {};
+
+var ChangelogChangeItem_ChangelogChangeItem = (0,es/* observer */.Pi)(function (props) {
+  // From ... props
+  var release = props.release;
+  var change = props.change;
+  var editable = props.editable == true ? true : false; // From ... states
+
+  var _React$useState = react.useState(false),
+      _React$useState2 = ChangelogChangeItem_slicedToArray(_React$useState, 2),
+      expanded = _React$useState2[0],
+      setExpanded = _React$useState2[1]; // ...
+
+
+  var changeTitle = change.title; // Events
+  // ==================================================================================================
+
+  var handleExpandClick = function handleExpandClick() {
+    setExpanded(!expanded);
+  }; // Render
+  // ==================================================================================================
+
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: (0,clsx_m/* default */.Z)("lb-changelog-change-item", {
+      "expanded": expanded
+    })
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-change-item-header"
+  }, /*#__PURE__*/react.createElement("div", {
+    className: "lb-changelog-change-item-header-title selectable"
+  }, changeTitle)));
+});
 // EXTERNAL MODULE: ../../ladybug/react/contexts/changelogs/Changelogs.css
 var Changelogs = __webpack_require__(9553);
 ;// CONCATENATED MODULE: ../../ladybug/react/contexts/changelogs/Changelogs.jsx
+function Changelogs_slicedToArray(arr, i) { return Changelogs_arrayWithHoles(arr) || Changelogs_iterableToArrayLimit(arr, i) || Changelogs_unsupportedIterableToArray(arr, i) || Changelogs_nonIterableRest(); }
+
+function Changelogs_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function Changelogs_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function Changelogs_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -10036,26 +12329,494 @@ var Changelogs = __webpack_require__(9553);
 
 
 
- // Models
-// -------------------------------------------------------------------------------------------------------------
-// ***** ChangelogsStore *****
-// ***************************
 
-var TAG_ChangelogsStore = function TAG_ChangelogsStore() {};
 
-var ChangelogsStore = mobx_state_tree_module/* types.model */.V5.model({
-  loaded: false
+
+
+
+
+
+
+
+function Changelogs_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = Changelogs_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function Changelogs_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Changelogs_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Changelogs_arrayLikeToArray(o, minLen); }
+
+function Changelogs_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Datas
+// ======================================================================================================
+// Changelogs static datas
+// -
+
+var STATIC_CHANGELOGS = {
+  'nexorium': NEXORIUM_CHANGELOGS,
+  'nexora': NEXORA_CHANGELOGS,
+  'gramophone': GRAMOPHONE_CHANGELOGS,
+  'vgm': VGM_CHANGELOGS
+}; // Plateformes
+// -
+
+var PLATEFORMS = [{
+  "value": "macos",
+  "label": "macOS"
+}, {
+  "value": "win32",
+  "label": "Windows 32"
+}, {
+  "value": "win64",
+  "label": "Windows 64"
+}];
+var PLATEFORMS_BY_KEYS = {};
+
+for (var Changelogs_i = 0, _PLATEFORMS = PLATEFORMS; Changelogs_i < _PLATEFORMS.length; Changelogs_i++) {
+  var plateformItem = _PLATEFORMS[Changelogs_i];
+  PLATEFORMS_BY_KEYS[plateformItem.value] = plateformItem;
+} // Models
+// ======================================================================================================
+// ***** Contributor *****
+// ***********************
+
+
+var TAG_ContributorStore = function TAG_ContributorStore() {};
+
+var ContributorStore = mobx_state_tree_module/* types.model */.V5.model({
+  initials: '',
+  email: '',
+  inactive: false
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    update: function update(raw) {
+      self.initials = raw.initials;
+      self.email = raw.email;
+      self.inactive = raw.inactive;
+    }
+  };
+}); // ***** ChangeStore *****
+// ***********************
+
+var TAG_ChangeStore = function TAG_ChangeStore() {};
+
+var ChangeStore = mobx_state_tree_module/* types.model */.V5.model({
+  key: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  idx: 0,
+  title: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  content: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  warnings: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  contributors: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(ContributorStore), [])
 }).actions(function (self) {
   return {
     setField: function setField(field, value) {
       self[field] = value;
     },
     // -
-    update: function update(raw) {}
+    update: function update(raw) {
+      self.key = raw.key ? raw.key : uuid();
+      self.idx = raw.idx ? raw.idx : 0;
+      self.title = raw.title;
+      self.content = raw.content ? raw.content : "";
+      self.warnings = raw.warnings ? raw.warnings : "";
+      self.contributors = [];
+
+      if (raw.contributors) {
+        var _iterator = Changelogs_createForOfIteratorHelper(raw.contributors),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var contributorRaw = _step.value;
+            var contributor = ContributorStore.create({});
+            contributor.update(contributorRaw);
+            self.contributors.push(contributor);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      }
+    }
+  };
+}); // ***** ReleaseAssetStore *****
+// *****************************
+
+var TAG_ReleaseAssetStore = function TAG_ReleaseAssetStore() {};
+
+var ReleaseAssetStore = mobx_state_tree_module/* types.model */.V5.model({
+  plateform_key: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  // macos, win32, win64
+  filename: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      self.plateform_key = raw.plateform_key;
+      self.filename = raw.filename;
+    }
+  };
+}); // ***** ReleaseStore *****
+// ************************
+
+var TAG_ReleaseStore = function TAG_ReleaseStore() {};
+
+var ReleaseStore = mobx_state_tree_module/* types.model */.V5.model({
+  doc_id: '',
+  doc_rev: '',
+  doc_state: 0,
+  status: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  // draft, ship, test, prod
+  date: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  app_key: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  changeset: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  version: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  version_name: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  version_assets: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(ReleaseAssetStore), []),
+  changes: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(ChangeStore), []),
+  next_send_newsletter: false
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      self.doc_id = raw.doc_id ? raw.doc_id : uuid();
+      self.doc_rev = raw.doc_rev ? raw.doc_rev : '';
+      self.doc_state = raw.doc_state ? raw.doc_state : 0;
+      self.status = raw.status;
+      self.date = raw.date;
+      self.app_key = raw.app_key;
+      self.changeset = raw.changeset ? raw.changeset : '';
+      self.version = raw.version ? raw.version : '';
+      self.version_name = raw.version_name ? raw.version_name : '';
+      self.version_assets = [];
+
+      if (raw.version_assets) {
+        var _iterator2 = Changelogs_createForOfIteratorHelper(raw.version_assets),
+            _step2;
+
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var versionAssetRaw = _step2.value;
+            var releaseAsset = ReleaseAssetStore.create({});
+            releaseAsset.update(versionAssetRaw);
+            self.version_assets.push(releaseAsset);
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+
+      self.changes = [];
+
+      var _iterator3 = Changelogs_createForOfIteratorHelper(raw.changes),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var changeRaw = _step3.value;
+          var change = ChangeStore.create({});
+          change.update(changeRaw);
+          self.changes.push(change);
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      self.next_send_newsletter = raw.next_send_newsletter ? raw.next_send_newsletter : false;
+    }
+  };
+}); // ***** ChangelogsStore *****
+// ***************************
+
+var TAG_ChangelogsStore = function TAG_ChangelogsStore() {};
+
+var ChangelogsStore = mobx_state_tree_module/* types.model */.V5.model({
+  loaded: false,
+  filterStates: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(mobx_state_tree_module/* types.string */.V5.string), ['draft', 'ship', 'test', 'prod']),
+  filterDates: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(mobx_state_tree_module/* types.string */.V5.string), []),
+  filterMonth: '',
+  releases: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(ReleaseStore), []),
+  nextUUID: ''
+}).views(function (self) {
+  return {
+    get nbReleases() {
+      return self.releases.length;
+    },
+
+    // Getters
+    // -
+    getLastRelease: function getLastRelease() {
+      var withAssets = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var lastRelease = null;
+
+      var _iterator4 = Changelogs_createForOfIteratorHelper(self.releases),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var release = _step4.value;
+
+          // Qu'avec des assets ?
+          if (withAssets && release.version_assets.length == 0) {
+            continue;
+          }
+
+          if (!lastRelease) {
+            lastRelease = release;
+          }
+
+          if (lastRelease.date < release.date) {
+            lastRelease = release;
+          }
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      return lastRelease;
+    },
+
+    // Bools
+    // -
+    get isEditable() {
+      // TODO
+      return false;
+    },
+
+    isFocused: function isFocused() {
+      // Est-on concentré sur une date en particulier ?
+      // ---
+      var filterDates = self.filterDates;
+      return filterDates.length == 1 ? true : false;
+    }
+  };
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      self.loaded = true;
+      self.releases = [];
+
+      var _iterator5 = Changelogs_createForOfIteratorHelper(raw.releases),
+          _step5;
+
+      try {
+        for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+          var releaseRaw = _step5.value;
+          var release = ReleaseStore.create({});
+          release.update(releaseRaw);
+          self.releases.push(release);
+        }
+      } catch (err) {
+        _iterator5.e(err);
+      } finally {
+        _iterator5.f();
+      }
+
+      self.nextUUID = uuid();
+    },
+    load: function load() {
+      // Chargement de la liste des versions
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var appKey = app.appKey; // const staticMode = app.staticMode;
+      // Chargement des changelogs statiques
+
+      if (STATIC_CHANGELOGS.hasOwnProperty(appKey)) {
+        self.update({
+          'releases': STATIC_CHANGELOGS[appKey]
+        });
+      }
+    },
+    // -
+    share: function share(date) {
+      // Partage d'une date de changelog
+      // ---
+      var year = date.substring(0, 4);
+      var shareUrl = "/changelog/".concat(year, "?mode=standalone&dates=").concat(date);
+      window.open(shareUrl, '_blank');
+    },
+    focus: function focus(date) {
+      // Concentration sur une date de changelog
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var year = date.substring(0, 4);
+      var changelogKey = store.app.changelogKey;
+      app.navigateTo('changelogs', null, null, {
+        filterDates: [date]
+      });
+    },
+    unfocus: function unfocus() {
+      // Arrêt concentration sur une date de changelog
+      // ---
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      app.navigateTo('changelogs', null, null, {
+        filterDates: []
+      });
+    }
   };
 }); // Functions Components ReactJS
-// -------------------------------------------------------------------------------------------------------------
-// ***** ChangelogsHeaderLeft *****
+// ======================================================================================================
+// ***** RenderChangelogs *****
+// ****************************
+
+var TAG_RenderChangelogs = function TAG_RenderChangelogs() {};
+
+var RenderChangelogs = (0,es/* observer */.Pi)(function (props) {
+  var store = react.useContext(window.storeContext);
+  var app = store.app;
+  var changelogs = app.changelogs; // From ... store
+
+  var staticUrl = app.staticUrl;
+  var loaded = changelogs.loaded;
+  var releases = changelogs.releases;
+  var isEditable = changelogs.isEditable;
+  var isFocused = changelogs.isFocused; // ...
+
+  react.useEffect(function () {
+    if (!loaded) {
+      changelogs.load();
+    }
+  }, [loaded]); // Renderers
+  // ==================================================================================================
+
+  var handleShareChangelog = function handleShareChangelog(date) {
+    changelog.share(date);
+  };
+
+  var handleFocusChangelog = function handleFocusChangelog(date) {
+    changelog.focus(date);
+  }; // -
+
+
+  var handleAssetClick = function handleAssetClick(filename) {
+    var assetLink = "".concat(staticUrl, "/file/").concat(filename);
+    console.log(assetLink);
+    app.gotoExternal(assetLink);
+  }; // Renderers
+  // ==================================================================================================
+
+
+  var changelogContent = null;
+
+  if (loaded) {
+    var dates = [];
+    var datesItems = [];
+    var releasesByDates = {};
+
+    var _iterator6 = Changelogs_createForOfIteratorHelper(releases),
+        _step6;
+
+    try {
+      for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+        var release = _step6.value;
+        var releaseId = release.doc_id;
+        var releaseDate = release.date;
+
+        if (dates.indexOf(releaseDate) == -1) {
+          dates.push(releaseDate);
+          releasesByDates[releaseDate] = [];
+        } // Changes
+
+
+        var changesList = [];
+
+        var _iterator7 = Changelogs_createForOfIteratorHelper(release.changes.entries()),
+            _step7;
+
+        try {
+          for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+            var _step7$value = Changelogs_slicedToArray(_step7.value, 2),
+                changeIdx = _step7$value[0],
+                change = _step7$value[1];
+
+            changesList.push( /*#__PURE__*/react.createElement(ChangelogChangeItem_ChangelogChangeItem, {
+              key: "".concat(release.doc_id, "_change_").concat(changeIdx),
+              release: release,
+              change: change,
+              editable: isEditable // showContributors={isEditable}
+              // callbackEdit={handleEditChange}
+              // callbackDelete={handleDeleteChange}
+
+            }));
+          } // Releases
+
+        } catch (err) {
+          _iterator7.e(err);
+        } finally {
+          _iterator7.f();
+        }
+
+        releasesByDates[releaseDate].push( /*#__PURE__*/react.createElement(ChangelogReleaseItem_ChangelogReleaseItem, {
+          key: release.doc_id,
+          release: release,
+          editable: isEditable // callbackEdit={handleEditRelease}
+          // callbackDelete={handleDeleteRelease}
+          // callbackRepository={handleRepository}
+          // callbackAdd={handleAddChange}
+          ,
+          callbackAssetClick: handleAssetClick
+        }, changesList));
+      } // Dates
+
+    } catch (err) {
+      _iterator6.e(err);
+    } finally {
+      _iterator6.f();
+    }
+
+    for (var _i2 = 0, _dates = dates; _i2 < _dates.length; _i2++) {
+      var date = _dates[_i2];
+      datesItems.push( /*#__PURE__*/react.createElement(ChangelogDateItem_ChangelogDateItem, {
+        key: date,
+        date: date,
+        editable: isEditable // showShare={!isFocused}
+        ,
+        showFocus: !isFocused // callbackShare={handleShareChangelog}
+        ,
+        callbackFocus: handleFocusChangelog
+      }, releasesByDates[date]));
+    }
+
+    changelogContent = /*#__PURE__*/react.createElement(react.Fragment, null, datesItems);
+  }
+
+  return changelogContent;
+}); // ***** ChangelogsHeaderLeft *****
 // ********************************
 
 var TAG_ChangelogsHeaderLeft = function TAG_ChangelogsHeaderLeft() {};
@@ -10117,21 +12878,40 @@ var TAG_ChangelogsPage = function TAG_ChangelogsPage() {};
 
 var ChangelogsPage = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app;
+  var changelogs = app.changelogs; // From ... store
+
+  var initialized = app.initialized;
+  var loaded = changelogs.loaded;
+  var nbReleases = changelogs.nbReleases; // ...
+
+  var showHelper = !initialized || !loaded || nbReleases == 0 ? true : false; // Renderers
   // ==================================================================================================
+
+  var renderPage = function renderPage() {
+    // Render :: Page -> que quand l'app est intitialisée (pour useEffect)
+    // ---
+    var pageContent = null;
+
+    if (initialized) {
+      pageContent = /*#__PURE__*/react.createElement(RenderChangelogs, null);
+    }
+
+    return pageContent;
+  };
 
   var renderHelper = function renderHelper() {
     // Render :: Helper
     // ---
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       iconName: "history",
-      show: true
+      show: showHelper
     });
   };
 
   return /*#__PURE__*/react.createElement("div", {
     className: "nx-page"
-  }, renderHelper());
+  }, renderPage(), renderHelper());
 });
 // EXTERNAL MODULE: ../../ladybug/react/contexts/bugs/Bugs.css
 var Bugs = __webpack_require__(2432);
@@ -10477,6 +13257,7 @@ function Header_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
  // Datas
 // -------------------------------------------------------------------------------------------------------------
 
@@ -10488,6 +13269,7 @@ var DEFAULT_HEADER_LEFT = {
   'about': AboutHeaderLeft,
   'changelogs': ChangelogsHeaderLeft,
   'bugs': BugsHeaderLeft,
+  'preferences': PreferencesHeaderLeft,
   'admin': AdminHeaderLeft,
   'playground': PlaygroundHeaderLeft,
   'account': AccountHeaderLeft
@@ -10500,6 +13282,7 @@ var DEFAULT_HEADER_RIGHT = {
   'about': AboutHeaderRight,
   'changelogs': ChangelogsHeaderRight,
   'bugs': BugsHeaderRight,
+  'preferences': PreferencesHeaderRight,
   'admin': AdminHeaderRight,
   'playground': PlaygroundHeaderRight,
   'account': AccountHeaderRight
@@ -10720,6 +13503,7 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
   var canGoHome = app.canGoHome();
   var breakPoint650 = app.breakPoint650;
   var appKind = app.kind;
+  var staticMode = app.staticMode;
   var menuExpanded = menu.expanded;
   var menuPinned = menu.pinned;
   var themeMode = theme.mode; // ...
@@ -10888,7 +13672,7 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
 
   var headerRight = /*#__PURE__*/react.createElement("div", {
     className: "nx-header-right"
-  }, right && right, btnThemeMode, btnBugs, headerMenu, portalBtn, breakPoint650 && menuBtn); // -------------------------------------------------
+  }, right && right, btnThemeMode, !staticMode && btnBugs, !staticMode && headerMenu, portalBtn, breakPoint650 && menuBtn); // -------------------------------------------------
 
   return /*#__PURE__*/react.createElement("div", {
     className: (0,clsx_m/* default */.Z)("nx-header", {
@@ -10908,8 +13692,6 @@ var Header_Header = (0,es/* observer */.Pi)(function (props) {
     }
   }, headerLeft, headerMiddle, headerRight));
 });
-// EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.array.includes.js
-var es_array_includes = __webpack_require__(368);
 // EXTERNAL MODULE: ../../nexus/react/node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__(2689);
 // EXTERNAL MODULE: ../../nexus/react/ui/theme/Theme.css
@@ -11006,6 +13788,11 @@ var ThemeStore = mobx_state_tree_module/* types.model */.V5.model({
 
       if (colorKey != 'default' && palette.paletteKeys.includes(colorKey)) {
         return palette[colorKey].main;
+      } // Couleur de typographie (noir ou blanc en fonction du mode d'ui)
+
+
+      if (colorKey == 'typography') {
+        return self.mode == 'dark' ? '#FFFFFF' : '#000000';
       } // La couleur est une sévrité ?
 
 
@@ -11523,7 +14310,13 @@ function matchUrl(routes, url) {
     }
   } else {
     // Some URL don't match properly with route-node
-    var urlParts = url.split('/'); // Hack :: login
+    var urlParts = url.split('/'); // Hack :: home staticMode
+
+    if (url.search('/index.html') > -1) {
+      matched['context'] = 'home';
+      matched['params'] = {};
+    } // Hack :: login
+
 
     if (url.search('connexion') > -1) {
       matched['context'] = 'login';
@@ -12824,7 +15617,7 @@ var NotFoundPage = function NotFoundPage(props) {
   var store = react.useContext(window.storeContext);
   var app = store.app; // From ... store
 
-  var staticUrl = app.staticUrl; // Render
+  var commonStaticUrl = app.commonStaticUrl; // Render
   // ==================================================================================================
 
   return /*#__PURE__*/react.createElement("div", {
@@ -12832,7 +15625,7 @@ var NotFoundPage = function NotFoundPage(props) {
   }, /*#__PURE__*/react.createElement(Helper_Helper, {
     icon: /*#__PURE__*/react.createElement("img", {
       className: "nx-helper-icon",
-      src: "".concat(staticUrl, "/img/emojis/jelly_crying.png")
+      src: "".concat(commonStaticUrl, "/img/emojis/jelly_crying.png")
     }),
     title: "Erreur 404",
     subtitle: "Il semblerait que la page demand\xE9e n'existe pas.",
@@ -12875,36 +15668,37 @@ function NxApp_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : type
 
 function NxApp_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function NxApp_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = NxApp_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function NxApp_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return NxApp_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return NxApp_arrayLikeToArray(o, minLen); }
 
 function NxApp_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12953,6 +15747,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   kind: 'web',
   // web, electron
   tasks: mobx_state_tree_module/* types.optional */.V5.optional(mobx_state_tree_module/* types.array */.V5.array(mobx_state_tree_module/* types.string */.V5.string), []),
+  staticMode: false,
   debugMode: false,
   editMode: false,
   standaloneMode: false,
@@ -12978,6 +15773,8 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
   changelogsContext: 'changelogs',
   bugsUrl: '/bugs',
   bugsContext: 'bugs',
+  preferencesUrl: '/preferences',
+  preferencesContext: 'preferences',
   adminUrl: '/admin',
   adminContext: 'admin',
   playgroundUrl: '/playground',
@@ -13036,12 +15833,39 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       return self.me.app_id;
     },
 
-    get staticUrl() {
-      if (self.kind == 'electron') {
+    // -
+    get folderName() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var isProd = app.isProd;
+
+      if (['gramophone', 'vgm'].includes(self.appKey) && !isProd) {
+        return "".concat(self.appKey, "_server");
+      }
+
+      return self.appKey;
+    },
+
+    // -
+    get commonStaticUrl() {
+      if (self.kind == 'electron' || self.staticMode) {
         return '../nexus/nexus/static';
       }
 
       return '/nexus_static';
+    },
+
+    get staticUrl() {
+      if (self.kind == 'electron' || self.staticMode) {
+        return "./".concat(self.appKey, "/static");
+      }
+
+      return '/static';
+    },
+
+    // -
+    generateUUID: function generateUUID() {
+      return uuid();
     },
 
     // Bools
@@ -13083,6 +15907,22 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
     // 	}
     // 	return false;
     // },
+    // Bools
+    // -
+    get isProd() {
+      var host = window.location.host;
+
+      if (host == "vincentboni.pagesperso-orange.fr") {
+        return true;
+      }
+
+      if (host.indexOf("nexorium.com") > -1) {
+        return true;
+      }
+
+      return false;
+    },
+
     canGoBack: function canGoBack() {
       // Peut-on revenir en arrière dans l'historique ?
       // ---
@@ -13201,7 +16041,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
     update: function update(raw, callback) {
       self.history = []; // User logged
 
-      if (raw) {
+      if (raw && raw.user) {
         self.account.update(raw.user);
         self.auth.setField('step', self.account.isLogged ? 'logged' : 'login');
       } // Edit mode ?
@@ -13228,7 +16068,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       self.editMode = editMode;
       self.debugMode = debugMode;
 
-      if (raw) {
+      if (raw && raw.smap) {
         self.services.update(raw.smap);
       }
 
@@ -13237,6 +16077,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       }
     },
     init: function init(callback, popups, extras) {
+      var staticRaw = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
       // Initialisation de l'application avec la récupération de données communes
       // ---
       extras = extras ? extras : {};
@@ -13248,7 +16089,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       self.updatePopups(popups);
 
       if (callback) {
-        if (self.kind == 'web') {
+        if (self.kind == 'web' && !self.staticMode) {
           // Fix history
           window.addEventListener("popstate", function (event) {
             document.location.reload();
@@ -13264,7 +16105,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
             console.error("Fetch failed for ".concat(url), ex); // self.snackbar.update(true, "Une erreur est survenue.", "error");
           });
         } else {
-          self.update(null, callback);
+          self.update(staticRaw, callback);
         }
       } // Responsiveness -> watching the window's size
 
@@ -13378,6 +16219,11 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
       var isMobile = self.isMobile;
       var appKind = self.kind;
+
+      if (self.staticMode) {
+        destination = '/index.html';
+      }
+
       newContext = newContext ? newContext : 'home';
       ignoreHistory = newContext == 'home' ? true : ignoreHistory;
       clearHistory = newContext == 'home' ? true : clearHistory;
@@ -13408,7 +16254,7 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
       } // MAJ de l'URL du navigateur
 
 
-      if (appKind == 'web') {
+      if (appKind == 'web' && !self.staticMode) {
         self.setBrowserURL(destination);
       } // Changement de contexte (all the magic of one paged apps appens here!)
 
@@ -13552,6 +16398,15 @@ var NxAppStore = mobx_state_tree_module/* types.model */.V5.model({
           "path": "/app/bugs/loaded",
           "value": false
         }]);
+      } // -
+      // Préférences
+
+
+      var preferencesUrl = self.preferencesUrl;
+      var preferencesContext = self.preferencesContext;
+
+      if (navContext == preferencesContext) {
+        self.navigate(preferencesUrl, preferencesContext);
       } // -
       // Administration
 
@@ -13975,6 +16830,7 @@ var makeInitSnapshot = function makeInitSnapshot(routes, snapshot, callback) {
   routeNodes.add(new route_node_esm/* RouteNode */.k('about', '/about'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('changelogs', '/changelogs'));
   routeNodes.add(new route_node_esm/* RouteNode */.k('bugs', '/bugs'));
+  routeNodes.add(new route_node_esm/* RouteNode */.k('preferences', '/preferences'));
 
   if (!routes.hasOwnProperty('admin')) {
     routeNodes.add(new route_node_esm/* RouteNode */.k('admin', '/admin'));
@@ -14051,7 +16907,6 @@ var makeInitSnapshot = function makeInitSnapshot(routes, snapshot, callback) {
   } // -
 
 
-  console.log(snapshot['app']['theme']);
   var defaultPrimaryMainLight = '#607d8b';
 
   if (snapshot.app.theme.palette_light && snapshot.app.theme.palette_light.primary && snapshot.app.theme.palette_light.primary.main) {
@@ -14209,7 +17064,7 @@ var ErrorBoundary = /*#__PURE__*/function (_React$Component) {
         }, /*#__PURE__*/react.createElement(Helper_Helper, {
           icon: /*#__PURE__*/react.createElement("img", {
             className: "nx-helper-icon",
-            src: "".concat(window.store.app.staticUrl, "/img/emojis/jelly_eyes_closed.png")
+            src: "".concat(window.store.app.commonStaticUrl, "/img/emojis/jelly_eyes_closed.png")
           }) // title="!"
           ,
           subtitle: "Une erreur est survenue.",
@@ -14301,6 +17156,7 @@ var NxApp_NxApp = (0,es/* observer */.Pi)(function (props) {
   contexts['forbidden'] = ForbiddenPage;
   contexts['portal'] = PortalPage;
   contexts['about'] = AboutPage;
+  contexts['preferences'] = PreferencesPage;
   contexts['notifications'] = NotificationsPage;
   contexts['blog'] = BlogPage;
   contexts['newsletters'] = NewslettersPage;
@@ -14369,9 +17225,18 @@ var NxApp_NxApp = (0,es/* observer */.Pi)(function (props) {
     id: "nx-main"
   }, content, /*#__PURE__*/react.createElement(Snackbar_Snackbar, null)), !isFullScreen && /*#__PURE__*/react.createElement(Portal_Portal, null), popupsRendered)));
 });
-// EXTERNAL MODULE: ../../nexus/react/contexts/home/Home.css
-var Home = __webpack_require__(2037);
-;// CONCATENATED MODULE: ../../nexus/react/contexts/home/Home.jsx
+;// CONCATENATED MODULE: ../../nexus/react/models/services.jsx
+function services_slicedToArray(arr, i) { return services_arrayWithHoles(arr) || services_iterableToArrayLimit(arr, i) || services_unsupportedIterableToArray(arr, i) || services_nonIterableRest(); }
+
+function services_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function services_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return services_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return services_arrayLikeToArray(o, minLen); }
+
+function services_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function services_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function services_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -14380,62 +17245,334 @@ var Home = __webpack_require__(2037);
 
 
 
- // Functions Components ReactJS
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Datas
+// ======================================================================================================
+// VBO : Recopie temporaire de nexus/services.py (pour le mode static)
+
+var services_STATIC_SMAP = {
+  'nexorium': {
+    app_key: 'nexorium',
+    app_variant: 'default',
+    app_id: 'nexorium',
+    name: "Nexorium",
+    description: "Portail d'accueil",
+    kind: "webserver",
+    port: 7301,
+    database: null,
+    version: '0.0.2',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "M_VIEW",
+    edit_role: "M_EDIT",
+    admin_role: "M_ADMIN"
+  },
+  'nexora': {
+    app_key: 'nexora',
+    app_variant: 'default',
+    app_id: 'nexora',
+    name: "Nexora",
+    description: "Histoire de science-fiction",
+    kind: "webserver",
+    port: 7302,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "N_VIEW",
+    edit_role: "N_EDIT",
+    admin_role: "N_ADMIN"
+  },
+  // Applications
+  // -
+  'gramophone': {
+    app_key: 'gramophone',
+    app_variant: 'default',
+    app_id: 'gramophone',
+    name: "Gramophone",
+    description: "Bibliothèque musicale",
+    kind: "webserver",
+    port: 7304,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "G_VIEW",
+    edit_role: "G_EDIT",
+    admin_role: "G_ADMIN"
+  },
+  'vgm': {
+    app_key: 'vgm',
+    app_variant: 'default',
+    app_id: 'vgm',
+    name: "VGM",
+    description: "Bibliothèque vidéoludique",
+    kind: "webserver",
+    port: 7303,
+    database: null,
+    version: '0.0.1',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: '/index.html',
+    external: '/',
+    view_role: "G_VIEW",
+    edit_role: "G_EDIT",
+    admin_role: "G_ADMIN"
+  },
+  // Support
+  // -
+  'nexus': {
+    app_key: 'nexus',
+    app_variant: 'default',
+    app_id: 'nexus',
+    name: "Nexus",
+    description: "Librairie de l'écosystème Nexorium",
+    kind: "library",
+    port: null,
+    database: null,
+    version: '0.0.2',
+    changeset: '...',
+    changeset_instance: '...',
+    internal: null,
+    external: null,
+    view_role: null,
+    edit_role: null,
+    admin_role: null
+  }
+}; // Models
 // -------------------------------------------------------------------------------------------------------------
-// ***** HomeHeaderMiddle *****
+// ***** ServiceInfoStore *****
 // ****************************
 
-var TAG_HomeHeaderMiddle = function TAG_HomeHeaderMiddle() {};
+var services_TAG_ServiceInfoStore = function TAG_ServiceInfoStore() {};
 
-var HomeHeaderMiddle = (0,es/* observer */.Pi)(function (props) {
-  var store = react.useContext(window.storeContext);
-  var app = store.app;
-  var services = app.services; // From ... store
-
-  var appName = services.me.name; // ...
-  // Render
-  // ==================================================================================================
-
-  return /*#__PURE__*/react.createElement(HeaderTitle, {
-    title: appName,
-    titleStyle: {
-      fontWeight: 'bold'
+var services_ServiceInfoStore = mobx_state_tree_module/* types.model */.V5.model({
+  app_key: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  app_variant: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  app_id: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  name: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  description: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  kind: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  port: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.integer */.V5.integer),
+  database: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  version: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  changeset: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  changeset_instance: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  internal: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  external: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  view_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  edit_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string),
+  admin_role: mobx_state_tree_module/* types.maybeNull */.V5.maybeNull(mobx_state_tree_module/* types.string */.V5.string)
+}).views(function (self) {
+  return {
+    get roles() {
+      return [self.view_role, self.edit_role, self.admin_role];
     },
-    centered: true
-  });
-}); // ***** HomeMenuItem *****
-// ************************
 
-var TAG_HomeMenuItem = function TAG_HomeMenuItem() {};
+    get shortcutIconUrl() {
+      return self.getIconUrl(48);
+    },
 
-var HomeMenuItem = (0,es/* observer */.Pi)(function (props) {
-  var store = react.useContext(window.storeContext);
-  var app = store.app;
-  var menu = app.menu; // From ... store
+    get iconUrl() {
+      return self.getIconUrl(192);
+    },
 
-  var breakPoint650 = app.breakPoint650;
-  var homeContext = app.homeContext; // Events
-  // ==================================================================================================
+    // -
+    get folderName() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var isProd = app.isProd;
 
-  var handleMenuItemClick = function handleMenuItemClick() {
-    app.navigateTo(homeContext);
-    app.menu.close();
-  }; // Render
-  // ==================================================================================================
+      if (['gramophone', 'vgm'].includes(self.app_key) && !isProd) {
+        return "".concat(self.app_key, "_server");
+      }
 
+      return self.app_key;
+    },
 
-  var homeMenuItemContent = null;
+    // -
+    get internalPrefix() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var appKey = app.appKey;
+      var isProd = app.isProd;
+      var prefix = "./".concat(self.app_key);
 
-  if (breakPoint650) {
-    homeMenuItemContent = /*#__PURE__*/react.createElement(MenuItem, {
-      iconName: "home",
-      label: "Accueil",
-      activeContexts: [homeContext],
-      callbackClick: handleMenuItemClick
-    });
-  }
+      if (appKey != self.app_key) {
+        prefix = "../".concat(self.folderName);
 
-  return homeMenuItemContent;
+        if (!isProd || self.app_key != 'nexorium') {
+          prefix = "".concat(prefix, "/").concat(self.app_key);
+        }
+      }
+
+      return prefix;
+    },
+
+    get externalPrefix() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var folderName = app.folderName;
+      var isProd = app.isProd;
+      var prefix = "/";
+
+      if (isProd) {
+        prefix = "https://vincentboni.pagesperso-orange.fr/";
+
+        if (self.app_key != 'nexorium') {
+          prefix = "".concat(prefix, "/").concat(self.app_key, "/");
+        }
+      } else {
+        prefix = window.location.pathname;
+        prefix = prefix.replace('index.html', '');
+        prefix = prefix.replace(folderName, self.folderName);
+      }
+
+      return prefix;
+    },
+
+    // -
+    get githubLink() {
+      return "https://github.com/vincent114/".concat(self.folderName);
+    },
+
+    get githubLinkClient() {
+      if (["gramophone", "vgm"].includes(self.app_key)) {
+        return "https://github.com/vincent114/".concat(self.app_key, "_client");
+      }
+
+      return "";
+    },
+
+    // Getters
+    // -
+    getIconUrl: function getIconUrl() {
+      var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '192';
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var staticMode = app.staticMode;
+      var external = self.external;
+      var dimention = "".concat(size, "x").concat(size);
+
+      if (staticMode) {
+        return "".concat(self.internalPrefix, "/static/favicons/android-icon-").concat(dimention, ".png");
+      }
+
+      return "".concat(external, "/static/favicons/android-icon-").concat(dimention, ".png");
+    },
+    getExternalUrl: function getExternalUrl() {
+      var store = (0,mobx_state_tree_module/* getRoot */.yj)(self);
+      var app = store.app;
+      var staticMode = app.staticMode;
+
+      if (staticMode && self.kind == 'webserver') {
+        return "".concat(self.externalPrefix, "index.html");
+      }
+
+      return self.external;
+    }
+  };
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      self.app_key = raw.app_key;
+      self.app_variant = raw.app_variant;
+      self.app_id = raw.app_id;
+      self.name = raw.name;
+      self.description = raw.description;
+      self.kind = raw.kind;
+      self.port = raw.port;
+      self.database = raw.database;
+      self.version = raw.version;
+      self.changeset = raw.changeset;
+      self.changeset_instance = raw.changeset_instance;
+      self.internal = raw.internal;
+      self.external = raw.external;
+      self.view_role = raw.view_role;
+      self.edit_role = raw.edit_role;
+      self.admin_role = raw.admin_role;
+    }
+  };
+}); // ***** ServicesStore *****
+// *************************
+
+var services_TAG_ServicesStore = function TAG_ServicesStore() {};
+
+var services_ServicesStore = mobx_state_tree_module/* types.model */.V5.model({
+  smap: mobx_state_tree_module/* types.map */.V5.map(services_ServiceInfoStore)
+}).views(function (self) {
+  return {
+    get me() {
+      var me = self.smap.get('me');
+
+      if (!me) {
+        me = services_ServiceInfoStore.create({});
+      }
+
+      return me;
+    },
+
+    // Getters
+    // -
+    getServiceInfo: function getServiceInfo(appId) {
+      return self.smap.get(appId);
+    },
+    getAjaxBase: function getAjaxBase(appId) {
+      var me = self.getServiceInfo('me'); // AJAX vers un autre serveur ?
+
+      if (me && me.app_id != appId) {
+        var serviceInfo = self.getServiceInfo(appId);
+
+        if (serviceInfo) {
+          return serviceInfo.external;
+        }
+      }
+
+      return '';
+    }
+  };
+}).actions(function (self) {
+  return {
+    setField: function setField(field, value) {
+      self[field] = value;
+    },
+    // -
+    update: function update(raw) {
+      self.smap = {};
+
+      for (var _i = 0, _Object$entries = Object.entries(raw); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = services_slicedToArray(_Object$entries[_i], 2),
+            appId = _Object$entries$_i[0],
+            serviceInfoRaw = _Object$entries$_i[1];
+
+        var serviceInfo = services_ServiceInfoStore.create({});
+        serviceInfo.update(serviceInfoRaw);
+        self.smap.set(appId, serviceInfo);
+      }
+    }
+  };
 });
 // EXTERNAL MODULE: ../../nexus/react/contexts/search/Search.css
 var Search = __webpack_require__(4048);
@@ -14605,6 +17742,13 @@ var Download = __webpack_require__(2251);
 
 
 
+
+
+
+
+
+
+
  // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** DownloadStore *****
@@ -14686,16 +17830,94 @@ var TAG_DownloadPage = function TAG_DownloadPage() {};
 
 var DownloadPage = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app;
+  var changelogs = app.changelogs; // From ... store
+
+  var staticUrl = app.staticUrl;
+  var initialized = app.initialized;
+  var isLoading = app.isLoading;
+  var loaded = changelogs.loaded; // ...
+
+  react.useEffect(function () {
+    if (!loaded) {
+      changelogs.load();
+    }
+  }, [loaded]); // Evenrs
   // ==================================================================================================
+
+  var handleOtherVersions = function handleOtherVersions() {
+    app.navigateTo('changelogs');
+  }; // Renderers
+  // ==================================================================================================
+
 
   var renderHelper = function renderHelper() {
     // Render :: Helper
     // ---
+    var helperTitle = "";
+    var helperSubtitle = "";
+    var helperContent = "";
+    var lastRelease = null;
+
+    if (loaded) {
+      lastRelease = changelogs.getLastRelease(true);
+
+      if (lastRelease) {
+        helperTitle = /*#__PURE__*/react.createElement(Column_Column, null, /*#__PURE__*/react.createElement("div", {
+          className: "h-col-small"
+        }, /*#__PURE__*/react.createElement(Indicator_Indicator, {
+          severity: "hot",
+          style: {
+            flex: 'none' // marginRight: '2px',
+            // marginBottom: (breakPoint414) ? '10px' : '',
+
+          }
+        }, "v", lastRelease.version), /*#__PURE__*/react.createElement("div", {
+          className: "flex-0"
+        }, lastRelease.version_name)));
+        helperSubtitle = "Téléchargez la version de Gramophone adaptée à votre système en cliquant sur un des boutons ci-dessous.";
+        helperContent = /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(Row_Row, {
+          style: {
+            marginTop: '30px',
+            marginLeft: '20px',
+            marginRight: '20px'
+          }
+        }, lastRelease.version_assets.map(function (asset, assetIdx) {
+          var plateformKey = asset.plateform_key;
+          var plateform = PLATEFORMS_BY_KEYS[plateformKey];
+          var assetLink = "".concat(staticUrl, "/file/").concat(asset.filename);
+          return /*#__PURE__*/react.createElement(Button_Button, {
+            key: "btn-download-asset-".concat(assetIdx),
+            variant: "contained",
+            color: "info",
+            disabled: isLoading,
+            href: assetLink,
+            startAdornment: "folder_zip"
+          }, plateform.label);
+        })), /*#__PURE__*/react.createElement(Button_Button, {
+          color: "primary",
+          disabled: isLoading // startAdornment="history"
+          ,
+          style: {
+            marginTop: '40px',
+            marginBottom: '40px',
+            marginLeft: '20px',
+            marginRight: '20px'
+          },
+          onClick: function onClick() {
+            return handleOtherVersions();
+          }
+        }, "Voir les autres versions"));
+      }
+    }
+
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       iconName: "file_download",
-      show: true
-    });
+      title: helperTitle,
+      subtitle: helperSubtitle,
+      show: true,
+      inFlux: loaded && lastRelease != null
+    }, helperContent);
   };
 
   return /*#__PURE__*/react.createElement("div", {
@@ -14832,6 +18054,7 @@ var ContextualHeader = (0,es/* observer */.Pi)(function (props) {
 
   var breakPoint650 = app.breakPoint650;
   var context = app.context;
+  var staticMode = app.staticMode;
   var homeContext = app.homeContext;
   var authContext = app.authContext; // Render
   // ==================================================================================================
@@ -14849,7 +18072,7 @@ var ContextualHeader = (0,es/* observer */.Pi)(function (props) {
   };
 
   var renderHeaderSearch = function renderHeaderSearch() {
-    if (breakPoint650 && context != 'search') {
+    if (staticMode || breakPoint650 && context != 'search') {
       return;
     }
 
@@ -14908,6 +18131,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 
 
+
  // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
 // ***** GramophoneServerMenuItems *****
@@ -14919,10 +18143,11 @@ var GramophoneServerMenuItems = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
   var app = store.app; // From ... store
 
+  var staticMode = app.staticMode;
   var breakPoint650 = app.breakPoint650; // Render
   // ==================================================================================================
 
-  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(PortalMenuItem, null), /*#__PURE__*/react.createElement(HomeMenuItem, null), /*#__PURE__*/react.createElement(SearchMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(BlogMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(DownloadMenuItem, null), /*#__PURE__*/react.createElement(HelpMenuItem, null), /*#__PURE__*/react.createElement(ChangelogsMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(AboutMenuItem, null), /*#__PURE__*/react.createElement(AdminMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(LoginMenuItem, null), /*#__PURE__*/react.createElement(AccountMenuItem, null), /*#__PURE__*/react.createElement(LogoutMenuItem, null));
+  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(PortalMenuItem, null), /*#__PURE__*/react.createElement(HomeMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(SearchMenuItem, null), breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), !staticMode && /*#__PURE__*/react.createElement(BlogMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(DownloadMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(HelpMenuItem, null), /*#__PURE__*/react.createElement(ChangelogsMenuItem, null), /*#__PURE__*/react.createElement(MenuDivider, null), /*#__PURE__*/react.createElement(AboutMenuItem, null), /*#__PURE__*/react.createElement(PreferencesMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(AdminMenuItem, null), !staticMode && breakPoint650 && /*#__PURE__*/react.createElement(MenuDivider, null), !staticMode && /*#__PURE__*/react.createElement(LoginMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(AccountMenuItem, null), !staticMode && /*#__PURE__*/react.createElement(LogoutMenuItem, null));
 }); // ***** ContextualMenu *****
 // **************************
 
@@ -14972,7 +18197,10 @@ var TAG_RenderHomeGrid = function TAG_RenderHomeGrid() {};
 
 var RenderHomeGrid = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app; // From ... store
+
+  var staticMode = app.staticMode; // ...
+  // Renderers
   // ==================================================================================================
   // HomeGrid -> Téléchargement
   // ---
@@ -14980,27 +18208,32 @@ var RenderHomeGrid = (0,es/* observer */.Pi)(function (props) {
   var navCardDownload = /*#__PURE__*/react.createElement(NavCard_NavCard, {
     key: "nav-card-download",
     icon: "file_download",
-    label: "T\xE9l\xE9chargement",
+    label: "T\xE9l\xE9charger ici",
     onClick: function onClick() {
       return store.navigateTo('download');
     }
   }); // HomeGrid -> F.A.Q
   // ---
 
-  var navCardHelp = /*#__PURE__*/react.createElement(NavCard_NavCard, {
-    key: "nav-card-help",
-    icon: "help",
-    label: "F.A.Q",
-    onClick: function onClick() {
-      return store.navigateTo('help');
-    }
-  }); // HomeGrid -> Changelogs
+  var navCardHelp = null;
+
+  if (!staticMode) {
+    var _navCardHelp = /*#__PURE__*/react.createElement(NavCard_NavCard, {
+      key: "nav-card-help",
+      icon: "help",
+      label: "F.A.Q",
+      onClick: function onClick() {
+        return store.navigateTo('help');
+      }
+    });
+  } // HomeGrid -> Changelogs
   // ---
+
 
   var navCardChangelogs = /*#__PURE__*/react.createElement(NavCard_NavCard, {
     key: "nav-card-changelogs",
     icon: "history",
-    label: "Changelogs",
+    label: "Historique des versions",
     onClick: function onClick() {
       return app.navigateTo('changelogs');
     }
@@ -15021,7 +18254,10 @@ var TAG_HomePage = function TAG_HomePage() {};
 
 var HomePage = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app; // From ... store
+
+  var staticUrl = app.staticUrl; // ...
+  // Renderers
   // ==================================================================================================
 
   var renderHelper = function renderHelper() {
@@ -15030,7 +18266,7 @@ var HomePage = (0,es/* observer */.Pi)(function (props) {
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       icon: /*#__PURE__*/react.createElement("img", {
         className: "nx-helper-icon",
-        src: "/static/favicons/android-icon-192x192.png"
+        src: "".concat(staticUrl, "/favicons/android-icon-192x192.png")
       }),
       title: "Bienvenue sur Gramophone !",
       subtitle: "Votre discoth\xE8que MP3 / FLAC / AAC dans une application-jukebox \xE0 l'ancienne.",
@@ -15101,6 +18337,13 @@ var SearchPage = (0,es/* observer */.Pi)(function (props) {
   }, renderHelper());
 });
 ;// CONCATENATED MODULE: ./contexts/download/download.jsx
+
+
+
+
+
+
+
 
 
 
@@ -15189,16 +18432,94 @@ var download_TAG_DownloadPage = function TAG_DownloadPage() {};
 
 var download_DownloadPage = (0,es/* observer */.Pi)(function (props) {
   var store = react.useContext(window.storeContext);
-  var app = store.app; // Renderers
+  var app = store.app;
+  var changelogs = app.changelogs; // From ... store
+
+  var staticUrl = app.staticUrl;
+  var initialized = app.initialized;
+  var isLoading = app.isLoading;
+  var loaded = changelogs.loaded; // ...
+
+  react.useEffect(function () {
+    if (!loaded) {
+      changelogs.load();
+    }
+  }, [loaded]); // Evenrs
   // ==================================================================================================
+
+  var handleOtherVersions = function handleOtherVersions() {
+    app.navigateTo('changelogs');
+  }; // Renderers
+  // ==================================================================================================
+
 
   var renderHelper = function renderHelper() {
     // Render :: Helper
     // ---
+    var helperTitle = "";
+    var helperSubtitle = "";
+    var helperContent = "";
+    var lastRelease = null;
+
+    if (loaded) {
+      lastRelease = changelogs.getLastRelease(true);
+
+      if (lastRelease) {
+        helperTitle = /*#__PURE__*/react.createElement(Column_Column, null, /*#__PURE__*/react.createElement("div", {
+          className: "h-col-small"
+        }, /*#__PURE__*/react.createElement(Indicator_Indicator, {
+          severity: "hot",
+          style: {
+            flex: 'none' // marginRight: '2px',
+            // marginBottom: (breakPoint414) ? '10px' : '',
+
+          }
+        }, "v", lastRelease.version), /*#__PURE__*/react.createElement("div", {
+          className: "flex-0"
+        }, lastRelease.version_name)));
+        helperSubtitle = "Téléchargez la version de Gramophone adaptée à votre système en cliquant sur un des boutons ci-dessous.";
+        helperContent = /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement(Row_Row, {
+          style: {
+            marginTop: '30px',
+            marginLeft: '20px',
+            marginRight: '20px'
+          }
+        }, lastRelease.version_assets.map(function (asset, assetIdx) {
+          var plateformKey = asset.plateform_key;
+          var plateform = PLATEFORMS_BY_KEYS[plateformKey];
+          var assetLink = "".concat(staticUrl, "/file/").concat(asset.filename);
+          return /*#__PURE__*/react.createElement(Button_Button, {
+            key: "btn-download-asset-".concat(assetIdx),
+            variant: "contained",
+            color: "info",
+            disabled: isLoading,
+            href: assetLink,
+            startAdornment: "folder_zip"
+          }, plateform.label);
+        })), /*#__PURE__*/react.createElement(Button_Button, {
+          color: "primary",
+          disabled: isLoading // startAdornment="history"
+          ,
+          style: {
+            marginTop: '40px',
+            marginBottom: '40px',
+            marginLeft: '20px',
+            marginRight: '20px'
+          },
+          onClick: function onClick() {
+            return handleOtherVersions();
+          }
+        }, "Voir les autres versions"));
+      }
+    }
+
     return /*#__PURE__*/react.createElement(Helper_Helper, {
       iconName: "file_download",
-      show: true
-    });
+      title: helperTitle,
+      subtitle: helperSubtitle,
+      show: true,
+      inFlux: loaded && lastRelease != null
+    }, helperContent);
   };
 
   return /*#__PURE__*/react.createElement("div", {
@@ -15324,6 +18645,8 @@ var Main = __webpack_require__(1729);
 
 
 
+
+
  // Models
 // -------------------------------------------------------------------------------------------------------------
 // ***** RootStore *****
@@ -15401,6 +18724,8 @@ var popups = {}; // Routes
 // -
 
 var routes = {
+  'home': '/',
+  'home:static': '/main.html',
   'download': '/download',
   'help': '/help'
 }; // Store
@@ -15408,6 +18733,7 @@ var routes = {
 
 var initSnapshot = makeInitSnapshot(routes, {
   'app': {
+    'staticMode': window.staticMode,
     'theme': {
       'palette_light': {
         'primary': {
@@ -15432,9 +18758,13 @@ var rootStore = RootStore.create(initSnapshot);
 var RootStoreContext = /*#__PURE__*/react.createContext(rootStore);
 window.store = rootStore;
 window.storeContext = RootStoreContext;
+var staticRaw = {
+  'smap': copyObj(services_STATIC_SMAP)
+};
+staticRaw['smap']['me'] = copyObj(services_STATIC_SMAP.gramophone);
 rootStore.app.init(function (datas) {
   rootStore.update(datas);
-}, popups, {}); // Functions Components ReactJS
+}, popups, {}, staticRaw); // Functions Components ReactJS
 // -------------------------------------------------------------------------------------------------------------
 // ***** Root *****
 // ****************
@@ -15511,6 +18841,27 @@ window.addEventListener('DOMContentLoaded', function () {
 /***/ }),
 
 /***/ 3199:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 5205:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 4591:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 4606:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -15728,6 +19079,13 @@ window.addEventListener('DOMContentLoaded', function () {
 /***/ }),
 
 /***/ 1999:
+/***/ (() => {
+
+// extracted by extract-css-chunks-webpack-plugin
+
+/***/ }),
+
+/***/ 2359:
 /***/ (() => {
 
 // extracted by extract-css-chunks-webpack-plugin
@@ -16087,7 +19445,7 @@ window.addEventListener('DOMContentLoaded', function () {
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, [216], () => (__webpack_require__(3979)))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(3973)))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [216], () => (__webpack_require__(4708)))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

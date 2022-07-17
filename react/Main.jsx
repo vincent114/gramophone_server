@@ -5,6 +5,9 @@ import { observer } from "mobx-react-lite";
 
 import { NxAppStore, NxApp, makeInitSnapshot } from 'nexus/NxApp';
 
+import { STATIC_SMAP } from 'nexus/models/services';
+import { copyObj } from 'nexus/utils/Datas';
+
 import { ContextualHeader } from 'gramophone_server/ui/ContextualHeader';
 import { ContextualMenu } from 'gramophone_server/ui/ContextualMenu';
 import { HomePage } from 'gramophone_server/contexts/home/Home';
@@ -115,6 +118,9 @@ let popups = {}
 // -
 
 let routes = {
+	'home': '/',
+	'home:static': '/main.html',
+
 	'download': '/download',
 	'help': '/help',
 }
@@ -124,6 +130,7 @@ let routes = {
 
 let initSnapshot = makeInitSnapshot(routes, {
 	'app': {
+		'staticMode': window.staticMode,
 		'theme': {
 			'palette_light': {
 				'primary': {
@@ -151,12 +158,18 @@ export const RootStoreContext = React.createContext(rootStore);
 window.store = rootStore;
 window.storeContext = RootStoreContext;
 
+let staticRaw = {
+	'smap': copyObj(STATIC_SMAP),
+}
+staticRaw['smap']['me'] = copyObj(STATIC_SMAP['gramophone']);
+
 rootStore.app.init(
 	(datas) => {
 		rootStore.update(datas);
 	},
 	popups,
-	{}
+	{},
+	staticRaw
 );
 
 
